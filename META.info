@@ -1,0 +1,13 @@
+{
+    "perl" : "6.*",
+    "name" : "Utiaji",
+    "version" : "0.1.0",
+    "description" : "Your needs.",
+    "authors" : [ "Brian Duggan" ],
+    "provides" : {
+        "Utiaji" : "lib/Utiaji.pm"
+    },
+    "depends" : [ ],
+    "resources" : [ ],
+    "source-url" : "git://github.com/bduggan/Utiaji.git"
+}
