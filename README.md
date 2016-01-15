@@ -4,4 +4,4 @@ Utiaji -- personal information organizer
 
 Description
 ===========
-Utiaji is a calender, wiki and personal information organizer.
+Utiaji is a calender, wiki, address book and general personal information organizer.
