@@ -1,6 +1,11 @@
-language: perl6
-perl6:
-  - 2015.12
+env:
+  - PATH=$PATH:$HOME/.rakudobrew/bin
+before_install:
+  - git clone https://github.com/tadzik/rakudobrew.git $HOME/.rakudobrew
 install:
-  - rakudobrew build-panda
-  - panda installdeps .
+  - ./install.sh
+script:
+  - PERL6LIB=lib prove -v -r --exec=perl6 t/
+cache:
+  directories:
+    - $HOME/build_cache
