@@ -1,6 +1,5 @@
 env:
-  - PATH=$PATH:$HOME/.rakudobrew/bin
-  - PGDATABASE=test
+  - PATH=$PATH:$HOME/.rakudobrew/bin PGDATABASE=test
 before_install:
   - git clone https://github.com/tadzik/rakudobrew.git $HOME/.rakudobrew
 install:
