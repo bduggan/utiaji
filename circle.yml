@@ -3,7 +3,6 @@ machine:
     PATH: $HOME/.rakudobrew/bin:$PATH PGDATABASE=test
 dependencies:
   pre:
-    - git clone https://github.com/tadzik/rakudobrew.git $HOME/.rakudobrew
     - createdb test -U postgres
   override:
     - ./install.sh
