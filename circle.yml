@@ -8,7 +8,7 @@ dependencies:
   override:
     - ./install.sh
   cache_directories:
-    - $HOME/build_cache
+    - ../.rakudobrew
 test:
   override:
     - PERL5LIB=lib prove -v -r --exec=perl6 t/
