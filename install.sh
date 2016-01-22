@@ -1,16 +1,15 @@
-#!/bin/sh -ex
+#!/bin/bash -ex
 
 version=2015.12
 
-if [ -d $HOME/build_cache/moar-$version ]; then
-    rm -rf $HOME/.rakudobrew/moar-$version
-    cp -al $HOME/build_cache/moar-$version $HOME/.rakudobrew
+if [ -x $HOME/.rakudobrew/bin/perl6 ]; then
     rakudobrew global $version
     rakudobrew rehash
-else
-    rakudobrew build moar $version
-    rakudobrew build-panda
-    panda installdeps .
-    cp -al $HOME/.rakudobrew/moar-$version $HOME/build_cache
+    exit 0
 fi
+
+git clone https://github.com/tadzik/rakudobrew.git $HOME/.rakudobrew
+rakudobrew build moar $version
+rakudobrew build-panda
+panda installdeps .
 

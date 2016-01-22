@@ -1,7 +1,5 @@
 env:
-  - PATH=$PATH:$HOME/.rakudobrew/bin PGDATABASE=test
-before_install:
-  - git clone https://github.com/tadzik/rakudobrew.git $HOME/.rakudobrew
+  - PATH=$PATH:$HOME/.rakudobrew/bin PGDATABASE=test CACHED=$HOME/build_cache
 install:
   - ./install.sh
 before_script:
@@ -10,7 +8,7 @@ script:
   - PERL6LIB=lib prove -v -r --exec=perl6 t/
 cache:
   directories:
-    - $HOME/build_cache
+    - $HOME/.rakudobrew
 services:
   - postgresql
 addons:
