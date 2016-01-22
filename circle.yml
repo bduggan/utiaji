@@ -1,3 +1,6 @@
+machine:
+  environment:
+    PATH: $HOME/.rakudobrew/bin:$PATH
 dependencies:
   pre:
     - ./install.sh
