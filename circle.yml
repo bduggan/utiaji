@@ -3,6 +3,8 @@ machine:
     PATH: $HOME/.rakudobrew/bin:$PATH
 dependencies:
   pre:
+    - git clone https://github.com/tadzik/rakudobrew.git $HOME/.rakudobrew
+  override:
     - ./install.sh
   cache_directories:
     - build_cache
