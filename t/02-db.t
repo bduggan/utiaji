@@ -5,6 +5,7 @@ use lib 'lib';
 
 my $db = %*ENV<PGDATABASE>;
 unless $db {
+    plan 1;
     skip-rest "Set PGDATABASE for database testing";
     exit;
 }
