@@ -1,5 +1,13 @@
+use Bailador;
+
 class Utiaji {
-    sub hi {
-        return 'hi';
+    Bailador::import;
+
+    get '/' => sub {
+        "Welcome to Utiaji"
+    }
+
+    method run {
+        baile;
     }
 }
