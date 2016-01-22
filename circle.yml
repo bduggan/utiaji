@@ -1,0 +1,8 @@
+dependencies:
+  pre:
+    - ./install.sh
+  cache_directories:
+    - build_cache
+test:
+  override:
+    PERL5LIB=lib prove -v -r --exec=perl6 t/
