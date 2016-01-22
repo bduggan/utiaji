@@ -10,8 +10,7 @@ if [ -d $HOME/build_cache/moar-$version ]; then
 else
     rakudobrew build moar $version
     rakudobrew build-panda
+    panda installdeps .
     cp -al $HOME/.rakudobrew/moar-$version $HOME/build_cache
 fi
-
-panda installdeps .
 
