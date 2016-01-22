@@ -8,6 +8,7 @@ if [ -d $HOME/build_cache/moar-$version ]; then
     rakudobrew global $version
     rakudobrew rehash
 else
+    export PATH=~/.rakudobrew/bin:$PATH
     rakudobrew build moar $version
     rakudobrew build-panda
     cp -al $HOME/.rakudobrew/moar-$version $HOME/build_cache
