@@ -1,6 +1,6 @@
 machine:
   environment:
-    PATH: $HOME/.rakudobrew/bin:$PATH PGDATABASE=test
+    PATH: $HOME/.rakudobrew/bin:$PATH
 dependencies:
   pre:
     - createdb test -U postgres
@@ -10,4 +10,4 @@ dependencies:
     - ../.rakudobrew
 test:
   override:
-    - PERL5LIB=lib prove -v -r --exec=perl6 t/
+    - PGDATABASE=test PERL5LIB=lib prove -v -r --exec=perl6 t/
