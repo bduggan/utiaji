@@ -5,4 +5,4 @@ dependencies:
     - build_cache
 test:
   override:
-    PERL5LIB=lib prove -v -r --exec=perl6 t/
+    - PERL5LIB=lib prove -v -r --exec=perl6 t/
