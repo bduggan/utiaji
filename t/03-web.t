@@ -1,6 +1,8 @@
 use v6;
 use Test;
+use Bailador;
 use Bailador::Test;
+
 use lib 'lib';
 
 use Utiaji;

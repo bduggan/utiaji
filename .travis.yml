@@ -4,6 +4,7 @@ install:
   - ./install.sh
 before_script:
   - createdb test -U postgres
+  - psql test -c 'create table kv(k varchar not null primary key, v jsonb)'
 script:
   - PERL6LIB=lib prove -v -r --exec=perl6 t/
 cache:
