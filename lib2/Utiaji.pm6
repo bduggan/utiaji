@@ -18,17 +18,17 @@ class Utiaji {
     }
 
     method handler {
-        return sub ($request, $response) {
+        return sub ($req, $res) {
             my $route = self.routes.lookup(
-                verb => $request.method,
-                path => $request.uri,
+                verb => $req.method,
+                path => $req.uri,
             );
             if $route {
                 my $cb = $route.code();
-                return $cb($request,$response);
+                return $cb($req,$res);
             }
-            $response.status(404);
-            $response.close("Not Found");
+            $res.status(404);
+            $res.close("Not Found");
         }
     }
 
