@@ -18,6 +18,5 @@ my %res = $ua.get("http://localhost:9999/bob");
 
 is %res<content>, 'uncle', 'got content';
 is %res<status>, 200, 'status 200';
-diag %res.perl;
 
 
