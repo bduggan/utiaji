@@ -1,6 +1,6 @@
 use Test;
 
-use lib 'lib2';
+use lib 'lib';
 
 use Utiaji::Routes;
 
@@ -17,16 +17,46 @@ $routes.routes.push(
 );
 
 $routes.routes.push(
-    Utiaji::Route.new(:name<findme>, :verb<GET>, :path</findme>, code => sub {
-        return "found it";
-    } )
+    Utiaji::Route.new(
+        :name<findme>,
+        :verb<GET>,
+        :path</findme>,
+        code => sub {
+            return "found it";
+        } )
 );
 
 is $routes.routes[0].name, 'hi', 'added a route';
 is $routes.routes[1].name, 'ho', 'added a route';
 
+$routes.routes.push(
+    Utiaji::Route.new(
+        :name<patternroute>,
+        :verb<GET>,
+        path => rx{ \/with\/pattern\d },
+        code => sub {
+            return "found pattern";
+        } )
+);
+
+$routes.routes.push(
+    Utiaji::Route.new(
+        :name<top>,
+        :verb<GET>,
+        path => "/")
+);
+
 my $found = $routes.lookup(path => '/findme', verb => 'GET');
 ok $found, "Found route";
 is $found.name, 'findme', 'lookup by path';
 is $found.code()(), "found it", "ran route code";
+
+$found = $routes.lookup(
+    path => "/with/pattern9",
+    verb => "GET"
+);
+
+ok $found, "Found pattern";
+is $found.name, "patternroute", "Found right pattern";
+
 

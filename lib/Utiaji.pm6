@@ -1,53 +1,28 @@
-use Bailador;
-use JSON::Fast;
-use DBIish;
+use Utiaji::App;
 
-my $db = DBIish.connect("Pg", database => %*ENV<PGDATABASE>);
+class Utiaji is Utiaji::App {
+method BUILD {
+    self.routes = Utiaji::Routes.new;
+    given (self.routes) {
 
-# createdb utiaji
-# psql utiaji -c "create table kv(k varchar not null primary key, v jsonb)"
-
-class Utiaji {
-
-    get '/' => sub {
-        "Welcome to Utiaji"
-    }
-
-    get '/get/:key' => sub ($key) {
-        my $sth = $db.prepare(q[select v from kv where k=?]);
-        $sth.execute($key);
-        my $json = $sth.row;
-        header("Content-Type", "application/json");
-        return $json ~ "\n";
-    }
-
-    post '/del/:key' => sub ($key) {
-        my $sth = $db.prepare(q[delete from kv where k=?]);
-        $sth.execute($key);
-        my $json = $sth.row;
-        header("Content-Type", "application/json");
-        return '{"status":"ok"}';
-    }
-
-
-    post '/set/:key' => sub ($key) {
-        my $json =
-            try {
-                CATCH {
-                    default {
-                        warn "Error parsing JSON: $_";
-                        return "Error parsing JSON."
-                    }
-                }
-                from-json(request.body)
+        # Routing table.
+        .get('/',
+            sub ($req,$res) {
+                $res.headers<Content-Type> = 'text/plain';
+                $res.status = 200;
+                $res.close('Welcome to Utiaji.')
             }
-        my $sth = $db.prepare(q[insert into kv (k,v) values (?, ?)]);
-        $sth.execute($key, to-json($json));
-        header("Content-Type", "application/json");
-        return '{"status":"ok"}';
-    }
+        );
 
-    method run {
-        baile;
+         my regex piece { <-[ / ]>+ };
+        .get(rx{^ \/get\/<key=piece> $},
+            sub ($req,$res, $m) {
+                $res.headers<Content-Type> = 'text/plain';
+                $res.status = 200;
+                $res.close("We got $m<key>\n");
+            }
+        );
+
     }
+}
 }
