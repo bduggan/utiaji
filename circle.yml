@@ -1,14 +1,15 @@
 machine:
   environment:
     PATH: $HOME/.rakudobrew/bin:$PATH
+    PGDATABASE: test
 dependencies:
   pre:
     - createdb test -U postgres
-    - psql test -c 'create table kv(k varchar not null primary key, v jsonb)'
+    - psql test -U postgres -c 'create table kv(k varchar not null primary key, v jsonb)'
   override:
     - ./install.sh
   cache_directories:
     - ../.rakudobrew
 test:
   override:
-    - PGDATABASE=test PERL5LIB=lib prove -v -r --exec=perl6 t/
+    - PERL5LIB=lib prove -v -r --exec=perl6 t/
