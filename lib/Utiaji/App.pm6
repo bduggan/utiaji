@@ -18,7 +18,10 @@ class Utiaji::App {
             );
             if $route {
                 my $cb = $route.code();
-                return $cb($req,$res,$matches);
+                if ($matches) {
+                    return $cb($req,$res);
+                }
+                return $cb($req,$res);
             }
             $res.status = 404;
             $res.headers<Connection> = 'Close';

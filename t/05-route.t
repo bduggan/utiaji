@@ -46,12 +46,12 @@ $routes.routes.push(
         path => "/")
 );
 
-my $found = $routes.lookup(path => '/findme', verb => 'GET');
+my ($found,$m) = $routes.lookup(path => '/findme', verb => 'GET');
 ok $found, "Found route";
 is $found.name, 'findme', 'lookup by path';
 is $found.code()(), "found it", "ran route code";
 
-$found = $routes.lookup(
+($found,$m) = $routes.lookup(
     path => "/with/pattern9",
     verb => "GET"
 );
