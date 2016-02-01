@@ -53,22 +53,40 @@ method BUILD {
                 }
                 if ($errors) {
                      $res.status = 400;
+                     $res.headers<Content-Type> = 'application/json';
                      $res.close(to-json(
                           { status => "fail",
                             reason => $errors,
                           }));
-                     $res.headers<Content-Type> = 'application/json';
                      return;
                 }
 
-                my $sth = $db.prepare(q[insert into kv (k,v) values (?, ?)]);
-                $sth.execute($key, to-json($json));
+                $errors = "";
+                try {
+                    CATCH {
+                        $errors = .message;
+                        .resume
+                    }
+                    my $sth = $db.prepare(q[insert into kv (k,v) values (?, ?)]);
+                    $sth.execute($key, to-json($json));
+                }
+                if ($errors) {
+                     $res.status = 400;
+                     $res.headers<Content-Type> = 'application/json';
+                     $res.close(to-json(
+                          { status => "fail",
+                            reason => $errors,
+                          }));
+                     return;
+                }
 
                 $res.headers<Content-Type> = 'application/json';
                 $res.status = 200;
                 $res.close(to-json({ status => 'ok' } ));
             }
         )
+
+
     }
 }
 }
