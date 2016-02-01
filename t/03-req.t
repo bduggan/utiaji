@@ -55,5 +55,5 @@ is %res<headers><content-type>, 'application/json', 'content type';
 is %res<status>, 200, "delete ok";
 is %res<headers><content-type>, 'application/json', 'content type';
 
-
+diag %res.perl;
 

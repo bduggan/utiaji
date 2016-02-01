@@ -16,7 +16,7 @@ method BUILD {
     given (self.routes) {
 
         # Routing table.
-        .get('/',
+        .get(rx{^ '\/' $},
             sub ($req,$res) {
                 $res.headers<Content-Type> = 'text/plain';
                 $res.status = 200;
@@ -84,8 +84,36 @@ method BUILD {
                 $res.status = 200;
                 $res.close(to-json({ status => 'ok' } ));
             }
-        )
+        );
 
+        .post(rx{^ \/del\/<key=piece> $},
+            sub ($req,$res,$m) {
+                my $errors;
+                my $key = $m<key>;
+                $errors = "";
+                try {
+                    CATCH {
+                        $errors = .message;
+                        .resume
+                    }
+                    my $sth = $db.prepare(q[delete from kv where k = ?]);
+                    $sth.execute($key);
+                }
+                if ($errors) {
+                     $res.status = 400;
+                     $res.headers<Content-Type> = 'application/json';
+                     $res.close(to-json(
+                          { status => "fail",
+                            reason => $errors,
+                          }));
+                     return;
+                }
+
+                $res.headers<Content-Type> = 'application/json';
+                $res.status = 200;
+                $res.close(to-json({ status => 'ok' } ));
+            }
+        );
 
     }
 }

@@ -1,8 +1,13 @@
 class Utiaji::Route {
     has $.name is rw;
     has $.verb is rw;
-    has $.path is rw;
+    has Regex $.path is rw;
     has $.code is rw;
+    method brief {
+        return  ( self.verb // "<no verb>" )
+              ~ ": "
+              ~ ( self.path.gist // "<no path>");
+    }
 }
 
 class Utiaji::Routes {
@@ -28,7 +33,7 @@ class Utiaji::Routes {
         return;
     }
 
-    method get($path, $cb) {
+    method get(Regex $path, $cb) {
         my $r = Utiaji::Route.new(
                 verb => 'GET',
                 path => $path,
@@ -37,7 +42,7 @@ class Utiaji::Routes {
         self.routes.push($r);
     }
 
-    method post($path, $cb) {
+    method post(Regex $path, $cb) {
         my $r = Utiaji::Route.new(
                 verb => 'POST',
                 path => $path,

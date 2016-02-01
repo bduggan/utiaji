@@ -25,6 +25,10 @@ class Utiaji::App {
             }
             $res.status = 404;
             $res.headers<Connection> = 'Close';
+            $res.write("Routes : ");
+            for self.routes.routes.flat -> $r {
+                $res.write($r.brief);
+            }
             $res.close("Sorry, not found\n");
         }
     }
