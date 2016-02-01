@@ -26,6 +26,12 @@ is %res<headers><content-type>, 'text/plain', 'content type';
 %res = $ua.get("$base/no/such/place");
 is %res<status>, 404, "404 not found";
 
+# Send invalid JSON
+%res = $ua.post("$base/set/foo",
+    headers => "Content-type" => 'application/json',
+    content => 'not v{ a ) } (lid JSON ');
+is %res<status>, 400, "error for invalid json";
+
 %res = $ua.post("$base/set/foo",
     headers => "Content-type" => 'application/json',
     content => to-json( { abc => 123 } ) );
