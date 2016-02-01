@@ -36,5 +36,15 @@ class Utiaji::Routes {
         );
         self.routes.push($r);
     }
+
+    method post($path, $cb) {
+        my $r = Utiaji::Route.new(
+                verb => 'POST',
+                path => $path,
+                code => $cb
+        );
+        self.routes.push($r);
+    }
+
 }
 

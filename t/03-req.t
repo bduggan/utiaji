@@ -10,6 +10,7 @@ use Test;
 # TODO find a port
 my $port = 9999;
 my $base = "http://localhost:$port";
+use JSON::Fast;
 
 my $u = Utiaji.new;
 $u.start($port);
@@ -24,4 +25,13 @@ is %res<headers><content-type>, 'text/plain', 'content type';
 
 %res = $ua.get("$base/no/such/place");
 is %res<status>, 404, "404 not found";
+
+%res = $ua.post("$base/set/foo",
+    headers => "Content-type" => 'application/json',
+    content => to-json( { abc => 123 } ) );
+
+is %res<status>, 200, "post ok";
+is %res<headers><content-type>, 'application/json', 'content type';
+my $json = from-json(%res<content>);
+is-deeply $json, { "status" => "ok" }, "got response";
 
