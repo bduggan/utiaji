@@ -71,7 +71,7 @@ method BUILD {
                     $sth.execute($key, to-json($json));
                 }
                 if ($errors) {
-                     $res.status = 400;
+                     $res.status = 409;
                      $res.headers<Content-Type> = 'application/json';
                      $res.close(to-json(
                           { status => "fail",

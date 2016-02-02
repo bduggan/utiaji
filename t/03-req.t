@@ -46,7 +46,7 @@ is-deeply $json, { "status" => "ok" }, "got response";
 %res = $ua.post("$base/set/foo",
     headers => "Content-type" => 'application/json',
     content => to-json( { abc => 456 } ) );
-is %res<status>, 400, "duplicate key";
+is %res<status>, 409, "duplicate key";
 is %res<headers><content-type>, 'application/json', 'content type';
 
 # Delete it
@@ -55,5 +55,4 @@ is %res<headers><content-type>, 'application/json', 'content type';
 is %res<status>, 200, "delete ok";
 is %res<headers><content-type>, 'application/json', 'content type';
 
-diag %res.perl;
 
