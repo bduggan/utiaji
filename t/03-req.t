@@ -49,10 +49,17 @@ is-deeply $json, { "status" => "ok" }, "got response";
 is %res<status>, 409, "duplicate key";
 is %res<headers><content-type>, 'application/json', 'content type';
 
+# Get original
+%res = $ua.get("$base/get/foo");
+is %res<status>, 200, "Success";
+is %res<headers><content-type>, 'application/json', 'content type';
+is-deeply from-json(%res<content>), { "abc" => 123 }, "got JSON";
+
 # Delete it
 %res = $ua.post("$base/del/foo",
     headers => "Content-type" => 'application/json');
 is %res<status>, 200, "delete ok";
 is %res<headers><content-type>, 'application/json', 'content type';
 
+done-testing;
 

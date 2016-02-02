@@ -4,23 +4,23 @@ use lib 'lib';
 
 use Utiaji::Routes;
 
-my $r = Utiaji::Route.new(name => 'hi', verb => 'GET', path => '/there');
+my $r = Utiaji::Route.new(name => 'hi', verb => 'GET', path => rx{\/there});
 is $r.name, 'hi', 'set name';
 is $r.verb, 'GET', 'set verb';
-is $r.path, '/there', 'set path';
+#is $r.path, rx{\/there}, 'set path';
 
 my $routes = Utiaji::Routes.new;
 $routes.routes.push($r);
 
 $routes.routes.push(
-    Utiaji::Route.new(:name<ho>, :verb<GET>, :path</here>)
+    Utiaji::Route.new(:name<ho>, :verb<GET>, path => rx{^ \/here $})
 );
 
 $routes.routes.push(
     Utiaji::Route.new(
         :name<findme>,
         :verb<GET>,
-        :path</findme>,
+        path => rx{^ \/findme $},
         code => sub {
             return "found it";
         } )
@@ -33,7 +33,7 @@ $routes.routes.push(
     Utiaji::Route.new(
         :name<patternroute>,
         :verb<GET>,
-        path => rx{ \/with\/pattern\d },
+        path => rx{^ \/with\/pattern\d $},
         code => sub {
             return "found pattern";
         } )
@@ -43,7 +43,7 @@ $routes.routes.push(
     Utiaji::Route.new(
         :name<top>,
         :verb<GET>,
-        path => "/")
+        path => rx{^ \/ $})
 );
 
 my ($found,$m) = $routes.lookup(path => '/findme', verb => 'GET');
@@ -59,4 +59,4 @@ is $found.code()(), "found it", "ran route code";
 ok $found, "Found pattern";
 is $found.name, "patternroute", "Found right pattern";
 
-
+done-testing;

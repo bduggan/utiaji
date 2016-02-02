@@ -1,8 +1,8 @@
 class Utiaji::Route {
-    has $.name is rw;
-    has $.verb is rw;
-    has Regex $.path is rw;
-    has $.code is rw;
+    has $.name;
+    has $.verb;
+    has Regex $.path;
+    has $.code;
     method brief {
         return  ( self.verb // "<no verb>" )
               ~ ": "
