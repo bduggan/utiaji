@@ -1,16 +1,16 @@
 #!/usr/bin/env perl6
 
 use v6;
-use lib 'lib';
 use HTTP::Tinyish;
-
-use Utiaji;
+use JSON::Fast;
 use Test;
+
+use lib 'lib';
+use Utiaji;
 
 # TODO find a port
 my $port = 9999;
 my $base = "http://localhost:$port";
-use JSON::Fast;
 
 my $u = Utiaji.new;
 $u.start($port);
