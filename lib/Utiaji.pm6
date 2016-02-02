@@ -16,7 +16,7 @@ method BUILD {
     given (self.routes) {
 
         # Routing table.
-        .get(rx{^ '\/' $},
+        .get(rx{^ \/ $},
             sub ($req,$res) {
                 $res.headers<Content-Type> = 'text/plain';
                 $res.status = 200;

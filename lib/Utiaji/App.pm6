@@ -16,18 +16,20 @@ class Utiaji::App {
                 verb => $req.method,
                 path => $req.uri,
             );
+            # TODO debug say " {$req.method} {$req.uri} ";
             if $route {
                 my $cb = $route.code();
-                if ($matches) {
+                if ($matches.hash.elems) {
                     return $cb($req,$res,$matches);
                 }
                 return $cb($req,$res);
             }
             $res.status = 404;
             $res.headers<Connection> = 'Close';
-            $res.write("Routes : ");
+            $res.write("Not found: { $req.method } { $req.uri }\nAvailable routes :\n");
             for self.routes.routes.flat -> $r {
                 $res.write($r.brief);
+                $res.write("\n");
             }
             $res.close("Sorry, not found\n");
         }
