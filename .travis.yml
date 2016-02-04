@@ -1,3 +1,5 @@
+sudo:
+  false
 env:
   - PATH=$PATH:$HOME/.rakudobrew/bin PGDATABASE=test CACHED=$HOME/build_cache
 install:
