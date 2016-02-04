@@ -1,3 +1,3 @@
 test:
-	PGDATABASE=test PERL6LIB=lib prove -v -r --exec=perl6 t/
+	PGDATABASE=test prove -Ilib -v -r --exec=perl6 t/
 

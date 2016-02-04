@@ -17,7 +17,6 @@ method start_server {
     $.app.start($port);
     $.server_url = "http://localhost:$port";
     sleep 2;
-    self;
 }
 
 method get_ok($path) {
