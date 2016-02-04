@@ -61,6 +61,7 @@ multi method post_ok(Str $path, :%headers, Str :$content ) {
 multi method post_ok(Str $path) {
     %.res = $.ua.post($.server_url ~ $path);
     isnt %.res<status>, 599, "POST $path";
+    self;
 }
 
 method json_is($json) {
