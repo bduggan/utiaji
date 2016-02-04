@@ -29,7 +29,11 @@ method BUILD {
                 my $sth = self.db.prepare(
                         q[select v from kv where k=?]);
                 $sth.execute($m<key>);
-                my $json = $sth.row;
+                my $json = $sth.row
+                    or do { $res.status = 404;
+                            $res.close;
+                            return;
+                        };
                 $res.headers<Content-Type> = 'application/json';
                 $res.status = 200;
                 $res.close("$json\n");
@@ -49,14 +53,14 @@ method BUILD {
                         .resume
                     }
                     # chop removes trailling \0
-                    $json = from-json($req.data.decode('UTF-8').chop)
+                    $json = from-json($req.data.decode('UTF-8').chop);
                 }
-                if ($errors) {
+                if ($errors or !$json) {
                      $res.status = 400;
                      $res.headers<Content-Type> = 'application/json';
                      $res.close(to-json(
                           { status => "fail",
-                            reason => $errors,
+                            reason => $errors // "Could not parse",
                           }));
                      return;
                 }
