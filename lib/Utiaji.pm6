@@ -18,9 +18,7 @@ method BUILD {
         # Routing table.
         .get(rx{^ \/ $},
             sub ($req,$res) {
-                $res.headers<Content-Type> = 'text/plain';
-                $res.status = 200;
-                $res.close('Welcome to Utiaji.')
+                self.render($res, text => 'Welcome to Utiaji.');
             }
         );
 

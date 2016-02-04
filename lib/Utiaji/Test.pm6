@@ -19,7 +19,7 @@ method start_server {
     sleep 2;
 }
 
-method get_ok($path) {
+method get_ok(Str $path) {
     %.res = $.ua.get($.server_url ~ $path);
     isnt %.res<status>, 599, "GET $path";
     self;
