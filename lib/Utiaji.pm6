@@ -32,9 +32,7 @@ method BUILD {
                             $res.close;
                             return;
                         };
-                $res.headers<Content-Type> = 'application/json';
-                $res.status = 200;
-                $res.close("$json\n");
+                self.render($res, json => $json);
             }
         );
 

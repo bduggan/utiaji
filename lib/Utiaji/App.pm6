@@ -1,5 +1,6 @@
 use HTTP::Server::Async;
 use Utiaji::Routes;
+use Utiaji::Log;
 use DBIish;
 
 die "Please set PGDATABASE" unless %*ENV<PGDATABASE>;
@@ -11,12 +12,11 @@ has $.db = DBIish.connect("Pg", database => %*ENV<PGDATABASE>);
 
 method handler {
     return sub ($req, $res) {
-        my ($route,$matches)
-         = self.routes.lookup(
+        my ($route,$matches) = self.routes.lookup(
             verb => $req.method,
             path => $req.uri,
         );
-        # TODO debug say " {$req.method} {$req.uri} ";
+        trace "# Utiaji::App: {$req.method} {$req.uri} ";
         if $route {
             my $cb = $route.code();
             if ($matches.hash.elems) {
@@ -42,9 +42,17 @@ method start($port) {
     $s.listen;
 }
 
-method render($res, :$text) {
+multi method render($res, :$text!) {
+    trace "# rendering text";
     $res.headers<Content-Type> = 'text/plain';
     $res.status = 200;
     $res.close('Welcome to Utiaji.')
+}
+
+multi method render($res, :$json!) {
+    trace "# rendering json";
+    $res.headers<Content-Type> = 'application/json';
+    $res.status = 200;
+    $res.close("$json\n");
 }
 

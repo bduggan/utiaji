@@ -66,7 +66,16 @@ multi method post_ok(Str $path) {
 
 method json_is($json) {
     self.content_type_is('application/json');
-    is-deeply $json, from-json(%.res<content>), "JSON matches";
+    my $json_res;
+    try {
+        $json_res = from-json(%.res<content>);
+        CATCH {
+            diag %.res<content>;
+            diag .message;
+            .resume;
+        }
+    }
+    is-deeply $json, $json_res, "JSON matches";
     self;
 }
 

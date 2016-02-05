@@ -1,3 +1,5 @@
+use Utiaji::Log;
+
 class Utiaji::Route {
     has $.name;
     has $.verb;
@@ -13,13 +15,15 @@ class Utiaji::Route {
 class Utiaji::Routes {
     has Array $.routes is rw = [];
 
-    method lookup(:$path!,:$verb!) {
+    method lookup(:$verb!,:$path!) {
+        trace "# Utiaji::Routes, lookup $verb $path";
 
         my @matches;
         my $captures;
         for self.routes.flat -> $route {
             next unless $verb eq $route.verb;
             next unless $path ~~ $route.path;
+            trace "# Utiaji::Routes, found { $route.verb } { $route.path.perl }";
             push @matches, $route;
             $captures = $/;
         }
