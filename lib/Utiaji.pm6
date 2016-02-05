@@ -32,6 +32,7 @@ method BUILD {
                             $res.close;
                             return;
                         };
+                $json = from-json($json);
                 self.render($res, json => $json);
             }
         );
@@ -52,13 +53,12 @@ method BUILD {
                     $json = from-json($req.data.decode('UTF-8').chop);
                 }
                 if ($errors or !$json) {
-                     $res.status = 400;
-                     $res.headers<Content-Type> = 'application/json';
-                     $res.close(to-json(
+                     return self.render( $res,
+                         status => 400,
+                         json =>
                           { status => "fail",
-                            reason => $errors // "Could not parse",
-                          }));
-                     return;
+                            reason => $errors // "Could not parse" }
+                     );
                 }
 
                 $errors = "";
@@ -71,18 +71,12 @@ method BUILD {
                     $sth.execute($key, to-json($json));
                 }
                 if ($errors) {
-                     $res.status = 409;
-                     $res.headers<Content-Type> = 'application/json';
-                     $res.close(to-json(
-                          { status => "fail",
-                            reason => $errors,
-                          }));
-                     return;
+                    return self.render($res,
+                        status => 409,
+                        json => { status => "fail", reason => $errors, });
                 }
 
-                $res.headers<Content-Type> = 'application/json';
-                $res.status = 200;
-                $res.close(to-json({ status => 'ok' } ));
+                self.render($res, json => { status => 'ok' } );
             }
         );
 
@@ -100,18 +94,12 @@ method BUILD {
                     $sth.execute($key);
                 }
                 if ($errors) {
-                     $res.status = 400;
-                     $res.headers<Content-Type> = 'application/json';
-                     $res.close(to-json(
-                          { status => "fail",
-                            reason => $errors,
-                          }));
-                     return;
+                    return self.render($res,
+                        status => 400,
+                        json => { status => "fail", reason => $errors, });
                 }
 
-                $res.headers<Content-Type> = 'application/json';
-                $res.status = 200;
-                $res.close(to-json({ status => 'ok' } ));
+                return self.render($res, json => { status => 'ok' });
             }
         );
 

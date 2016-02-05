@@ -1,7 +1,9 @@
 use HTTP::Server::Async;
+use JSON::Fast;
+use DBIish;
+
 use Utiaji::Routes;
 use Utiaji::Log;
-use DBIish;
 
 die "Please set PGDATABASE" unless %*ENV<PGDATABASE>;
 
@@ -42,17 +44,17 @@ method start($port) {
     $s.listen;
 }
 
-multi method render($res, :$text!) {
+multi method render($res, :$text!, :$status=200) {
     trace "# rendering text";
     $res.headers<Content-Type> = 'text/plain';
-    $res.status = 200;
+    $res.status = $status;
     $res.close('Welcome to Utiaji.')
 }
 
-multi method render($res, :$json!) {
+multi method render($res, :$json!, :$status=200) {
     trace "# rendering json";
     $res.headers<Content-Type> = 'application/json';
-    $res.status = 200;
-    $res.close("$json\n");
+    $res.status = $status;
+    $res.close(to-json($json) ~ "\n");
 }
 
