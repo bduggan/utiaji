@@ -28,16 +28,17 @@ method BUILD {
 
         .get(rx{^ \/get\/<key=piece> $},
             sub ($req,$res,$m) {
-                $db.query('select v from kv where k=?', $m<key>)
-                           or return self.render:$res, status => 404;
-                return self.render($res, :404status) unless $db.json;
-                self.render: $res, json => $db.json
+                $db.query: "select v from kv where k=?", $m<key>
+                    or return self.render: $res, :404status;
+                my $json = $db.json or return self.render: $res, :404status;
+                self.render: $res, :$json
             }
         );
 
         .post(rx{^ \/set\/<key=piece> $},
             sub ($req,$res,$m) {
                 my $key = $m<key>;
+                #my $json = $req.json or return self.render: $res, :400status;
                 my $json;
                 my $errors;
                 # TODO encapsulate
@@ -70,22 +71,9 @@ method BUILD {
 
         .post(rx{^ \/del\/<key=piece> $},
             sub ($req,$res,$m) {
-                my $errors;
-                my $key = $m<key>;
-                $errors = "";
-                try {
-                    CATCH {
-                        $errors = .message;
-                        .resume
-                    }
-                    my $sth = $db.db.prepare(q[delete from kv where k = ?]);
-                    $sth.execute($key);
-                }
-                if ($errors) {
-                    return self.render: $res,
-                        status => 400,
-                        json => { status => "fail", reason => $errors, }
-                }
+                $db.query: "delete from kv where k = ?", $m<key>
+                    or return self.render: $res, :400status,
+                       json => { status => "fail", reason => $db.errors };
 
                 return self.render: $res, json => { status => 'ok' }
             }
