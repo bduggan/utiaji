@@ -8,7 +8,8 @@ my $db = Utiaji::DB.new;
 # createdb utiaji
 # psql utiaji -c "create table kv(k varchar not null primary key, v jsonb)"
 
-class Utiaji is Utiaji::App {
+unit class Utiaji is Utiaji::App;
+
 method BUILD {
 
     my regex piece { <-[ / ]>+ };
@@ -59,5 +60,4 @@ method BUILD {
         );
 
     }
-}
 }
