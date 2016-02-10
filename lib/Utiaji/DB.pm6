@@ -12,7 +12,12 @@ method BUILD {
     $.db = DBIish.connect("Pg", database => %*ENV<PGDATABASE>);
 }
 
-method query($sql,*@bind) {
+multi method query($sql, $key, :$json!) {
+    my $arg = to-json($json);
+    self.query($sql,$key,$arg);
+}
+
+multi method query($sql,*@bind) {
     $.sth = self.db.prepare($sql);
     try {
         CATCH {

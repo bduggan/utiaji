@@ -1,13 +1,9 @@
-use JSON::Fast;
-use DBIish;
-
 use Utiaji::App;
 use Utiaji::DB;
 use Utiaji::Log;
 
-
-#my $db = DBIish.connect("Pg", database => %*ENV<PGDATABASE>);
 my $db = Utiaji::DB.new;
+
 # setup:
 # createdb utiaji
 # psql utiaji -c "create table kv(k varchar not null primary key, v jsonb)"
@@ -38,11 +34,12 @@ method BUILD {
         .post(rx{^ \/set\/<key=piece> $},
             sub ($req,$res,$m,$json) {
                 my $key = $m<key>;
-                return self.render: $res, :400status,
-                    json => { status => "fail",
-                              reason => "missing or invalid json"
-                          } unless $json;
-                $db.query(q[insert into kv (k,v) values (?, ?)], $key, to-json($json))
+                unless $json {
+                    return self.render: $res, :400status,
+                        json => { status => "fail",
+                                  reason => "missing or invalid json" }
+                }
+                $db.query(q[insert into kv (k,v) values (?, ?)], $key, :$json)
                     or return self.render: $res,
                         json => { status => "fail", reason => $db.errors },
                         status => 409;
