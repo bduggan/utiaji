@@ -16,14 +16,14 @@ class Utiaji::Routes {
     has Array $.routes is rw = [];
 
     method lookup(:$verb!,:$path!) {
-        trace "# Utiaji::Routes, lookup $verb $path";
+        trace "lookup $verb $path";
 
         my @matches;
         my $captures;
         for self.routes.flat -> $route {
             next unless $verb eq $route.verb;
             next unless $path ~~ $route.path;
-            trace "# Utiaji::Routes, found { $route.verb } { $route.path.perl }";
+            trace "found { $route.verb } { $route.path.perl }";
             push @matches, $route;
             $captures = $/;
         }

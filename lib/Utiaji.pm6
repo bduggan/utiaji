@@ -1,8 +1,13 @@
-use Utiaji::App;
 use JSON::Fast;
 use DBIish;
 
-my $db = DBIish.connect("Pg", database => %*ENV<PGDATABASE>);
+use Utiaji::App;
+use Utiaji::DB;
+use Utiaji::Log;
+
+
+#my $db = DBIish.connect("Pg", database => %*ENV<PGDATABASE>);
+my $db = Utiaji::DB.new;
 # setup:
 # createdb utiaji
 # psql utiaji -c "create table kv(k varchar not null primary key, v jsonb)"
@@ -13,9 +18,8 @@ method BUILD {
     my regex piece { <-[ / ]>+ };
 
     self.routes = Utiaji::Routes.new;
+    # Routing table.
     given (self.routes) {
-
-        # Routing table.
         .get(rx{^ \/ $},
             sub ($req,$res) {
                 self.render($res, text => 'Welcome to Utiaji.');
@@ -24,16 +28,10 @@ method BUILD {
 
         .get(rx{^ \/get\/<key=piece> $},
             sub ($req,$res,$m) {
-                my $sth = self.db.prepare(
-                        q[select v from kv where k=?]);
-                $sth.execute($m<key>);
-                my $json = $sth.row
-                    or do { $res.status = 404;
-                            $res.close;
-                            return;
-                        };
-                $json = from-json($json);
-                self.render($res, json => $json);
+                $db.query('select v from kv where k=?', $m<key>)
+                           or return self.render($res, status => 404);
+                return self.render($res, :404status) unless $db.json;
+                self.render($res, json => $db.json);
             }
         );
 
@@ -42,17 +40,18 @@ method BUILD {
                 my $key = $m<key>;
                 my $json;
                 my $errors;
+                # TODO encapsulate
                 try {
                     CATCH {
-                        # TODO, logging
-                        #say "error: " ~ .message;
+                        debug "error: { .message }";
                         $errors = .message;
-                        .resume
+                        .resume;
                     }
                     # chop removes trailling \0
                     $json = from-json($req.data.decode('UTF-8').chop);
                 }
                 if ($errors or !$json) {
+                     trace "rendering error";
                      return self.render( $res,
                          status => 400,
                          json =>
@@ -61,21 +60,12 @@ method BUILD {
                      );
                 }
 
-                $errors = "";
-                try {
-                    CATCH {
-                        $errors = .message;
-                        .resume
-                    }
-                    my $sth = $db.prepare(q[insert into kv (k,v) values (?, ?)]);
-                    $sth.execute($key, to-json($json));
-                }
-                if ($errors) {
-                    return self.render($res,
-                        status => 409,
-                        json => { status => "fail", reason => $errors, });
-                }
-
+                $db.query(q[insert into kv (k,v) values (?, ?)], $key, to-json($json))
+                    or return self.render($res,
+                        json => { status => "fail", reason => $db.errors },
+                        status => 409
+                   );
+                trace "rendering ok";
                 self.render($res, json => { status => 'ok' } );
             }
         );
@@ -90,7 +80,7 @@ method BUILD {
                         $errors = .message;
                         .resume
                     }
-                    my $sth = $db.prepare(q[delete from kv where k = ?]);
+                    my $sth = $db.db.prepare(q[delete from kv where k = ?]);
                     $sth.execute($key);
                 }
                 if ($errors) {

@@ -18,7 +18,7 @@ method handler {
             verb => $req.method,
             path => $req.uri,
         );
-        trace "# Utiaji::App: {$req.method} {$req.uri} ";
+        trace "{$req.method} {$req.uri} ";
         if $route {
             my $cb = $route.code();
             if ($matches.hash.elems) {
@@ -45,16 +45,25 @@ method start($port) {
 }
 
 multi method render($res, :$text!, :$status=200) {
-    trace "# rendering text";
+    trace "rendering text";
     $res.headers<Content-Type> = 'text/plain';
     $res.status = $status;
     $res.close('Welcome to Utiaji.')
 }
 
 multi method render($res, :$json!, :$status=200) {
-    trace "# rendering json";
+    trace "rendering json";
     $res.headers<Content-Type> = 'application/json';
     $res.status = $status;
     $res.close(to-json($json) ~ "\n");
 }
+
+multi method render($res, :$status!) {
+    # NB, must be declared below the ones above.
+    trace "rendering status $status";
+    $res.status = $status;
+    $res.headers<Content-Type> = 'text/plain';
+    $res.close("");
+}
+
 
