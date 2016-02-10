@@ -22,16 +22,16 @@ method BUILD {
     given (self.routes) {
         .get(rx{^ \/ $},
             sub ($req,$res) {
-                self.render($res, text => 'Welcome to Utiaji.');
+                self.render: $res, text => 'Welcome to Utiaji.'
             }
         );
 
         .get(rx{^ \/get\/<key=piece> $},
             sub ($req,$res,$m) {
                 $db.query('select v from kv where k=?', $m<key>)
-                           or return self.render($res, status => 404);
+                           or return self.render:$res, status => 404;
                 return self.render($res, :404status) unless $db.json;
-                self.render($res, json => $db.json);
+                self.render: $res, json => $db.json
             }
         );
 
@@ -52,21 +52,19 @@ method BUILD {
                 }
                 if ($errors or !$json) {
                      trace "rendering error";
-                     return self.render( $res,
+                     return self.render: $res,
                          status => 400,
                          json =>
                           { status => "fail",
                             reason => $errors // "Could not parse" }
-                     );
                 }
 
                 $db.query(q[insert into kv (k,v) values (?, ?)], $key, to-json($json))
-                    or return self.render($res,
+                    or return self.render: $res,
                         json => { status => "fail", reason => $db.errors },
-                        status => 409
-                   );
+                        status => 409;
                 trace "rendering ok";
-                self.render($res, json => { status => 'ok' } );
+                self.render: $res, json => { status => 'ok' }
             }
         );
 
@@ -84,12 +82,12 @@ method BUILD {
                     $sth.execute($key);
                 }
                 if ($errors) {
-                    return self.render($res,
+                    return self.render: $res,
                         status => 400,
-                        json => { status => "fail", reason => $errors, });
+                        json => { status => "fail", reason => $errors, }
                 }
 
-                return self.render($res, json => { status => 'ok' });
+                return self.render: $res, json => { status => 'ok' }
             }
         );
 
