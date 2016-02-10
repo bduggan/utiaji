@@ -7,7 +7,6 @@ sub trace($msg) is export {
     my $back  = Backtrace.new;
     my $frame = $back.first: -> $f { !$f.is-setting and $f.file ne $?FILE };
     my $file = $frame.file.Str;
-    $file ~~ s/^$*CWD/./;
     my $line = $frame.line;
     my $out = $msg ~ " at {$file} $line";
     $out ~= " in {$frame.subname}" if $frame.subname;
