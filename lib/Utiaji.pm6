@@ -36,30 +36,12 @@ method BUILD {
         );
 
         .post(rx{^ \/set\/<key=piece> $},
-            sub ($req,$res,$m) {
+            sub ($req,$res,$m,$json) {
                 my $key = $m<key>;
-                #my $json = $req.json or return self.render: $res, :400status;
-                my $json;
-                my $errors;
-                # TODO encapsulate
-                try {
-                    CATCH {
-                        debug "error: { .message }";
-                        $errors = .message;
-                        .resume;
-                    }
-                    # chop removes trailling \0
-                    $json = from-json($req.data.decode('UTF-8').chop);
-                }
-                if ($errors or !$json) {
-                     trace "rendering error";
-                     return self.render: $res,
-                         status => 400,
-                         json =>
-                          { status => "fail",
-                            reason => $errors // "Could not parse" }
-                }
-
+                return self.render: $res, :400status,
+                    json => { status => "fail",
+                              reason => "missing or invalid json"
+                          } unless $json;
                 $db.query(q[insert into kv (k,v) values (?, ?)], $key, to-json($json))
                     or return self.render: $res,
                         json => { status => "fail", reason => $db.errors },
@@ -70,7 +52,7 @@ method BUILD {
         );
 
         .post(rx{^ \/del\/<key=piece> $},
-            sub ($req,$res,$m) {
+            sub ($req,$res,$m,$json) {
                 $db.query: "delete from kv where k = ?", $m<key>
                     or return self.render: $res, :400status,
                        json => { status => "fail", reason => $db.errors };

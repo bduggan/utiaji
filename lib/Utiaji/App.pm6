@@ -21,6 +21,17 @@ method handler {
         trace "{$req.method} {$req.uri} ";
         if $route {
             my $cb = $route.code();
+            my $content_type = $req.headers<Content-type>;
+            if ($content_type and $content_type eq 'application/json') {
+                trace "Got JSON";
+                my $json;
+                # TODO simplify, also log parse errors
+                try { $json = from-json($req.data.decode('UTF-8').chop); };
+                if ($matches.hash.elems) {
+                    return $cb($req,$res,$matches,$json);
+                }
+                return $cb($req,$res,$json);
+            }
             if ($matches.hash.elems) {
                 return $cb($req,$res,$matches);
             }
