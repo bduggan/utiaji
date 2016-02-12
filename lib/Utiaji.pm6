@@ -15,15 +15,16 @@ method BUILD {
     my regex piece { <-[ / ]>+ };
 
     self.routes = Utiaji::Routes.new;
+
     # Routing table.
     given (self.routes) {
-        .get(rx{^ \/ $},
+        .get('/',
             sub ($req,$res) {
                 self.render: $res, text => 'Welcome to Utiaji.'
             }
         );
 
-        .get(rx{^ \/get\/<key=piece> $},
+        .get(rx{^ '/' get '/' <key=piece> $},
             sub ($req,$res,$m) {
                 $db.query: "select v from kv where k=?", $m<key>
                     or return self.render: $res, :404status;
@@ -32,7 +33,7 @@ method BUILD {
             }
         );
 
-        .post(rx{^ \/set\/<key=piece> $},
+        .post(rx{^ '/' set '/' <key=piece> $},
             sub ($req,$res,$m,$json) {
                 my $key = $m<key>;
                 unless $json {
@@ -49,7 +50,7 @@ method BUILD {
             }
         );
 
-        .post(rx{^ \/del\/<key=piece> $},
+        .post(rx{^ '/' del '/' <key=piece> $},
             sub ($req,$res,$m,$json) {
                 $db.query: "delete from kv where k = ?", $m<key>
                     or return self.render: $res, :400status,

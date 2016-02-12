@@ -37,7 +37,11 @@ class Utiaji::Routes {
         return;
     }
 
-    method get(Regex $path, $cb) {
+    multi method get(Str $path, $cb) {
+        self.get(rx{^$path$}, $cb);
+    }
+
+    multi method get(Regex $path, $cb) {
         my $r = Utiaji::Route.new(
                 verb => 'GET',
                 path => $path,
