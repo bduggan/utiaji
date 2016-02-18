@@ -54,7 +54,12 @@ class Utiaji::Matcher {
         my $p = Utiaji::Router.parse($.pattern, actions => $a) or return;
         my $rex = $p.made;
         my $result = $path ~~ rx{ ^ <captured=$rex> $ };
-        self.captures = $/.hash{'captured'}.clone;
+        my %h = $/.hash.clone;
+        my %c = %h{'captured'}.hash;
+        %c<placeholder_word>:delete;
+        %c<placeholder_ascii_lc>:delete;
+        %c<placeholder_date>:delete;
+        self.captures = %c;
         return $result;
     }
 }
