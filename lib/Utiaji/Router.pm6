@@ -42,9 +42,8 @@ class Utiaji::RouterActions {
 }
 
 class Utiaji::Matcher {
-    has Str $.pattern is rw;
-    # Patterns are compiled into a string, $.rex, which is used as a regex.
-    has Str $.rex is rw;
+    has Str $.pattern;
+    has Str $.rex is rw;       # Compiled pattern ( used within a regex )
     has %.captures is rw = {};
 
     my regex placeholder_word     { [ \w | '-' ]+ }
@@ -64,21 +63,9 @@ class Utiaji::Matcher {
     method match(Str $path) is export {
         trace "Parsing $path";
         self!compile;
-        self.captures = {};
-        my $rex = $.rex;
-        my $result = $path ~~ rx{ ^ <captured=$rex> $ };
-        trace "result is { $result.gist }";
-        my %h = $/.hash.clone;
-        my %c = %h{'captured'}.hash;
-        # TODO cleanup
-        %c<placeholder_word>:delete;
-        %c<placeholder_ascii_lc>:delete;
-        %c<placeholder_date>:delete;
-        return $result unless %c.elems > 0;
-        for %c.kv -> $k, $v {
-            %c{$k} = ~$v;
-        }
-        self.captures = %c;
+        my $result = $path ~~ rx{ ^ <captured={$.rex}> $ };
+        %.captures = $<captured>.hash.grep: { $_.kv[0] !~~ /^placeholder/ };
+        $_ = ~$_ for values %.captures;
         return $result;
     }
 }
