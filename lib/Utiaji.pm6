@@ -33,8 +33,9 @@ method BUILD {
             }
         );
 
-        .post(rx{^ '/' set '/' <key=piece> $},
+        .post('/set/_key',
             sub ($req,$res,$m,$json) {
+                trace "running POST /set/_key";
                 my $key = $m<key>;
                 unless $json {
                     return self.render: $res, :400status,
@@ -50,7 +51,7 @@ method BUILD {
             }
         );
 
-        .post(rx{^ '/' del '/' <key=piece> $},
+        .post('/del/_key',
             sub ($req,$res,$m,$json) {
                 $db.query: "delete from kv where k = ?", $m<key>
                     or return self.render: $res, :400status,

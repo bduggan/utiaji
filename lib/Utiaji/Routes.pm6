@@ -30,7 +30,6 @@ class Utiaji::Routes {
                 next;
             }
             next unless $path ~~ $route.path;
-            trace "found { $route.verb } { $route.path.perl }";
             push @matches, $route;
             $captures = $/;
         }
@@ -63,7 +62,18 @@ class Utiaji::Routes {
         self.routes.push($r);
     }
 
-    method post(Regex $path, $cb) {
+    multi method post(Str $pattern, $cb) {
+        my $r = Utiaji::Route.new(
+                verb => 'POST',
+                path => $pattern,
+                matcher => Utiaji::Matcher.new(pattern => $pattern),
+                code => $cb
+        );
+        self.routes.push($r);
+    }
+
+
+    multi method post(Regex $path, $cb) {
         my $r = Utiaji::Route.new(
                 verb => 'POST',
                 path => $path,

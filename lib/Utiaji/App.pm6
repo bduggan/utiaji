@@ -28,12 +28,12 @@ method handler {
                 # TODO simplify, also log parse errors
                 try { $json = from-json($req.data.decode('UTF-8').chop); };
                 if ($matches.hash.elems) {
-                    return $cb($req,$res,$matches,$json);
+                    return $cb($req,$res,$matches.hash,$json);
                 }
                 return $cb($req,$res,$json);
             }
             if ($matches.hash.elems) {
-                return $cb($req,$res,$matches);
+                return $cb($req,$res,$matches.hash);
             }
             return $cb($req,$res);
         }
