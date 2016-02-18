@@ -24,7 +24,7 @@ method BUILD {
             }
         );
 
-        .get(rx{^ '/' get '/' <key=piece> $},
+        .get('/get/_key',
             sub ($req,$res,$m) {
                 $db.query: "select v from kv where k=?", $m<key>
                     or return self.render: $res, :404status;

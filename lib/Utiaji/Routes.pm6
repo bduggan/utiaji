@@ -1,3 +1,4 @@
+use Utiaji::Router;
 use Utiaji::Log;
 
 class Utiaji::Route {
@@ -37,8 +38,8 @@ class Utiaji::Routes {
         return;
     }
 
-    multi method get(Str $path, $cb) {
-        self.get(rx{^$path$}, $cb);
+    multi method get(Str $pattern, $cb) {
+        self.get(parse-pattern($pattern), $cb);
     }
 
     multi method get(Regex $path, $cb) {
