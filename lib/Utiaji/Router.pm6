@@ -41,15 +41,20 @@ class Utiaji::RouterActions {
     }
 }
 
-my regex placeholder_word     { [ \w | '-' ]+ }
-my regex placeholder_ascii_lc { [ <[a..z]> | <[0..9]> | '_' | '-' ]+ }
-my regex placeholder_date     { \d+ '-' \d+ '-' \d+ }
+class Utiaji::Matcher {
+    has Str $.pattern is rw;
+    has $.captures is rw;
 
-sub match-pattern(Str $pattern, Str $path) is export {
-    my $a = Utiaji::RouterActions.new;
-    my $p = Utiaji::Router.parse($pattern, actions => $a) or return;
-    my $rex = $p.made;
-    my $result = $path ~~ rx{ ^ <captured=$rex> $ };
-    $/.say if $/;
-    return $result;
+    my regex placeholder_word     { [ \w | '-' ]+ }
+    my regex placeholder_ascii_lc { [ <[a..z]> | <[0..9]> | '_' | '-' ]+ }
+    my regex placeholder_date     { \d+ '-' \d+ '-' \d+ }
+
+    method match(Str $path) is export {
+        my $a = Utiaji::RouterActions.new;
+        my $p = Utiaji::Router.parse($.pattern, actions => $a) or return;
+        my $rex = $p.made;
+        my $result = $path ~~ rx{ ^ <captured=$rex> $ };
+        self.captures = $/.hash{'captured'}.clone;
+        return $result;
+    }
 }

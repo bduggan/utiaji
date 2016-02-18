@@ -29,11 +29,13 @@ my @tests = (
 
 for @tests -> %in {
     my $pattern = %in<pattern>;
+    my $matcher = Utiaji::Matcher.new(pattern => $pattern);
     for %in<accepts>.flat -> $a {
-        ok match-pattern($pattern, $a), "%in<pattern> matches $a";
+       ok $matcher.match($a), "$pattern matches $a";
+       diag $matcher.captures.gist;
     }
     for %in<rejects>.flat -> $r {
-        ok !match-pattern($pattern, $r), "%in<pattern> does not match $r";
+       ok !$matcher.match($r), "$pattern does not match $r";
     }
 }
 
