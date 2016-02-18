@@ -4,9 +4,10 @@ use Utiaji::Log;
 class Utiaji::Route {
     has $.name;
     has $.verb;
-    has Regex $.path;
+    has $.path;
+    has Utiaji::Matcher $.matcher is rw;
     has $.code;
-    method brief {
+    method gist {
         return  ( self.verb // "<no verb>" )
               ~ ": "
               ~ ( self.path.gist // "<no path>");
@@ -23,6 +24,11 @@ class Utiaji::Routes {
         my $captures;
         for self.routes.flat -> $route {
             next unless $verb eq $route.verb;
+            if ($route.matcher and $route.matcher.match($path)) {
+                $captures = $route.matcher.captures;
+                push @matches, $route;
+                next;
+            }
             next unless $path ~~ $route.path;
             trace "found { $route.verb } { $route.path.perl }";
             push @matches, $route;
@@ -39,7 +45,13 @@ class Utiaji::Routes {
     }
 
     multi method get(Str $pattern, $cb) {
-        self.get(parse-pattern($pattern), $cb);
+        my $r = Utiaji::Route.new(
+                verb => 'GET',
+                path => $pattern,
+                matcher => Utiaji::Matcher.new(pattern => $pattern),
+                code => $cb
+        );
+        self.routes.push($r);
     }
 
     multi method get(Regex $path, $cb) {

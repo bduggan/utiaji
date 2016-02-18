@@ -41,7 +41,7 @@ method handler {
         $res.headers<Connection> = 'Close';
         $res.write("Not found: { $req.method } { $req.uri }\nAvailable routes :\n");
         for self.routes.routes.flat -> $r {
-            $res.write($r.brief);
+            $res.write($r.gist);
             $res.write("\n");
         }
         $res.close("Sorry, not found\n");
