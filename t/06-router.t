@@ -29,6 +29,11 @@ my @tests = (
      accepts  => [ '/wiki/abc',       '/wiki/123',       '/wiki/a_b-d' ],
      captures => [ { page => 'abc' }, { page => "123" }, { page => 'a_b-d' } ],
      rejects  => [ '/wiki/a.d', '/wiki/ABC' ],
+   },
+   { pattern  => '/date/Δwhen',
+     accepts  => [ '/date/2012-01-01', '/date/1999-12-20' ],
+     captures => [ { when => '2012-01-01' }, { when => '1999-12-20' } ],
+     rejects  => [ '/date/2012', '/date/20120202','/date/abcd-ef-gh', '/date/２０１１-１１-１１'],
    }
 );
 

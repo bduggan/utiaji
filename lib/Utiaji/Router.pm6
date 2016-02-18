@@ -48,7 +48,7 @@ class Utiaji::Matcher {
 
     my regex placeholder_word     { [ \w | '-' ]+ }
     my regex placeholder_ascii_lc { [ <[a..z]> | <[0..9]> | '_' | '-' ]+ }
-    my regex placeholder_date     { \d+ '-' \d+ '-' \d+ }
+    my regex placeholder_date     { <[0..9]>**4 '-' <[0..9]>**2 '-' <[0..9]>**2 }
 
     method !compile {
         trace "compiling $.pattern";
