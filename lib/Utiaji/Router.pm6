@@ -43,22 +43,28 @@ class Utiaji::RouterActions {
 
 class Utiaji::Matcher {
     has Str $.pattern is rw;
-    has $.captures is rw;
+    has %.captures is rw = {};
 
     my regex placeholder_word     { [ \w | '-' ]+ }
     my regex placeholder_ascii_lc { [ <[a..z]> | <[0..9]> | '_' | '-' ]+ }
     my regex placeholder_date     { \d+ '-' \d+ '-' \d+ }
 
     method match(Str $path) is export {
+        self.captures = {};
         my $a = Utiaji::RouterActions.new;
-        my $p = Utiaji::Router.parse($.pattern, actions => $a) or return;
+        my $p = Utiaji::Router.parse($.pattern, actions => $a) or return {};
         my $rex = $p.made;
         my $result = $path ~~ rx{ ^ <captured=$rex> $ };
         my %h = $/.hash.clone;
         my %c = %h{'captured'}.hash;
+        # TODO cleanup
         %c<placeholder_word>:delete;
         %c<placeholder_ascii_lc>:delete;
         %c<placeholder_date>:delete;
+        return $result unless %c.elems > 0;
+        for %c.kv -> $k, $v {
+            %c{$k} = ~$v;
+        }
         self.captures = %c;
         return $result;
     }
