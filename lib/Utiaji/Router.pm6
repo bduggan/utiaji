@@ -43,21 +43,29 @@ class Utiaji::RouterActions {
 
 class Utiaji::Matcher {
     has Str $.pattern is rw;
+    # Patterns are compiled into a string, $.rex, which is used as a regex.
+    has Str $.rex is rw;
     has %.captures is rw = {};
-    has $.parser is rw;
 
     my regex placeholder_word     { [ \w | '-' ]+ }
     my regex placeholder_ascii_lc { [ <[a..z]> | <[0..9]> | '_' | '-' ]+ }
     my regex placeholder_date     { \d+ '-' \d+ '-' \d+ }
 
+    method !compile {
+        trace "compiling $.pattern";
+        $.rex //= do {
+            my $parser = Utiaji::Router.parse(
+                        $.pattern,
+                        actions => Utiaji::RouterActions.new);
+            $parser.made;
+        };
+    }
+
     method match(Str $path) is export {
         trace "Parsing $path";
+        self!compile;
         self.captures = {};
-        $.parser //= Utiaji::Router.parse($.pattern,
-            actions => Utiaji::RouterActions.new
-        );
-        trace "parsed $path using { $.pattern.gist } ";
-        my $rex = $.parser.made;
+        my $rex = $.rex;
         my $result = $path ~~ rx{ ^ <captured=$rex> $ };
         trace "result is { $result.gist }";
         my %h = $/.hash.clone;
