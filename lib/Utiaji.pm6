@@ -12,12 +12,7 @@ unit class Utiaji is Utiaji::App;
 
 method BUILD {
 
-    my regex piece { <-[ / ]>+ };
-
-    self.routes = Utiaji::Routes.new;
-
-    # Routing table.
-    given (self.routes) {
+    given self.routes {
         .get('/',
             sub ($req,$res) {
                 self.render: $res, text => 'Welcome to Utiaji.'
