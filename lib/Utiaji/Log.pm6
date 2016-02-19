@@ -17,3 +17,7 @@ sub debug($msg) is export {
     return unless $level eq 'debug';
     say "# debug: $msg";
 }
+
+sub info($msg) is export {
+    say "# info: $msg";
+}
