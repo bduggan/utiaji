@@ -34,11 +34,10 @@ class Utiaji::Server {
                     #   $conn.close if $conn;
                     #} });
                     trace "got a connection";
-                    my Buf[uint8] $request;
+                    my Buf[uint8] $request = Buf[uint8].new();
                     whenever $conn.Supply(:bin) -> $buf {
-                        trace "got data";
-                        $request = $request.defined ?? Buf[uint8].new(@$request, @$buf) !! $buf;
-                        trace "request is now { $request.perl }";
+                        trace "got bytes for request";
+                        $request = $request ~ $buf;
                         if self._header_done($request) {
                             trace "Got a request header.";
                             my $response = self.respond($request.decode('UTF-8'));

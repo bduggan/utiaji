@@ -17,7 +17,5 @@ $t.get_ok('/')
   .content_type_is('text/plain')
   .content_is('Welcome to Utiaji.');;
 
-$s.await;
-
 done-testing;
 
