@@ -30,9 +30,9 @@ class Utiaji::Server {
             react {
                 whenever IO::Socket::Async.listen($.host,$.port) -> $conn {
                     #Promise.in($.timeout).then({ try {
-                        #    trace "timeout, closing connection";
-                        #$conn.close if $conn;
-                        #} });
+                    #    trace "timeout, closing connection";
+                    #   $conn.close if $conn;
+                    #} });
                     trace "got a connection";
                     my Buf[uint8] $request;
                     whenever $conn.Supply(:bin) -> $buf {
@@ -40,8 +40,7 @@ class Utiaji::Server {
                         $request = $request.defined ?? Buf[uint8].new(@$request, @$buf) !! $buf;
                         trace "request is now { $request.perl }";
                         if self._header_done($request) {
-                        #if $last_chars.decode('UTF-8') eq "\n" {
-                            trace "Got a request.";
+                            trace "Got a request header.";
                             my $response = self.respond($request.decode('UTF-8'));
                             $conn.write($response);
                             $conn.close;
