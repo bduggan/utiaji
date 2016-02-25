@@ -2,22 +2,11 @@ use HTTP::Tinyish;
 use JSON::Fast;
 use Test;
 
-use Utiaji;
-
 unit class Utiaji::Test;
 
-has $.server_url is rw;
-has $.app is rw;
+has $.server_url is rw = 'http://localhost:3333';
 has %.res is rw;
 has HTTP::Tinyish $.ua = HTTP::Tinyish.new;
-
-method start_server {
-    $.app = Utiaji.new;
-    my $port = 9998;
-    $.app.start($port);
-    $.server_url = "http://localhost:$port";
-    sleep 2;
-}
 
 method get_ok(Str $path) {
     %.res = $.ua.get($.server_url ~ $path);

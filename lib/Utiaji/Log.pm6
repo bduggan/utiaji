@@ -14,7 +14,7 @@ sub trace($msg) is export {
 }
 
 sub debug($msg) is export {
-    return unless $level eq 'debug';
+    return unless $level ~~ / debug | trace /;
     say "# debug: $msg";
 }
 

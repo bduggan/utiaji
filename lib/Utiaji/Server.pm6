@@ -8,6 +8,11 @@ class Utiaji::Server {
     has $.port = 3333;
     has $.host = 'localhost';
 
+    method _header_done(Buf[] $request) {
+        # NB: won't work if body is later
+        $request.subbuf($request.elems-4,4) eq "\r\n\r\n".encode('UTF-8');
+    }
+
     method respond($req) {
         my $match = Utiaji::Server::Grammar.parse($req);
         if ($match) {
@@ -19,33 +24,28 @@ class Utiaji::Server {
     }
 
     method start {
+        debug "starting server on http://{$.host}:{$.port}";
         $.loop =
         start {
             react {
                 whenever IO::Socket::Async.listen($.host,$.port) -> $conn {
-                    Promise.in($.timeout).then({ $conn.close });
+                    #Promise.in($.timeout).then({ try {
+                        #    trace "timeout, closing connection";
+                        #$conn.close if $conn;
+                        #} });
                     trace "got a connection";
-                    my $req_str;
+                    my Buf[uint8] $request;
                     whenever $conn.Supply(:bin) -> $buf {
                         trace "got data";
-                        if $req_str.defined {
-                            try {
-                                CATCH { $conn.close; next; }
-                                $req_str.append($buf);
-                            }
-                        } else {
-                            $req_str = $buf.clone;
-                        }
-                        trace "looking for last character";
-                        my $last_char = $req_str.subbuf($req_str.elems-1,1);
-                        if $last_char.decode('UTF-8') eq "\n" {
-                            start {
-                                    trace "Got a request.";
-                                    my $response = self.respond($req_str.decode('UTF-8'));
-                                    $conn.write($response);
-                                    $conn.close;
-                                    trace "closed connection";
-                                }
+                        $request = $request.defined ?? Buf[uint8].new(@$request, @$buf) !! $buf;
+                        trace "request is now { $request.perl }";
+                        if self._header_done($request) {
+                        #if $last_chars.decode('UTF-8') eq "\n" {
+                            trace "Got a request.";
+                            my $response = self.respond($request.decode('UTF-8'));
+                            $conn.write($response);
+                            $conn.close;
+                            trace "closed connection";
                         }
                     }
                 }
