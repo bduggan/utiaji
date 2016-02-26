@@ -7,7 +7,7 @@ class Utiaji::Server {
 
     has Promise $.loop is rw;
     has $.timeout = 10;
-    has $.port = 3333;
+    has Int $.port = 3333;
     has $.host = 'localhost';
 
     method _header_done(Buf[] $request) {
@@ -15,12 +15,12 @@ class Utiaji::Server {
         $request.subbuf($request.elems-4,4) eq "\r\n\r\n".encode('UTF-8');
     }
 
-    method respond($req) {
-        trace "generating request object";
-        my $request = parse-request($req) or
-            trace "did not parse request [[$req]]";
-        my $response = handle-request($request);
-        return $response.to-string.encode("UTF-8");
+    method respond(Str $request) {
+        my $req = parse-request($request) or do {
+            warn "did not parse request [[$request]]";
+            return HTTP::Response.new(status => 500);
+        }
+        handle-request($req);
     }
 
     method start {
@@ -34,14 +34,14 @@ class Utiaji::Server {
                     #   $conn.close if $conn;
                     #} });
                     trace "got a connection";
-                    my Buf[uint8] $request = Buf[uint8].new();
+                    my Buf[uint8] $request_bytes = Buf[uint8].new();
                     whenever $conn.Supply(:bin) -> $buf {
                         trace "got bytes for request";
-                        $request = $request ~ $buf;
-                        if self._header_done($request) {
+                        $request_bytes = $request_bytes ~ $buf;
+                        if self._header_done($request_bytes) {
                             trace "Got a request header.";
-                            my $response = self.respond($request.decode('UTF-8'));
-                            $conn.write($response);
+                            my $response = self.respond($request_bytes.decode('UTF-8'));
+                            $conn.write($response.to-string.encode("UTF-8"));
                             $conn.close;
                             trace "closed connection";
                         }
