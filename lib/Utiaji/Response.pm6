@@ -1,7 +1,7 @@
 unit class Utiaji::Response;
 use Utiaji::Headers;
 
-our %codes =
+has %.codes =
     200 => "OK",
     201 => "Created",
     301 => "Moved Permanently",
@@ -24,9 +24,15 @@ has Utiaji::Headers $.headers is rw = Utiaji::Headers.new;
 
 method to-string {
     my $str = "HTTP/1.1 ";
-    my $code = self.code;
-    my $code_str = %codes<$code>;
-    my $body = self.body;
-    $str ~= "$code $str\n";
-    $str ~= "$body".encode("UTF-8");
+    my $status = $.status;
+    my $code_str = %.codes{$status} or say "no code for '$status'";
+    my $body = $.body;
+    $str ~= "$status $code_str\n";
+    if $.headers.content-type {
+        $str ~= "Content-Type: { $.headers.content-type }\n";
+    } else {
+        say "no content-type";
+    }
+    $str ~= "\n$body\n";
+    return $str;
 }

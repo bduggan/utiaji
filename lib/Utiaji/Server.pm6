@@ -20,9 +20,11 @@ class Utiaji::Server {
         my $request = parse-request($req) or
             trace "did not parse request [[$req]]";
         my $response = handle-request($request);
-        # my $response = Utiaji::Response.new;
+        return $response.to-string.encode("UTF-8");
+        say $response.to-string.encode("UTF-8").perl;
+        say "HTTP/1.1 200 OK\nContent-Type: text/plain\n\nhello\n".encode("UTF-8").perl;
         #return $response.to-string;
-        return "HTTP/1.1 200 OK\n\nhello\n".encode("UTF-8");
+        return "HTTP/1.1 200 OK\nContent-Type: text/plain\n\nhello\n".encode("UTF-8");
     }
 
     method start {
