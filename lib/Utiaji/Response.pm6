@@ -43,6 +43,6 @@ method to-string {
         "Connection: Close";
     );
     my $str = @lines.join("\r\n");
-    $str ~= "\r\n\r\n$body\r\n";
+    $str ~= "\r\n\r\n$body";
     return $str;
 }
