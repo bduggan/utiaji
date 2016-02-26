@@ -18,6 +18,10 @@ sub debug($msg) is export {
     say "# debug: $msg";
 }
 
+sub error($msg) is export {
+    say "# error: $msg";
+}
+
 sub info($msg) is export {
     say "# info: $msg";
 }

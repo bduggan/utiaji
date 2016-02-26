@@ -31,6 +31,7 @@ method prepare-response {
 }
 
 method to-string {
+    self.prepare-response unless $.headers.content-length.defined;
     my $str = "HTTP/1.1 ";
     my $status = $.status;
     my $code_str = %.codes{$status} or say "no code for '$status'";
