@@ -20,7 +20,6 @@ class Utiaji::Server {
             warn "did not parse request [[$request]]";
             return HTTP::Response.new(status => 500);
         }
-        die 'we have a problem';
         return handle-request($req);
     }
 
@@ -46,12 +45,16 @@ class Utiaji::Server {
                                 $response = self.respond($request_bytes.decode('UTF-8'));
                                 CATCH {
                                     default {
-                                        error "caught { .gist }";
+                                        my $error = $_;
+                                        error "caught { $error.gist }";
+                                        $response = Utiaji::Response.new(
+                                            :500status,
+                                            :body<houston>
+                                        );
                                     }
                                     .resume
                                 }
                             }
-                            $response = Utiaji::Response.new(:500status,:body<houston>);
                             $conn.write($response.to-string.encode("UTF-8"));
                             $conn.close;
                             trace "closed connection";
