@@ -15,12 +15,12 @@ $s.start;
 $t.get_ok('/')
   .status_is(200)
   .content_type_is('text/plain')
-  .content_is("welcome to utiaji");
+  .content_is("Welcome to utiaji.");
 
 $t.get_ok('/test')
   .status_is(200)
   .content_type_is('text/plain')
-  .content_is("This is a test.");
+  .content_is("This is a test of the emergency broadcast system.");
 
 
 done-testing;

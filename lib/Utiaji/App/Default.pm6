@@ -2,8 +2,13 @@ use Utiaji::App;
 
 class Utiaji::App::Default is Utiaji::App {
     method BUILD {
+
         self.routes.get('/', sub ($req,$res) {
-            self.render: $res, text => "welcome to utiaji"
+            self.render: $res, text => "Welcome to utiaji."
+        });
+
+        self.routes.get('/test', sub ($req,$res) {
+            self.render: $res, text => "This is a test of the emergency broadcast system."
         })
     }
 }
