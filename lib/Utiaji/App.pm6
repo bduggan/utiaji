@@ -49,9 +49,9 @@ method handler {
 
 multi method render($res, :$text!, :$status=200) {
     trace "rendering text";
-    $res.headers<Content-Type> = 'text/plain';
+    $res.headers.content-type = 'text/plain';
+    $res.body = $text;
     $res.status = $status;
-    $res.close('Welcome to Utiaji.')
 }
 
 multi method render($res, :$json!, :$status=200) {
