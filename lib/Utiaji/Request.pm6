@@ -1,8 +1,21 @@
 use Utiaji::Log;
 
+class Utiaji::Headers {
+    has %.fields;
+    method host {
+        return %.fields<Host>;
+    }
+}
+
+class Utiaji::Request {
+    has Str $.method is rw;
+    has Str $.path is rw;
+    has Utiaji::Headers $.headers is rw;
+}
+
 grammar Utiaji::Request::Grammar {
      rule TOP {
-        <verb> '/' 'HTTP/1.1' \n
+        <verb> <path> 'HTTP/1.1' \n
         <headers>
         \n
      }
@@ -30,26 +43,31 @@ grammar Utiaji::Request::Grammar {
      }
 }
 
-class Utiaji::Request::Grammar::Actions {
+class Utiaji::Request::Actions {
     method TOP($/) {
-        $/.make: 42;
+        $/.make: Utiaji::Request.new:
+            path => $<path>.made,
+            method => $<verb>.made,
+            headers => $<headers>.made,
     }
+    method path($/) { $/.make: ~$/; }
+    method verb($/) { $/.make: ~$/; }
+    method headers($/) { $/.make: Utiaji::Headers.new:
+        fields => [ map {.made }, $<header> ]
+    }
+    method header($/) {
+        $/.make: $<field-name>.made => $<field-value>.made
+    }
+    method field-name($/) { $/.make: ~$/ }
+    method field-value($/) { $/.make: ~$/ }
 }
 
-
-
-class Utiaji::Request {
-    has Str $.raw is rw;
-    has $.matched is rw;
-
-    method parse-request($raw) {
-        $.raw = $raw;
-        my $match = Utiaji::Request::Grammar.parse($raw);
-        unless $match {
-            trace "did not parse request { $.raw.perl }";
-            return False;
-        }
-        $.matched = $match.clone;
-        return True;
+sub parse-request($raw) is export {
+    my $actions = Utiaji::Request::Actions.new;
+    my $match = Utiaji::Request::Grammar.parse($raw, :$actions);
+    unless $match {
+        trace "did not parse request { $raw.perl }";
+        return;
     }
+    return $match.made;
 }

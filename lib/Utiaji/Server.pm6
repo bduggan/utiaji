@@ -16,14 +16,9 @@ class Utiaji::Server {
 
     method respond($req) {
         trace "generating request object";
-        my $request = Utiaji::Request.new;
-        # my $handler = Utiaji::Handler.new;
-        #my $response = $handler.respond-to($request);
-        if $request.parse-request($req) {
-            trace "parsed request";
-        } else {
+        my $request = parse-request($req) or
             trace "did not parse request [[$req]]";
-        }
+
         return "HTTP/1.1 200 OK\n\nhello\n".encode("UTF-8");
     }
 
