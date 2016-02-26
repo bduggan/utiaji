@@ -32,15 +32,17 @@ method prepare-response {
 
 method to-string {
     self.prepare-response unless $.headers.content-length.defined;
-    my $str = "HTTP/1.1 ";
     my $status = $.status;
     my $code_str = %.codes{$status} or say "no code for '$status'";
     my $body = $.body;
-    $str ~= "$status $code_str\n";
-    $str ~= "Server: Utiaji\n";
-    $str ~= "Content-Type: { $.headers.content-type }\n";
-    $str ~= "Content-Length { $.headers.content-length }\n";
-    $str ~= "Connection: Close\n";
-    $str ~= "\n$body\n\n";
+    my @lines = (
+        "HTTP/1.1 $status $code_str",
+        "Server: Utiaji";
+        "Content-Type: { $.headers.content-type }";
+        "Content-Length { $.headers.content-length }";
+        "Connection: Close";
+    );
+    my $str = @lines.join("\r\n");
+    $str ~= "\r\n\r\n$body\r\n";
     return $str;
 }

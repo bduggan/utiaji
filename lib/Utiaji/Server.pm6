@@ -49,7 +49,7 @@ class Utiaji::Server {
                                         error "caught { $error.gist }";
                                         $response = Utiaji::Response.new(
                                             :500status,
-                                            :body<houston>
+                                            :body<houston we have a problem>
                                         );
                                     }
                                     .resume
