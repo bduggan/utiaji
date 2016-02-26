@@ -8,7 +8,7 @@ sub trace($msg) is export {
     my $frame = $back.first: -> $f { !$f.is-setting and $f.file ne $?FILE };
     my $file = $frame.file;
     my $line = $frame.line;
-    my $out = $msg ~ " at {$file} $line";
+    my $out = $msg ~ " [ +$line {$file} ]";
     $out ~= " in {$frame.subname}" if $frame.subname;
     say "# $out" # {$line}";
 }

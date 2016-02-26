@@ -1,5 +1,6 @@
-use Utiaji::Server::Grammar;
+use Utiaji::Request;
 use Utiaji::Log;
+use Utiaji::Handler;
 
 class Utiaji::Server {
 
@@ -14,9 +15,12 @@ class Utiaji::Server {
     }
 
     method respond($req) {
-        my $match = Utiaji::Server::Grammar.parse($req);
-        if ($match) {
-            trace $match.gist;
+        trace "generating request object";
+        my $request = Utiaji::Request.new;
+        # my $handler = Utiaji::Handler.new;
+        #my $response = $handler.respond-to($request);
+        if $request.parse-request($req) {
+            trace "parsed request";
         } else {
             trace "did not parse request [[$req]]";
         }
