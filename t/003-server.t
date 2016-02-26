@@ -15,7 +15,7 @@ $s.start;
 $t.get_ok('/')
   .status_is(200)
   .content_type_is('text/plain')
-  .content_is("Welcome to utiaji.");
+  .content_is("Welcome to Utiaji.");
 
 $t.get_ok('/test')
   .status_is(200)
