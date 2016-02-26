@@ -27,5 +27,6 @@ method to-string {
     my $code = self.code;
     my $code_str = %codes<$code>;
     my $body = self.body;
-    return "HTTP/1.1 $code $str\n\n$body".encode("UTF-8");
+    $str ~= "$code $str\n";
+    $str ~= "$body".encode("UTF-8");
 }
