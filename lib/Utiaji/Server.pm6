@@ -2,6 +2,7 @@ use Utiaji::Request;
 use Utiaji::Log;
 use Utiaji::Handler;
 use Utiaji::Response;
+use Utiaji::App::Default;
 
 class Utiaji::Server {
 
@@ -9,6 +10,7 @@ class Utiaji::Server {
     has $.timeout = 10;
     has Int $.port = 3333;
     has $.host = 'localhost';
+    has $.app is rw = Utiaji::App::Default.new;
 
     method _header_done(Buf[] $request) {
         # NB: won't work if body is later
@@ -20,7 +22,7 @@ class Utiaji::Server {
             warn "did not parse request [[$request]]";
             return HTTP::Response.new(status => 500);
         }
-        return handle-request($req);
+        return handle-request($req,$.app.routes);
     }
 
     method start {

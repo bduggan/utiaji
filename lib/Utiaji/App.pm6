@@ -1,4 +1,3 @@
-use HTTP::Server::Async;
 use JSON::Fast;
 use DBIish;
 
@@ -46,13 +45,6 @@ method handler {
         }
         $res.close("Sorry, not found\n");
     }
-}
-
-method start($port) {
-    # NB: default 8 sec timeout causes errors
-    my $s = HTTP::Server::Async.new(port => $port, timeout => 60 * 60 * 24);
-    $s.handler(self.handler);
-    $s.listen;
 }
 
 multi method render($res, :$text!, :$status=200) {

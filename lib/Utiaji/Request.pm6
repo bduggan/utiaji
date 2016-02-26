@@ -5,6 +5,10 @@ class Utiaji::Request {
     has Str $.method is rw;
     has Str $.path is rw;
     has Utiaji::Headers $.headers is rw;
+
+    method gist {
+        return "{ $.method // '?' } { $.path // '?' }";
+    }
 }
 
 grammar Utiaji::Request::Grammar {
