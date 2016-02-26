@@ -30,22 +30,26 @@ grammar Utiaji::Request::Grammar {
      }
 }
 
+class Utiaji::Request::Grammar::Actions {
+    method TOP($/) {
+        $/.make: 42;
+    }
+}
 
 
 
 class Utiaji::Request {
-    has Str $.raw;
-    has $.matched;
+    has Str $.raw is rw;
+    has $.matched is rw;
 
     method parse-request($raw) {
-        trace "parsing request";
+        $.raw = $raw;
         my $match = Utiaji::Request::Grammar.parse($raw);
         unless $match {
             trace "did not parse request { $.raw.perl }";
             return False;
         }
-        say $match.say;
-        # $.matched = $match.hash.clone;
+        $.matched = $match.clone;
         return True;
     }
 }
