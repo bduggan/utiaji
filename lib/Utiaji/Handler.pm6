@@ -12,13 +12,17 @@ sub handle-request($request,$routes) is export {
         $routes.lookup(
             verb => $request.method,
             path => $request.path);
+
     unless $route {
         trace "Not found";
-        return Utiaji::Response.new(:404status, :body<are you lost?>);
+        my $response = Utiaji::Response.new(:404status, :body<are you lost?>);
+        debug $response.status-line;
+        return $response;
     }
     trace "Matched { $route.gist } ";
     my $response = Utiaji::Response.new;
     dispatch-request($route, $captures, $request, $response);
+    debug $response.status-line;
     return $response;
 }
 

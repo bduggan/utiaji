@@ -19,30 +19,31 @@ has %.codes =
 ;
 
 has $.status is rw;
+has $.status-line is rw;
 has $.body is rw;
 has Utiaji::Headers $.headers is rw = Utiaji::Headers.new;
 
 method prepare-response {
-
     unless $.headers.content-type {
         $.headers.content-type = 'text/plain';
     }
     $.headers.content-length = $.body.chars;
 }
 
+method status-line {
+    return join ' ', 'HTTP/1.1', $.status, %.codes{$.status} // '';
+}
+
 method to-string {
     self.prepare-response unless $.headers.content-length.defined;
-    my $status = $.status;
-    my $code_str = %.codes{$status} or say "no code for '$status'";
-    my $body = $.body;
     my @lines = (
-        "HTTP/1.1 $status $code_str",
+        self.status-line,
         "Server: Utiaji";
         "Content-Type: { $.headers.content-type }";
         "Content-Length { $.headers.content-length }";
         "Connection: Close";
     );
     my $str = @lines.join("\r\n");
-    $str ~= "\r\n\r\n$body";
+    $str ~= "\r\n\r\n$.body";
     return $str;
 }
