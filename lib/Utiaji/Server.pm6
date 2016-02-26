@@ -1,6 +1,7 @@
 use Utiaji::Request;
 use Utiaji::Log;
 use Utiaji::Handler;
+use Utiaji::Response;
 
 class Utiaji::Server {
 
@@ -18,7 +19,9 @@ class Utiaji::Server {
         trace "generating request object";
         my $request = parse-request($req) or
             trace "did not parse request [[$req]]";
-
+        my $response = handle-request($request);
+        # my $response = Utiaji::Response.new;
+        #return $response.to-string;
         return "HTTP/1.1 200 OK\n\nhello\n".encode("UTF-8");
     }
 

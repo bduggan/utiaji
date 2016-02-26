@@ -50,14 +50,15 @@ class Utiaji::Request::Actions {
             method => $<verb>.made,
             headers => $<headers>.made,
     }
-    method path($/) { $/.make: ~$/; }
-    method verb($/) { $/.make: ~$/; }
-    method headers($/) { $/.make: Utiaji::Headers.new:
+    method headers($/) {
+        $/.make: Utiaji::Headers.new:
         fields => [ map {.made }, $<header> ]
     }
     method header($/) {
         $/.make: $<field-name>.made => $<field-value>.made
     }
+    method path($/) { $/.make: ~$/; }
+    method verb($/) { $/.make: ~$/; }
     method field-name($/) { $/.make: ~$/ }
     method field-value($/) { $/.make: ~$/ }
 }
