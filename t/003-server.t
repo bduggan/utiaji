@@ -22,6 +22,9 @@ $t.get_ok('/test')
   .content_type_is('text/plain')
   .content_is("This is a test of the emergency broadcast system.");
 
+#$t.post_ok("/echo/foo", json => { abc => 123 } )
+#  .status_is(200)
+#  .json_is( { status => 'ok' } );
 
 done-testing;
 

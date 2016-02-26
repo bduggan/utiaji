@@ -4,12 +4,9 @@ use DBIish;
 use Utiaji::Routes;
 use Utiaji::Log;
 
-die "Please set PGDATABASE" unless %*ENV<PGDATABASE>;
-
 unit class Utiaji::App;
 
 has Utiaji::Routes $.routes = Utiaji::Routes.new;
-has $.db = DBIish.connect("Pg", database => %*ENV<PGDATABASE>);
 
 method handler {
     return sub ($req, $res) {
