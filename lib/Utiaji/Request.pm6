@@ -1,11 +1,5 @@
 use Utiaji::Log;
-
-class Utiaji::Headers {
-    has %.fields;
-    method host {
-        return %.fields<Host>;
-    }
-}
+use Utiaji::Headers;
 
 class Utiaji::Request {
     has Str $.method is rw;

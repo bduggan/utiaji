@@ -1,4 +1,5 @@
 unit class Utiaji::Response;
+use Utiaji::Headers;
 
 our %codes =
     200 => "OK",
@@ -19,6 +20,7 @@ our %codes =
 
 has $.status is rw;
 has $.body is rw;
+has Utiaji::Headers $.headers is rw = Utiaji::Headers.new;
 
 method to-string {
     my $str = "HTTP/1.1 ";
