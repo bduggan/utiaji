@@ -13,14 +13,13 @@ class Utiaji::Server {
     has $.app is rw = Utiaji::App::Default.new;
 
     method _header_done(Buf[] $request) {
-        # NB: won't work if body is later
-        $request.subbuf($request.elems-4,4) eq "\r\n\r\n".encode('UTF-8');
+        $request.decode('UTF-8').contains("\r\n\r\n");
     }
 
     method respond(Str $request) {
         my $req = parse-request($request) or do {
             warn "did not parse request [[$request]]";
-            return HTTP::Response.new(status => 500);
+            return Utiaji::Response.new(status => 500);
         }
         return handle-request($req,$.app.routes);
     }
@@ -31,10 +30,10 @@ class Utiaji::Server {
         start {
             react {
                 whenever IO::Socket::Async.listen($.host,$.port) -> $conn {
-                    #Promise.in($.timeout).then({ try {
-                    #    trace "timeout, closing connection";
-                    #   $conn.close if $conn;
-                    #} });
+                    Promise.in($.timeout).then({ try {
+                        error "timeout, closing connection";
+                        try { $conn.close; };
+                    } });
                     trace "got a connection";
                     my Buf[uint8] $request_bytes = Buf[uint8].new();
                     whenever $conn.Supply(:bin) -> $buf {

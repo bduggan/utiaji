@@ -47,4 +47,40 @@ END
 ok $req, "parsed proxy request via nginx";
 is $req.headers.host, 'echo.jpbd.org', 'host';
 
+$req = parse-request(q:heredoc/END/);
+POST / HTTP/1.1
+Referer: http://echo.jpbd.org/
+X-Forwarded-For: 98.115.181.215
+X-Forwarded-HTTPS: 0
+Accept-Language: en-US,en;q=0.5
+Content-Length: 23
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Connection: upgrade
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:44.0) Gecko/20100101 Firefox/44.0
+Host: echo.jpbd.org
+
+something=hi&else=there
+END
+
+ok $req, "parsed POST request";
+is $req.headers.host, 'echo.jpbd.org', 'host';
+
+$req = parse-request(q:heredoc/END/);
+POST /echo/foo HTTP/1.1
+User-Agent: HTTP::Tinyish::Curl
+Host: localhost:3333
+Accept: */*
+Content-type:application/json
+Content-Length: 16
+
+{
+  "abc": 123
+  }
+END
+
+ok $req, "parsed json request";
+is $req.headers.host, 'localhost:3333', 'host';
+
 done-testing;

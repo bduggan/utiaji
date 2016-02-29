@@ -6,6 +6,14 @@ class Utiaji::Headers {
     method host {
         return %.fields<Host>;
     }
+
+    method normalize {
+        for %.fields.kv -> $k, $v {
+            if fc($k) eq fc('content-length') {
+                $.content-length = 0+$v;
+            }
+        }
+    }
 }
 
 

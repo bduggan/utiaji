@@ -16,6 +16,7 @@ grammar Utiaji::Request::Grammar {
         <verb> <path> 'HTTP/1.1' \n
         <headers>
         \n
+        <body>?
      }
      token ws { \h* }
      token verb {
@@ -31,13 +32,16 @@ grammar Utiaji::Request::Grammar {
          [ <header> \n ]*
      }
      rule header {
-         <field-name> ':' <field-value>
+         <field-name>':' <field-value>
      }
      token field-name {
          <-[:]>+
      }
      token field-value {
          <-[\n]>+
+     }
+     token body {
+         .+
      }
 }
 
@@ -65,8 +69,13 @@ sub parse-request($raw) is export {
     my $actions = Utiaji::Request::Actions.new;
     my $match = Utiaji::Request::Grammar.parse($raw, :$actions);
     unless $match {
-        trace "did not parse request { $raw.perl }";
+        error "did not parse request { $raw.perl }";
         return;
     }
-    return $match.made;
+    my $request = $match.made;
+    $request.headers.normalize;
+    if my $length = $request.headers.content-length {
+        say "#### checking length $length"
+    }
+    return $request;
 }
