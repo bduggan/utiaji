@@ -1,23 +1,17 @@
 use Utiaji::Log;
 
-grammar header-parser {
+unit class Utiaji::Headers;
+
+has $.raw;
+has %.fields;
+has Str $.content-type;
+has Int $.content-length;
+
+grammar parser {
      rule TOP {
-        <verb> <path> "HTTP/1.1" \n
-        <headers>
-     }
-     token ws { \h* }
-     token verb {
-         GET | POST | PUT
-     }
-     token path {
-         '/' <segment>* %% '/'
-     }
-     token segment {
-         [ <alpha> | <digit> | '+' | '-' | '.' ]*
-     }
-     rule headers {
         [ <header> \n ]*
      }
+     token ws { \h* }
      rule header {
         <field-name> ':' <field-value>
      }
@@ -29,14 +23,8 @@ grammar header-parser {
      }
 }
 
-class header-actions {
+class actions {
     method TOP($/) {
-        $/.make: Utiaji::Request.new:
-            path => $<path>.made,
-            method => $<verb>.made,
-            headers => $<headers>.made,
-    }
-    method headers($/) {
         $/.make: Utiaji::Headers.new:
         fields => [ map {.made }, $<header> ]
     }
@@ -49,34 +37,28 @@ class header-actions {
     method field-value($/) { $/.make: ~$/ }
 }
 
-class Utiaji::Headers {
-    has $.raw;
-    has %.fields;
-    has Str $.content-type;
-    has Int $.content-length;
+method host {
+    return %!fields<Host>;
+}
 
-    method parse {
-        my $actions = header-actions.new;
-        my $match = header-parser.parse("$!raw\n", :$actions);
-        unless $match {
-            error "did not parse headers { $!raw.perl }";
-            return;
-        }
-        my $request = $match.made;
-        self.normalize;
-    }
-
-    method host {
-        return %!fields<Host>;
-    }
-
-    method normalize {
-        for %!fields.kv -> $k, $v {
-            if fc($k) eq fc('content-length') {
-                $!content-length = 0+$v;
-            }
+method normalize {
+    for %!fields.kv -> $k, $v {
+        if fc($k) eq fc('content-length') {
+            $!content-length = 0+$v;
         }
     }
+}
+
+method parse {
+    my $actions = actions.new;
+    my $match = parser.parse("$!raw\n", :$actions);
+    unless $match {
+        error "did not parse headers { $!raw.perl }";
+        return;
+    }
+    my $request = $match.made;
+    $request.normalize;
+    return $request;
 }
 
 

@@ -41,6 +41,8 @@ method parse {
         error "did not parse request line { $!raw.perl }";
         return;
     }
+    self.path = $match.made.path;
+    self.verb = $match.made.verb;
     return self
 }
 

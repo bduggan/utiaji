@@ -2,10 +2,23 @@ use Utiaji::Log;
 use Utiaji::Headers;
 use Utiaji::RequestLine;
 
+
+#| https://www.w3.org/Protocols/rfc2616/rfc2616.txt
+#|
+#| Section 5.
+#|
+#|  Request    = Request-Line              ; Section 5.1
+#|               *(( general-header        ; Section 4.5
+#|                | request-header         ; Section 5.3
+#|                | entity-header ) CRLF)  ; Section 7.1
+#|               CRLF
+#|               [ message-body ]          ; Section 4.3
+#|
+
 class Utiaji::Request {
     has Str $.raw;
-    has Utiaji::Headers $.headers;
     has Utiaji::RequestLine $.request-line;
+    has Utiaji::Headers $.headers;
     # has Utiaji::Body $.body;
 
     method verb {
