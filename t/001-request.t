@@ -5,7 +5,11 @@ use Utiaji::Request;
 
 my $req;
 
-$req = parse-request("GET / HTTP/1.1\nHost: localhost\r\n\r\n");
+sub parse-request($str) {
+    Utiaji::Request.new(raw => $str).parse;
+}
+
+$req = parse-request("GET / HTTP/1.1\nHost: localhost\n\n");
 ok $req, "Parsed GET request";
 is $req.WHAT, Utiaji::Request, 'made a request';
 is $req.path, '/', 'path';
@@ -75,9 +79,7 @@ Accept: */*
 Content-type:application/json
 Content-Length: 16
 
-{
-  "abc": 123
-  }
+z: 123
 END
 
 ok $req, "parsed json request";

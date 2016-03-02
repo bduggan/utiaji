@@ -1,3 +1,4 @@
+unit module Utiaji::Request::Parser;
 use Utiaji::Log;
 
 grammar header-parser {
@@ -49,34 +50,19 @@ class header-actions {
     method field-value($/) { $/.make: ~$/ }
 }
 
-class Utiaji::Headers {
-    has $.raw;
-    has %.fields;
-    has Str $.content-type;
-    has Int $.content-length;
-
-    method parse {
-        my $actions = header-actions.new;
-        my $match = header-parser.parse("$!raw\n", :$actions);
-        unless $match {
-            error "did not parse headers { $!raw.perl }";
-            return;
-        }
-        my $request = $match.made;
-        self.normalize;
-    }
-
-    method host {
-        return %!fields<Host>;
-    }
-
-    method normalize {
-        for %!fields.kv -> $k, $v {
-            if fc($k) eq fc('content-length') {
-                $!content-length = 0+$v;
-            }
-        }
-    }
+sub parse-json-body {
+    ...
 }
 
+sub parse-headers($raw) is export {
+    my $actions = header-actions.new;
+    my $match = header-parser.parse($raw, :$actions);
+    unless $match {
+        error "did not parse request { $raw.perl }";
+        return;
+    }
+    my $request = $match.made;
+    $request.headers.normalize;
+    return $request;
+}
 
