@@ -45,7 +45,8 @@ use Utiaji::Request;
     ok $req.parse, "parsed request";
     is $req.path, '/set', 'path';
     is $req.body.raw, q[{"a":"2"}] ~ "\n", 'body';
-    is $req.headers.content-type, 'application/json';
+    is $req.headers.content-type, 'application/json', 'parsed type';
+    is $req.headers.content-length, 9, 'parsed length';
 }
 
 done-testing;

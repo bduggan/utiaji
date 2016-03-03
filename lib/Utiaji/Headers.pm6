@@ -4,8 +4,6 @@ unit class Utiaji::Headers;
 
 has $.raw;
 has %.fields;
-has Str $.content-type;
-has Int $.content-length;
 
 grammar parser {
      rule TOP {
@@ -37,17 +35,19 @@ class actions {
     method field-value($/) { $/.make: ~$/ }
 }
 
-method host {
-    return %!fields<Host>;
-}
 
 method normalize {
+    my %new;
     for %!fields.kv -> $k, $v {
-        if fc($k) eq fc('content-length') {
-            $!content-length = 0+$v;
-        }
+        %new{lc $k} = $v;
     }
+    %!fields = %new;
 }
+
+method content-type { %!fields<content-type> }
+method content-length { %!fields<content-length> }
+method host { %!fields<host>; }
+
 
 method parse {
     my $actions = actions.new(made => self);
