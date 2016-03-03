@@ -44,7 +44,7 @@ use Utiaji::Request;
     my $req = Utiaji::Request.new(raw => $str);
     ok $req.parse, "parsed request";
     is $req.path, '/set', 'path';
-    is $req.body.raw, '{"a":"2"}', 'body';
+    is $req.body.raw, q[{"a":"2"}] ~ "\n", 'body';
 }
 
 done-testing;
