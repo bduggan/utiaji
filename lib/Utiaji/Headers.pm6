@@ -35,7 +35,6 @@ class actions {
     method field-value($/) { $/.make: ~$/ }
 }
 
-
 method normalize {
     my %new;
     for %!fields.kv -> $k, $v {
@@ -47,7 +46,6 @@ method normalize {
 method content-type { %!fields<content-type> }
 method content-length { %!fields<content-length> }
 method host { %!fields<host>; }
-
 
 method parse {
     my $actions = actions.new(made => self);

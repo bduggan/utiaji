@@ -33,7 +33,6 @@ class actions {
     method verb($/) { $/.make: ~$/; }
 }
 
-
 method parse {
     my $actions = actions.new(made => self);
     my $match = parser.parse($!raw, :$actions);
@@ -43,6 +42,4 @@ method parse {
     }
     self
 }
-
-
 

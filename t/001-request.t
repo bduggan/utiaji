@@ -37,7 +37,7 @@ use Utiaji::Request;
         POST /set HTTP/1.1
         Host: localhost
         Content-type:application/json
-        Content-length:9
+        Content-length:10
 
         {"a":"2"}
         DONE
