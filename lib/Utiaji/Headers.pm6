@@ -24,9 +24,9 @@ grammar parser {
 }
 
 class actions {
+    has Utiaji::Headers $.made;
     method TOP($/) {
-        $/.make: Utiaji::Headers.new:
-        fields => [ map {.made }, $<header> ]
+        $.made.fields = [ map {.made }, $<header> ]
     }
     method header($/) {
         $/.make: $<field-name>.made => $<field-value>.made
@@ -50,15 +50,14 @@ method normalize {
 }
 
 method parse {
-    my $actions = actions.new;
+    my $actions = actions.new(made => self);
     my $match = parser.parse("$!raw\n", :$actions);
     unless $match {
         error "did not parse headers { $!raw.perl }";
         return;
     }
-    my $request = $match.made;
-    $request.normalize;
-    return $request;
+    self.normalize;
+    self
 }
 
 

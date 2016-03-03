@@ -41,7 +41,7 @@ method parse {
         error "did not parse request line { $!raw.perl }";
         return;
     }
-    return self
+    self
 }
 
 
