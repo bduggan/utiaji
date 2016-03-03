@@ -1,0 +1,12 @@
+GET /chrome HTTP/1.1
+Host: echo.jpbd.org
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.109 Safari/537.36
+Connection: upgrade
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Encoding: gzip, deflate, sdch
+Content-Length: 0
+Accept-Language: en-US,en;q=0.8
+X-Forwarded-HTTPS: 0
+X-Forwarded-For: 98.115.181.215
+Upgrade-Insecure-Requests: 1
+

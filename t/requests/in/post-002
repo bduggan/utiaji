@@ -1,0 +1,8 @@
+POST /echo/foo HTTP/1.1
+User-Agent: HTTP::Tinyish::Curl
+Host: localhost:3333
+Accept: */*
+Content-type:application/json
+Content-Length: 16
+
+{ z: 123 }
