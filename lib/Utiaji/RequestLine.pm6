@@ -23,11 +23,11 @@ grammar parser {
 }
 
 class actions {
+    has Utiaji::RequestLine $.made;
+
     method TOP($/) {
-        $/.make: Utiaji::RequestLine.new:
-            path => $<path>.made,
-            verb => $<verb>.made,
-            headers => $<headers>.made,
+        $!made.path = $<path>.made;
+        $!made.verb = $<verb>.made;
     }
     method path($/) { $/.make: ~$/; }
     method verb($/) { $/.make: ~$/; }
@@ -35,14 +35,12 @@ class actions {
 
 
 method parse {
-    my $actions = actions.new;
-    my $match = parser.parse("$!raw", :$actions);
+    my $actions = actions.new(made => self);
+    my $match = parser.parse($!raw, :$actions);
     unless $match {
         error "did not parse request line { $!raw.perl }";
         return;
     }
-    self.path = $match.made.path;
-    self.verb = $match.made.verb;
     return self
 }
 

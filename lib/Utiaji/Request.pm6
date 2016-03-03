@@ -38,7 +38,7 @@ class Utiaji::Request {
         return unless $head;
         my ($request-line-raw, $headers-raw) = $head.split( / "\n" | "\r\n" /, 2, :skip-empty );
         $!request-line = Utiaji::RequestLine.new(raw => $request-line-raw).parse or return;
-        $!headers = Utiaji::Headers.new(raw => $headers-raw).parse;
+        $!headers = Utiaji::Headers.new(raw => $headers-raw).parse if $$headers-raw.defined;
         return self;
     }
 
