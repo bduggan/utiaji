@@ -43,9 +43,9 @@ method normalize {
     %!fields = %new;
 }
 
-method content-type { %!fields<content-type> }
-method content-length { %!fields<content-length> }
-method host { %!fields<host>; }
+method content-type is rw { return-rw %!fields<content-type> }
+method content-length is rw { return-rw %!fields<content-length> }
+method host is rw { return-rw %!fields<host>; }
 
 method parse {
     my $actions = actions.new(made => self);

@@ -17,7 +17,7 @@ class Utiaji::Server {
     }
 
     method respond(Str $request) {
-        my $req = parse-request($request) or do {
+        my $req = Utiaji::Request.new(raw => $request).parse or do {
             warn "did not parse request [[$request]]";
             return Utiaji::Response.new(status => 500);
         }

@@ -10,12 +10,12 @@ sub handle-request($request,$routes) is export {
     debug $request.gist;
     my ($route,$captures) =
         $routes.lookup(
-            verb => $request.method,
+            verb => $request.verb,
             path => $request.path);
 
     unless $route {
         trace "Not found";
-        my $response = Utiaji::Response.new(:404status, :body<are you lost?>);
+        my $response = Utiaji::Response.new(:404status, :body<not found>);
         debug $response.status-line;
         return $response;
     }
