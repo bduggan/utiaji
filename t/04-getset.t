@@ -4,12 +4,13 @@ use v6;
 use Test;
 
 use lib 'lib';
-use Utiaji;
 use Utiaji::Test;
+use Utiaji;
 
-my $t = Utiaji::Test.new;
+my $s = Utiaji::Server.new(app => Utiaji.new);
+my $t = Utiaji::Test.new(server => $s);
 
-$t.start_server;
+$s.start;
 
 $t.post_ok("/set/foo", json => { abc => 123 } )
   .status_is(200)

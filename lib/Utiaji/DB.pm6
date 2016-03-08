@@ -9,6 +9,7 @@ has $.errors is rw;
 has $.results is rw;
 
 method BUILD {
+    die "Please set PGDATABASE" unless %*ENV<PGDATABASE>;
     $.db = DBIish.connect("Pg", database => %*ENV<PGDATABASE>);
 }
 
