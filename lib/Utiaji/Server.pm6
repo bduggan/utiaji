@@ -12,6 +12,10 @@ class Utiaji::Server {
     has $.host = 'localhost';
     has $.app is rw = Utiaji::App::Default.new;
 
+    method url {
+        "http://$.host" ~ ($.port == 80 ?? "" !! ":$.port")
+    }
+
     method _header_done(Buf[] $request) {
         $request.decode('UTF-8').contains("\r\n\r\n");
     }
@@ -25,7 +29,7 @@ class Utiaji::Server {
     }
 
     method start {
-        debug "starting server on http://{$.host}:{$.port}";
+        debug "starting server on { self.url } ";
         $.loop =
         start {
             react {

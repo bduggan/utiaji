@@ -8,7 +8,6 @@ BEGIN { %*ENV<UTIAJI_LOG_LEVEL> //= 'info'; }
 use Utiaji::Server;
 use Utiaji::Test;
 
-
 my $s = Utiaji::Server.new;
 my $t = Utiaji::Test.new;
 

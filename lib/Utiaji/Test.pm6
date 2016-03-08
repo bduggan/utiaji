@@ -3,10 +3,11 @@ use JSON::Fast;
 use Test;
 
 unit class Utiaji::Test;
+use Utiaji::Server;
 
-has $.server_url is rw = 'http://localhost:3333';
 has %.res is rw;
 has HTTP::Tinyish $.ua = HTTP::Tinyish.new;
+has Utiaji::Server $.server = Utiaji::Server.new;
 
 method get_ok(Str $path) {
     %.res = $.ua.get($.server_url ~ $path);
@@ -68,3 +69,6 @@ method json_is($json) {
     self;
 }
 
+method server_url {
+    $.server.url;
+}

@@ -4,12 +4,11 @@ use v6;
 use Test;
 
 use lib 'lib';
-use Utiaji;
 use Utiaji::Test;
 
 my $t = Utiaji::Test.new;
 
-$t.start_server;
+$t.server.start;
 $t.get_ok('/')
   .status_is(200)
   .content_type_is('text/plain')
