@@ -4,7 +4,7 @@ use v6;
 use Test;
 
 use lib 'lib';
-BEGIN { %*ENV<UTIAJI_LOG_LEVEL> = 'info'; }
+BEGIN { %*ENV<UTIAJI_LOG_LEVEL> //= 'info'; }
 use Utiaji::Server;
 use Utiaji::Test;
 
@@ -24,11 +24,9 @@ $t.get_ok('/test')
   .content_type_is('text/plain')
   .content_is("This is a test of the emergency broadcast system.");
 
-todo('add this route', 3);
-
-$t.post_ok("/echo/foo", json => { abc => 123 } )
+$t.post_ok("/echo", json => { abc => 123 } )
   .status_is(200)
-  .json_is( { status => 'ok' } );
+  .json_is( { abc => 123 } );
 
 done-testing;
 

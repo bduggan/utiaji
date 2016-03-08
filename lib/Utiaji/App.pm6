@@ -53,17 +53,16 @@ multi method render($res, :$text!, :$status=200) {
 
 multi method render($res, :$json!, :$status=200) {
     trace "rendering json";
-    $res.headers<Content-Type> = 'application/json';
+    $res.headers.content-type = 'application/json';
     $res.status = $status;
-    $res.close(to-json($json) ~ "\n");
+    $res.body = to-json($json);
 }
 
 multi method render($res, :$status!) {
     # NB, must be declared below the ones above.
     trace "rendering status $status";
+    $res.headers.content-type = 'text/plain';
     $res.status = $status;
-    $res.headers<Content-Type> = 'text/plain';
-    $res.close("");
 }
 
 

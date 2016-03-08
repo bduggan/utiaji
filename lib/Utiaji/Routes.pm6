@@ -18,11 +18,12 @@ class Utiaji::Routes {
     has Array $.routes is rw = [];
 
     method lookup(:$verb!,:$path!) {
-        trace "lookup $verb $path";
+        trace "Lookup $verb $path";
 
         my @matches;
         my $captures;
         for self.routes.flat -> $route {
+            trace "Comparing with { $route.gist } ";
             next unless $verb eq $route.verb;
             if ($route.matcher and $route.matcher.match($path)) {
                 $captures = $route.matcher.captures;

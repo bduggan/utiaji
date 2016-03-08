@@ -1,4 +1,5 @@
 use Utiaji::App;
+use Utiaji::Log;
 
 class Utiaji::App::Default is Utiaji::App {
     method BUILD {
@@ -9,6 +10,10 @@ class Utiaji::App::Default is Utiaji::App {
 
         self.routes.get('/test', sub ($req,$res) {
             self.render: $res, text => "This is a test of the emergency broadcast system."
-        })
+        });
+
+        self.routes.post('/echo', sub ($req,$res) {
+            self.render: $res, json => $req.json
+        });
     }
 }
