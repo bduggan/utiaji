@@ -20,8 +20,8 @@ method BUILD {
         );
 
         .get('/get/_key',
-            sub ($req,$res,$m) {
-                $.db.query: "select v from kv where k=?", $m<key>
+            sub ($req,$res,$/) {
+                $.db.query: "select v from kv where k=?", $<key>
                     or return self.render: $res, :404status;
                 my $json = $.db.json or return self.render: $res, :404status;
                 self.render: $res, :$json
@@ -29,9 +29,10 @@ method BUILD {
         );
 
         .post('/set/_key',
-            sub ($req,$res,$m,$json) {
+            sub ($req,$res,$/) {
                 trace "running POST /set/_key";
-                my $key = $m<key>;
+                my $json = $req.json;
+                my $key = $<key>;
                 unless $json {
                     return self.render: $res, :400status,
                         json => { status => "fail",
@@ -47,8 +48,9 @@ method BUILD {
         );
 
         .post('/del/_key',
-            sub ($req,$res,$m,$json) {
-                $.db.query: "delete from kv where k = ?", $m<key>
+            sub ($req,$res,$/) {
+                my $json = $req.json;
+                $.db.query: "delete from kv where k = ?", $<key>
                     or return self.render: $res, :400status,
                        json => { status => "fail", reason => $.db.errors };
 
