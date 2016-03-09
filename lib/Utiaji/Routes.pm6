@@ -5,7 +5,7 @@ use Utiaji::Router;
 use Utiaji::Route;
 use Utiaji::Log;
 
-has Array $.routes is rw = [];
+has Utiaji::Route @.routes is rw = ();
 
 method lookup(:$verb!,:$path!) {
     trace "Lookup $verb $path";
