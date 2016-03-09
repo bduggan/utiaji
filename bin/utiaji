@@ -5,6 +5,7 @@ use lib 'lib';
 use Utiaji::Server;
 
 my $server = Utiaji::Server.new(host => 'localhost', port => 3333);
+say "Listening on { $server.url } ";
 $server.start;
 $server.await;
 

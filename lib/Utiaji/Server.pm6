@@ -34,9 +34,10 @@ class Utiaji::Server {
         start {
             react {
                 whenever IO::Socket::Async.listen($.host,$.port) -> $conn {
-                    Promise.in($.timeout).then({ try {
+                    my $promise = Promise.in($.timeout).then({{
+                        return unless $conn.Supply.live;
                         error "timeout, closing connection";
-                        try { $conn.close; };
+                        $conn.close;
                     } });
                     trace "got a connection";
                     my Buf[uint8] $request_bytes = Buf[uint8].new();

@@ -20,7 +20,7 @@ has %.codes =
 
 has $.status is rw;
 has $.status-line is rw;
-has $.body is rw;
+has $.body is rw = "";
 has Utiaji::Headers $.headers is rw = Utiaji::Headers.new;
 
 method prepare-response {
