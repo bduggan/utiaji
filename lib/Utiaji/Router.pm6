@@ -18,6 +18,9 @@ grammar Utiaji::Router {
     token var { <[a..z]>+ }
 }
 
+use MONKEY-SEE-NO-EVAL;
+# NB: It is possible to avoid the above and just use =placeholder*, but
+# then there are extra named captures.
 class Utiaji::RouterActions {
     method TOP($/)     {
         $/.make: q[ '/' ] ~ join q[ '/' ], map { .made }, $<part>;
@@ -29,9 +32,9 @@ class Utiaji::RouterActions {
         $/.make: $<placeholder_word>.made
               // $<placeholder_ascii_lc>.made
               // $<placeholder_date>.made}
-    method placeholder_word($/)     { $/.make: "<" ~ $<var>.made ~ '=placeholder_word>'; }
-    method placeholder_ascii_lc($/) { $/.make: "<" ~ $<var>.made ~ '=placeholder_ascii_lc>'; }
-    method placeholder_date($/)     { $/.make: "<" ~ $<var>.made ~ '=placeholder_date>'; }
+    method placeholder_word($/)     { $/.make: "<" ~ $<var>.made ~ '=&placeholder_word>'; }
+    method placeholder_ascii_lc($/) { $/.make: "<" ~ $<var>.made ~ '=&placeholder_ascii_lc>'; }
+    method placeholder_date($/)     { $/.make: "<" ~ $<var>.made ~ '=&placeholder_date>'; }
 
     method var($/)     {
         $/.make: ~$/;
