@@ -44,7 +44,7 @@ class Utiaji::RouterActions {
 class Utiaji::Matcher {
     has Str $.pattern;
     has Str $.rex is rw;       # Compiled pattern ( used within a regex )
-    has %.captures is rw = {};
+    has Match $.captures is rw;
 
     my regex placeholder_word     { [ \w | '-' ]+ }
     my regex placeholder_ascii_lc { [ <[a..z]> | <[0..9]> | '_' | '-' ]+ }
@@ -64,8 +64,9 @@ class Utiaji::Matcher {
         trace "Parsing $path";
         self!compile;
         my $result = $path ~~ rx{ ^ <captured={$.rex}> $ };
-        %.captures = $<captured>.hash.grep: { $_.kv[0] !~~ /^placeholder/ };
-        $_ = ~$_ for values %.captures;
+        $.captures = $<captured>.clone;
+        # TODO grep: { $_.kv[0] !~~ /^placeholder/ };
+        # $_ = ~$_ for values %.captures;
         return $result;
     }
 }

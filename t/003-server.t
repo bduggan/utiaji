@@ -27,5 +27,10 @@ $t.post_ok("/echo", json => { abc => 123 } )
   .status_is(200)
   .json_is( { abc => 123 } );
 
+$t.get_ok('/placeholder/bob')
+  .status_is(200)
+  .content_type_is('text/plain')
+  .content_is('bob');
+
 done-testing;
 

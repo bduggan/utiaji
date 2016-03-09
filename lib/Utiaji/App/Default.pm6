@@ -15,5 +15,9 @@ class Utiaji::App::Default is Utiaji::App {
         self.routes.post('/echo', sub ($req,$res) {
             self.render: $res, json => $req.json
         });
+
+        self.routes.get('/placeholder/:here', sub ($req,$res, $/) {
+            self.render: $res, text => $<here>
+        });
     }
 }
