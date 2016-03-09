@@ -7,7 +7,7 @@
     "provides" : {
         "Utiaji" : "lib/Utiaji.pm"
     },
-    "depends" : [ "DBIish", "HTTP::Tinyish", "HTTP::Server::Async" ],
+    "depends" : [ "DBIish", "HTTP::Tinyish" ],
     "resources" : [ ],
     "source-url" : "git://github.com/bduggan/Utiaji.git"
 }
