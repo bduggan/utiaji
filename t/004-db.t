@@ -1,7 +1,10 @@
 use v6;
-use Test;
-use DBIish;
+
+# NB: use lib must go first
 use lib 'lib';
+
+use DBIish;
+use Test;
 
 my $db = %*ENV<PGDATABASE>;
 unless $db {
