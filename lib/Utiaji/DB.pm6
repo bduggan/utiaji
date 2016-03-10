@@ -1,16 +1,17 @@
 unit class Utiaji::DB;
 
+use Utiaji::Log;
 use DBIish;
 use JSON::Fast;
 
 has $.db is rw;
 has $.sth is rw;
 has $.errors is rw;
-has $.results is rw;
+has @.results is rw;
 
 method BUILD {
     die "Please set PGDATABASE" unless %*ENV<PGDATABASE>;
-    $.db = DBIish.connect("Pg", database => %*ENV<PGDATABASE>);
+    $.db = DBIish.connect("Pg", database => %*ENV<PGDATABASE>, :!RaiseError);
 }
 
 multi method query($sql, $key, :$json!) {
@@ -19,21 +20,33 @@ multi method query($sql, $key, :$json!) {
 }
 
 multi method query($sql,*@bind) {
+    trace "Query: $sql";
+    trace "Bind: @bind" if @bind;
     $.sth = self.db.prepare($sql);
+    @.results = Mu;
     try {
         CATCH {
-            $.errors = .message;
-            self.results = Mu;
-            return False;
+            default {
+                False;
+            }
         }
-        $.sth.execute(|@bind);
+        $.sth.execute(|@bind)
+     } or do {
+        $.errors = $.sth.errstr;
+        debug "Error: $.errors";
+        return False;
+    };
+    @.results = ();
+    while $.sth.fetch -> $row {
+        @.results.push($row);
     }
-    self.results = $.sth.allrows;
     return True;
 }
 
 method result {
-    return $.results[0][0];
+    return @.results unless @.results==1;
+    return @.results[0] unless @.results[0]==1;
+    return @.results[0][0];
 }
 
 method json {

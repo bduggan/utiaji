@@ -20,7 +20,11 @@ is $db.result, 101, "Single value";
 
 ok $db.query("select version()"), "Selected version";
 
-diag $db.result;
+diag $db.results;
+
+ok $db.query("select typname from pg_catalog.pg_type where typname = 'jsonb'"), "find jsonb";
+
+is $db.result, 'jsonb', 'have jsonb type';
 
 ok $db.query("select 102"), "Query ok";
 
