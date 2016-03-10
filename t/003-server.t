@@ -1,10 +1,6 @@
-#!/usr/bin/env perl6
-
 use v6;
-use Test;
-
 use lib 'lib';
-BEGIN { %*ENV<UTIAJI_LOG_LEVEL> //= 'info'; }
+use Test;
 use Utiaji::Server;
 use Utiaji::Test;
 

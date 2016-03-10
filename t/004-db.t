@@ -1,8 +1,5 @@
 use v6;
-
-# NB: use lib must go first
 use lib 'lib';
-
 use DBIish;
 use Test;
 

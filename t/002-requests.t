@@ -1,6 +1,6 @@
-use Test;
-
+use v6;
 use lib 'lib';
+use Test;
 use Utiaji::Request;
 
 for dir 't/requests/in' -> $file {

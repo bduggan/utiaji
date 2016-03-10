@@ -1,7 +1,6 @@
-use Test;
-
+use v6;
 use lib 'lib';
-
+use Test;
 use Utiaji::Routes;
 
 my $r = Utiaji::Route.new(name => 'hi', verb => 'GET', path => rx{\/there});
