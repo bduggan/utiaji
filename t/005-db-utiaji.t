@@ -18,6 +18,10 @@ ok $db.query("select 101"), "Query ok";
 
 is $db.result, 101, "Single value";
 
+ok $db.query("select version()"), "Selected version";
+
+diag $db.result;
+
 ok $db.query("select 102"), "Query ok";
 
 is $db.result, 102, "Single value";
