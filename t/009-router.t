@@ -41,12 +41,9 @@ for @tests -> %in {
     my $matcher = Utiaji::Matcher.new(pattern => $pattern);
     my $i = 0;
     for %in<accepts>.flat -> $a {
-       diag "result: " ~ $matcher.match($a); #, "$pattern matches $a";
-       diag "rex: " ~ $matcher.rex;
-       diag "captures: " ~ $matcher.captures.hash;
+       ok $matcher.match($a), "$pattern matches $a";
        my $hash = $matcher.captures.hash;
        my $want = %in<captures>[$i].hash;
-       diag "want $want";
        for %in<captures>[$i++].hash.kv -> $k, $v {
              is $hash{$k}, $v, "found $k in match";
        #     is $matcher.captures.hash.flat<$k>, $v, "Matched $k to $v";

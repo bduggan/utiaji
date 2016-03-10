@@ -1,6 +1,6 @@
 unit module Utiaji::Log;
 
-my $level = %*ENV<UTIAJI_LOG_LEVEL> || 'debug';
+my $level = %*ENV<UTIAJI_LOG_LEVEL> || 'info';
 
 sub trace($msg) is export {
     return unless $level eq 'trace';

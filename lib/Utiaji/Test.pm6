@@ -1,12 +1,9 @@
+unit class Utiaji::Test;
+
 use HTTP::Tinyish;
 use JSON::Fast;
 use Test;
 
-BEGIN {
-    %*ENV<UTIAJI_LOG_LEVEL> //= 'info';
-}
-
-unit class Utiaji::Test;
 use Utiaji::Server;
 
 has %.res is rw;

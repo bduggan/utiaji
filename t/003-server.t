@@ -1,8 +1,8 @@
 use v6;
 use lib 'lib';
 use Test;
-use Utiaji::Server;
 use Utiaji::Test;
+use Utiaji::Server;
 
 my $s = Utiaji::Server.new;
 my $t = Utiaji::Test.new;
