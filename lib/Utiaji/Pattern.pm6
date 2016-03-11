@@ -69,7 +69,7 @@ method match(Str $path) {
     return $result;
 }
 
-method capture-hash {
+method caught {
     my %h = $.captures.hash;
     my %i = map { $_ => ~%h{$_} }, keys %h;
     %i;
