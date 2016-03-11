@@ -1,7 +1,7 @@
 use v6;
 use lib 'lib';
 use Test;
-use Utiaji::Matcher;
+use Utiaji::Pattern;
 
 my @tests = (
    { pattern  => '/',
@@ -38,7 +38,7 @@ my @tests = (
 
 for @tests -> %in {
     my $pattern = %in<pattern>;
-    my $matcher = Utiaji::Matcher.new(pattern => $pattern);
+    my $matcher = Utiaji::Pattern.new(pattern => $pattern);
     my $i = 0;
     for %in<accepts>.flat -> $a {
        ok $matcher.match($a), "$pattern matches $a";

@@ -1,4 +1,4 @@
-unit class Utiaji::Matcher;
+unit class Utiaji::Pattern;
 use Utiaji::Log;
 
 has Str $.pattern;

@@ -1,7 +1,7 @@
 
 unit class Utiaji::Routes;
 use Utiaji::Log;
-use Utiaji::Matcher;
+use Utiaji::Pattern;
 use Utiaji::Route;
 
 has Utiaji::Route @.routes is rw = ();
@@ -37,7 +37,7 @@ multi method get(Str $pattern, $cb) {
     my $r = Utiaji::Route.new(
             verb => 'GET',
             path => rx{^$pattern$},
-            matcher => Utiaji::Matcher.new(pattern => $pattern),
+            matcher => Utiaji::Pattern.new(pattern => $pattern),
             code => $cb
     );
     self.routes.push($r);
@@ -56,7 +56,7 @@ multi method post(Str $pattern, $cb) {
     my $r = Utiaji::Route.new(
             verb => 'POST',
             path => rx{^$pattern$},
-            matcher => Utiaji::Matcher.new(pattern => $pattern),
+            matcher => Utiaji::Pattern.new(pattern => $pattern),
             code => $cb
     );
     self.routes.push($r);
