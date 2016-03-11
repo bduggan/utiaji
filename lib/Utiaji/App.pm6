@@ -58,6 +58,15 @@ multi method render($res, :$json!, :$status=200) {
     $res.body = to-json($json);
 }
 
+multi method render($res, :$static!, :$status=200) {
+    trace "rendering static $static";
+    $res.headers.content-type = 'text/html';
+    my $path = IO::Path.new($?FILE).dirname ~ "/../../static/$static";
+    $path.IO ~~ :e or do { info "$path not found"; return self.render_not_found($res); };
+    $res.status = $status;
+    $res.body = $path.IO.slurp;
+}
+
 multi method render($res, :$status!) {
     # NB, must be declared below the ones above.
     trace "rendering status $status";
@@ -65,4 +74,9 @@ multi method render($res, :$status!) {
     $res.status = $status;
 }
 
+method render_not_found($res) {
+    $res.status = 404;
+    $res.body = 'not found';
+    $res.headers.content-type = 'text/plain';
+}
 
