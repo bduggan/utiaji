@@ -4,10 +4,12 @@ use lib 'lib';
 
 use Utiaji::Server;
 use Utiaji::Log;
+use Utiaji;
 
 logger.level = 'debug';
 
 my $server = Utiaji::Server.new(host => 'localhost', port => 3333);
+$server.app = Utiaji.new;
 say "Listening on { $server.url } ";
 $server.start;
 $server.await;
