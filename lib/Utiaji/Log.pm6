@@ -1,6 +1,8 @@
 unit class Utiaji::Log;
 
 has $.level is rw = %*ENV<UTIAJI_LOG_LEVEL> || 'info';
+has IO::Handle $.fh is rw = $*OUT;
+
 # see http://doc.perl6.org/language/classtut
 
 method new {!!!}
@@ -29,18 +31,18 @@ method trace($msg) {
     my $line = $frame.line;
     my $out = $msg ~ " [ +$line {$file} ]";
     $out ~= " in {$frame.subname}" if $frame.subname;
-    say "# $out" # {$line}";
+    $.fh.say("# $out");
 }
 
 method debug($msg) {
     return unless $.level ~~ / debug | trace /;
-    say "# debug: $msg";
+    $.fh.say("# debug: $msg");
 }
 
 method error($msg) {
-    say "# error: $msg";
+    $.fh.say( "# error: $msg");
 }
 
 method info($msg) {
-    say "# info: $msg";
+    $.fh.say("# info: $msg");
 }
