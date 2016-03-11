@@ -2,9 +2,9 @@ use v6;
 use lib 'lib';
 use Test;
 use Utiaji::Test;
-use Utiaji;
+use Utiaji::App::Getset;
 
-my $s = Utiaji::Server.new(app => Utiaji.new);
+my $s = Utiaji::Server.new(app => Utiaji::Getset.new);
 my $t = Utiaji::Test.new(server => $s);
 
 $s.start;
