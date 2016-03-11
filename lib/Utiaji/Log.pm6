@@ -16,10 +16,10 @@ submethod logger() {
     $logger;
 }
 
-sub trace($msg) is export { $logger.trace($msg) }
-sub debug($msg) is export { $logger.debug($msg) }
-sub error($msg) is export { $logger.error($msg) }
-sub info($msg)  is export { $logger.info($msg) }
+sub trace($msg) is export { logger.trace($msg) }
+sub debug($msg) is export { logger.debug($msg) }
+sub error($msg) is export { logger.error($msg) }
+sub info($msg)  is export { logger.info($msg) }
 
 method trace($msg) {
     return unless $.level eq 'trace';
