@@ -61,10 +61,20 @@ method !compile {
     };
 }
 
-method match(Str $path) is export {
+method match(Str $path) {
     trace "Parsing $path";
     self!compile;
     my $result = $path ~~ rx{ ^ <captured={$.rex}> $ };
     $.captures = $<captured>.clone;
     return $result;
+}
+
+method capture-hash {
+    my %h = $.captures.hash;
+    my %i = map { $_ => ~%h{$_} }, keys %h;
+    %i;
+}
+
+method Str {
+    $.pattern;
 }
