@@ -74,7 +74,8 @@ method server_url {
     $.server.url;
 }
 
-method start_server($app) {
+method start($app) {
     Utiaji::Server.new(app => $app).start;
+    self;
 }
 
