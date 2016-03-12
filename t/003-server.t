@@ -21,7 +21,7 @@ $t.get-ok('/test')
 
 $t.post-ok("/echo", json => { abc => 123 } )
   .status-is(200)
-  .json_is( { abc => 123 } );
+  .json-is( { abc => 123 } );
 
 $t.get-ok('/placeholder/bob')
   .status-is(200)

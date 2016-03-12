@@ -11,7 +11,7 @@ $s.start;
 
 $t.post-ok("/set/foo", json => { abc => 123 } )
   .status-is(200)
-  .json_is( { status => 'ok' } );
+  .json-is( { status => 'ok' } );
 
 $t.post-ok("/set/foo", json => { something => 'else' } )
   .status-is(409)
@@ -19,7 +19,7 @@ $t.post-ok("/set/foo", json => { something => 'else' } )
 
 $t.get-ok("/get/foo")
   .status-is(200)
-  .json_is({abc => 123});
+  .json-is({abc => 123});
 
 $t.post-ok("/del/foo").status-is(200);
 

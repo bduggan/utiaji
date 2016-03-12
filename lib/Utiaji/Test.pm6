@@ -55,7 +55,7 @@ multi method post-ok(Str $path) {
     self;
 }
 
-method json_is($json) {
+method json-is($json) {
     self.content-type-is('application/json');
     my $json_res;
     try {
