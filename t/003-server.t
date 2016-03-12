@@ -9,24 +9,24 @@ my $t = Utiaji::Test.new;
 
 $s.start;
 
-$t.get_ok('/')
-  .status_is(200)
-  .content_type_is('text/plain')
-  .content_is("Welcome to Utiaji.");
+$t.get-ok('/')
+  .status-is(200)
+  .content-type-is('text/plain')
+  .content-is("Welcome to Utiaji.");
 
-$t.get_ok('/test')
-  .status_is(200)
-  .content_type_is('text/plain')
-  .content_is("This is a test of the emergency broadcast system.");
+$t.get-ok('/test')
+  .status-is(200)
+  .content-type-is('text/plain')
+  .content-is("This is a test of the emergency broadcast system.");
 
-$t.post_ok("/echo", json => { abc => 123 } )
-  .status_is(200)
+$t.post-ok("/echo", json => { abc => 123 } )
+  .status-is(200)
   .json_is( { abc => 123 } );
 
-$t.get_ok('/placeholder/bob')
-  .status_is(200)
-  .content_type_is('text/plain')
-  .content_is('bob');
+$t.get-ok('/placeholder/bob')
+  .status-is(200)
+  .content-type-is('text/plain')
+  .content-is('bob');
 
 done-testing;
 

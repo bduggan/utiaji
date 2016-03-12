@@ -10,28 +10,28 @@ has %.res is rw;
 has HTTP::Tinyish $.ua = HTTP::Tinyish.new;
 has Utiaji::Server $.server = Utiaji::Server.new;
 
-method get_ok(Str $path) {
+method get-ok(Str $path) {
     %.res = $.ua.get($.server_url ~ $path);
     isnt %.res<status>, 599, "GET $path";
     self;
 }
 
-method status_is(Int $status) {
+method status-is(Int $status) {
     is %.res<status>, $status, "status $status";
     self;
 }
 
-method content_is(Str $content) {
+method content-is(Str $content) {
     is %.res<content>, $content, "Content is $content";
     self;
 }
 
-method content_type_is(Str $content_type) {
+method content-type-is(Str $content_type) {
     is %.res<headers><content-type>, $content_type, "Content type $content_type";
     self;
 }
 
-multi method post_ok(Str $path, :$json) {
+multi method post-ok(Str $path, :$json) {
     %.res = $.ua.post($.server_url ~ $path,
         headers => "Content-type" => 'application/json',
         content => to-json( $json )
@@ -40,7 +40,7 @@ multi method post_ok(Str $path, :$json) {
     self;
 }
 
-multi method post_ok(Str $path, :%headers, Str :$content ) {
+multi method post-ok(Str $path, :%headers, Str :$content ) {
     %.res = $.ua.post($.server_url ~ $path,
         headers => %headers,
         content => $content
@@ -49,14 +49,14 @@ multi method post_ok(Str $path, :%headers, Str :$content ) {
     self;
 }
 
-multi method post_ok(Str $path) {
+multi method post-ok(Str $path) {
     %.res = $.ua.post($.server_url ~ $path);
     isnt %.res<status>, 599, "POST $path";
     self;
 }
 
 method json_is($json) {
-    self.content_type_is('application/json');
+    self.content-type-is('application/json');
     my $json_res;
     try {
         $json_res = from-json(%.res<content>);
