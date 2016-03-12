@@ -73,3 +73,8 @@ method json_is($json) {
 method server_url {
     $.server.url;
 }
+
+method start_server($app) {
+    Utiaji::Server.new(app => $app).start;
+}
+

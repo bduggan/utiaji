@@ -9,10 +9,7 @@ my $app = Hello.new;
 
 $app.routes.get('/', sub ($req,$res) { $app.render: $res, text => "hello" } );
 
-my $s = Utiaji::Server.new(app => $app);
-my $t = Utiaji::Test.new(server => $s);
-
-$s.start;
+my $t = Utiaji::Test.new.start_server($app);
 
 $t.get_ok('/').status_is(200).content_is('hello');
 
