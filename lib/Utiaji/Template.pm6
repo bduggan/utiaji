@@ -1,4 +1,5 @@
 unit class Utiaji::Template;
+use Utiaji::Log;
 
 has $.raw;
 has $.parsed;
@@ -6,19 +7,17 @@ has $.parsed;
 grammar parser {
     rule TOP {
       [   <line=statement>
-        | <line=expression>
         | <line=text>
-        | <line=comment>
      ] *
     }
 
     token statement {
-        '%' \V* \n
+        '%' [ <expression> | <comment> | <code> ] \n
     }
 
-    token expression {
-        '%=' \V* \n
-    }
+    token expression { '=' \V* }
+    token comment { '#' \V* }
+    token code { \V* }
 
     regex text {
         <-[%]>
@@ -43,10 +42,6 @@ grammar parser {
     token inline-start { '<%' }
     token inline-end   { '%>' }
 
-    token comment {
-        '#' \V* \n
-    }
-
 }
 
 class actions {
@@ -62,18 +57,21 @@ class actions {
     method statement($/) {
         my $str = ~$/;
         $str .= subst(/^ '%' /,'');
-        say "adding statement $str";
-        $/.make: $str
+        $/.make: $<expression>.made || $<code>.made;
     }
 
     method expression($/) {
         my $str = chomp ~$/;
-        $str.=subst(/^ '%='/,'');
+        $str .= subst(/^ '='/,'');
         $/.make: "@out.push: $str;"
     }
 
     method comment($/) {
         $/.make: Nil
+    }
+
+    method code($/) {
+        $/.make ~$/;
     }
 
     method inline-code($/) {
@@ -93,13 +91,16 @@ multi method parse($!raw) {
 multi method parse {
     my $act = actions.new;
     my $raw = chomp($.raw) ~ "\n";
-    my $p = parser.parse($raw, actions => $act) or die 'no parse';
+    my $p = parser.parse($raw, actions => $act) or die "did not parse $raw";
     use MONKEY-SEE-NO-EVAL;
     my $head = ' sub { my @out = (); ';
     my $tail = ' return @out; } ';
 
     my @lines = $p.made;
     my $code = join "\n", $head, @lines, $tail;
+    trace "---code--";
+    trace $code;
+    trace "---------";
     $!parsed = EVAL $code;
     self;
 }

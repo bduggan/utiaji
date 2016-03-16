@@ -10,6 +10,18 @@ is $t.render, "Four score", "simple string";
 ok $t.parse("nother"), 'parsed another';
 is $t.render, "nother", 'rendered another';
 
+ok $t.parse(q:to/DONE/), 'parsed expression';
+%= 1 + 1
+DONE
+is $t.render, "2", 'rendered expression';
+
+ok $t.parse(q:to/DONE/), 'parsed comments';
+something
+%# is not
+here
+DONE
+is $t.render, "something\nhere", "rendered comments";
+
 # my $str = q:heredoc/END/;
 # #| :$a, :$b, :$c
 # # comments
