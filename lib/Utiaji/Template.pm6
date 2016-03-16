@@ -54,13 +54,11 @@ class actions {
     }
 
     method inline-code($/) {
-        my $str = chomp ~$/;
-        $/.make: $str ~ "\n";
+        $/.make: ~$/;
     }
 
     method inline-expression($/) {
-        my $str = chomp ~$/;
-        $str.=subst( /^ '=' /,'');
+        my $str = $/.subst( /^ '=' /,'');
         $/.make: "@out.push: $str;\n";
     }
 
@@ -69,14 +67,11 @@ class actions {
     }
 
    method statement($/) {
-        my $str = ~$/;
-        $str .= subst(/^ '%' /,'');
         $/.make: $<expression>.made || $<code>.made;
     }
 
     method expression($/) {
-        my $str = chomp ~$/;
-        $str .= subst(/^ '='/,'');
+        my $str = $/.subst(/^ '='/,'');
         $/.make: qq|@out.push: $str ~ "\n";\n|
     }
 
