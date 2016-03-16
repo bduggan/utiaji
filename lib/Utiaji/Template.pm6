@@ -86,7 +86,11 @@ class actions {
 
 }
 
-method parse {
+multi method parse($!raw) {
+    self.parse;
+}
+
+multi method parse {
     my $act = actions.new;
     my $raw = chomp($.raw) ~ "\n";
     my $p = parser.parse($raw, actions => $act) or die 'no parse';
@@ -97,6 +101,7 @@ method parse {
     my @lines = $p.made;
     my $code = join "\n", $head, @lines, $tail;
     $!parsed = EVAL $code;
+    self;
 }
 
 method render {

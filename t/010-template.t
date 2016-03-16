@@ -4,9 +4,11 @@ use lib 'lib';
 use Test;
 use Utiaji::Template;
 
-my $t = Utiaji::Template.new(raw => "Four score");
-$t.parse;
+my $t = Utiaji::Template.new(raw => "Four score").parse;
 is $t.render, "Four score", "simple string";
+
+ok $t.parse("nother"), 'parsed another';
+is $t.render, "nother", 'rendered another';
 
 # my $str = q:heredoc/END/;
 # #| :$a, :$b, :$c
