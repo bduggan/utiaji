@@ -28,6 +28,13 @@ ditto
 DONE
 is $t.render, "ditto\n" x 5, "rendered code";
 
+ok $t.parse(q:to/DONE/), 'code + expressions';
+% for 1..5 -> $x {
+%= $x
+% }
+DONE
+is $t.render, <1 2 3 4 5>.join("\n") ~ "\n", 'rendered';
+
 # my $str = q:heredoc/END/;
 # #| :$a, :$b, :$c
 # # comments
