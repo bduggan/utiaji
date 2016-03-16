@@ -29,7 +29,7 @@ grammar parser {
           <inline-end>
          ]
         ]*
-        \n
+        $<cr> = [\n]
     }
 
     regex verbatim {
@@ -50,7 +50,7 @@ class actions {
     }
 
     method text($/) {
-        $/.make: [ ( map { .made }, $<piece> ), '@out.push: "\n";' ];
+        $/.make: [ ( map { .made }, $<piece> ), $<cr>, '@out.push: "\n";' ];
     }
 
     method inline-code($/) {

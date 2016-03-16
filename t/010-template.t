@@ -41,7 +41,13 @@ is $t.render, "1 + 2 is 3.", 'inline expr render';
 ok $t.parse("percent inside <%= '%' %>."), 'percent inside';
 is $t.render, 'percent inside %.', 'percent literal';
 
-# hard: "<%= '%>' %>"
+# not doing: "<%= '%>' %>"
+
+ok $t.parse("<%= 2 + 2 %> > <%= 9 - 6 %>"), 'parse two inlines';
+is $t.render, "4 > 3", 'render two inlines';
+
+ok $t.parse('<% for 1..6 -> $x { %><%= $x %><% } %>'), 'parse inline code';
+is $t.render, '123456', 'render inline code';
 
 # my $str = q:heredoc/END/;
 # #| :$a, :$b, :$c
