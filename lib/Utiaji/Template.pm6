@@ -46,33 +46,27 @@ grammar parser {
 
 class actions {
     method TOP($/) {
-        say $<line>;
         $/.make( grep { .defined }, map { .made }, $<line> );
     }
 
     method text($/) {
-        say " text '$/'";
         #my $str = chomp ~$/;
         # $/.make: "@out.push: q[$str];\n";
         $/.make: [ ( map { .made }, $<piece> ), '@out.push: "\n";' ];
-        say "text made '{$/.made}'";
     }
 
     method inline-code($/) {
-        say "------->inline code: $/";
         my $str = chomp ~$/;
         $/.make: $str ~ "\n";
     }
 
     method inline-expression($/) {
-        say "------->inline expression $/";
         my $str = chomp ~$/;
         $str.=subst( /^ '=' /,'');
         $/.make: "@out.push: $str;\n";
     }
 
     method verbatim($/) {
-        say "-------->verbatim '$/'";
         $/.make: "@out.push: q[$/];\n";
     }
 
@@ -85,7 +79,7 @@ class actions {
     method expression($/) {
         my $str = chomp ~$/;
         $str .= subst(/^ '='/,'');
-        $/.make: "@out.push: $str\n;"
+        $/.make: qq|@out.push: $str ~ "\n";\n|
     }
 
     method comment($/) {
