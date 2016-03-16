@@ -20,7 +20,7 @@ grammar parser {
     token code { \V* }
 
     regex text {
-        <-[%]>
+        <!after '%'>
         [
             <verbatim>
             # [ <-[<\v]> | '<' <-[%\v]> ]+ # <-[%\v]>+
