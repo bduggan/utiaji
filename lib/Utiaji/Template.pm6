@@ -50,8 +50,6 @@ class actions {
     }
 
     method text($/) {
-        #my $str = chomp ~$/;
-        # $/.make: "@out.push: q[$str];\n";
         $/.make: [ ( map { .made }, $<piece> ), '@out.push: "\n";' ];
     }
 
