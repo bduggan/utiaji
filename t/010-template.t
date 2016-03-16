@@ -49,20 +49,5 @@ is $t.render, "4 > 3", 'render two inlines';
 ok $t.parse('<% for 1..6 -> $x { %><%= $x %><% } %>'), 'parse inline code';
 is $t.render, '123456', 'render inline code';
 
-# my $str = q:heredoc/END/;
-# #| :$a, :$b, :$c
-# # comments
-# hello there
-# % for 1..5 -> $a {
-# is it me
-# %= $a
-# % }
-# you're looking for
-# %= 12 + 12
-# inl<<<<ine <%= "expression" %>
-# some code here <% for (1..12) { %> hi <% } %>
-# END
-#
-
 done-testing;
 
