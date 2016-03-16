@@ -71,7 +71,7 @@ class actions {
     }
 
     method code($/) {
-        $/.make ~$/;
+        $/.make: ~$/;
     }
 
     method inline-code($/) {
@@ -108,6 +108,7 @@ multi method parse {
 method render {
    self.parse unless $.parsed;
    my @out = $!parsed();
+   push @out, "" if $!raw ~~ /\n$/;
    return @out.join( "\n");
 }
 

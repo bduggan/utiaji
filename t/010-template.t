@@ -1,4 +1,3 @@
-
 use v6;
 use lib 'lib';
 use Test;
@@ -13,14 +12,21 @@ is $t.render, "nother", 'rendered another';
 ok $t.parse(q:to/DONE/), 'parsed expression';
 %= 1 + 1
 DONE
-is $t.render, "2", 'rendered expression';
+is $t.render, "2\n", 'rendered expression';
 
 ok $t.parse(q:to/DONE/), 'parsed comments';
 something
 %# is not
 here
 DONE
-is $t.render, "something\nhere", "rendered comments";
+is $t.render, "something\nhere\n", "rendered comments";
+
+ok $t.parse(q:to/DONE/), 'parse code';
+% for 1..5 {
+ditto
+% }
+DONE
+is $t.render, "ditto\n" x 5, "rendered code";
 
 # my $str = q:heredoc/END/;
 # #| :$a, :$b, :$c
