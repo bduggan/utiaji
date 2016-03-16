@@ -35,6 +35,9 @@ ok $t.parse(q:to/DONE/), 'code + expressions';
 DONE
 is $t.render, [1..5].join("\n") ~ "\n", 'rendered';
 
+ok $t.parse("1 + 2 is <%= 1 + 2 %>."), "inline expr parse";
+is $t.render, "1 + 2 is 3.", 'inline expr render';
+
 # my $str = q:heredoc/END/;
 # #| :$a, :$b, :$c
 # # comments

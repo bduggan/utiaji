@@ -22,7 +22,8 @@ grammar parser {
     regex text {
         <-[%]>
         [
-         <verbatim>
+            <verbatim>
+            # [ <-[<\v]> | '<' <-[%\v]> ]+ # <-[%\v]>+
         |
          [ <inline-start>
             [ <inline-code> | <inline-expression> ]
@@ -32,8 +33,9 @@ grammar parser {
         \n
     }
 
-    token verbatim {
-        [ <-[<\n]> | '<' <-[%\n]> ]
+    regex verbatim {
+        [ <-[<\v]> | '<' <-[%\v]> ]+ # <-[%\v]>+
+        # [ <-[<\v]> | '<' <-[%\v]> ] <-[%\v]>+
     }
 
     token inline-code { <-[\v%]>+ }
@@ -50,11 +52,24 @@ class actions {
     }
 
     method text($/) {
+        say " text $/";
         my $str = chomp ~$/;
         $/.make: "@out.push: q[$str];\n";
     }
 
-    method statement($/) {
+    method inline-code($/) {
+        say "------->inline code: $/";
+    }
+
+    method inline-expression($/) {
+        say "------->inline expression $/";
+    }
+
+    method verbatim($/) {
+        say "-------->verbatim $/";
+    }
+
+   method statement($/) {
         my $str = ~$/;
         $str .= subst(/^ '%' /,'');
         $/.make: $<expression>.made || $<code>.made;
@@ -72,14 +87,6 @@ class actions {
 
     method code($/) {
         $/.make: ~$/;
-    }
-
-    method inline-code($/) {
-        say "------->inline code: $/";
-    }
-
-    method inline-expression($/) {
-        say "------->inline expression $/";
     }
 
 }
