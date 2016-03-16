@@ -33,7 +33,7 @@ ok $t.parse(q:to/DONE/), 'code + expressions';
 %= $x
 % }
 DONE
-is $t.render, <1 2 3 4 5>.join("\n") ~ "\n", 'rendered';
+is $t.render, [1..5].join("\n") ~ "\n", 'rendered';
 
 # my $str = q:heredoc/END/;
 # #| :$a, :$b, :$c
