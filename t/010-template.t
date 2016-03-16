@@ -38,6 +38,8 @@ is $t.render, [1..5].join("\n") ~ "\n", 'rendered';
 ok $t.parse("1 + 2 is <%= 1 + 2 %>."), "inline expr parse";
 is $t.render, "1 + 2 is 3.", 'inline expr render';
 
+ok $t.parse("percent inside <%= '%' %>."), 'percent inside';
+is $t.render, 'percent inside %.', 'percent literal';
 # my $str = q:heredoc/END/;
 # #| :$a, :$b, :$c
 # # comments

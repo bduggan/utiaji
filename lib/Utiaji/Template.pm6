@@ -37,7 +37,7 @@ grammar parser {
     }
 
     token inline-code { <-[\v%]>+ }
-    token inline-expression { '=' <-[\v%]>+ }
+    token inline-expression { '=' [ <-[\v%]> | '%' <!before '>'> ] + }
 
     token inline-start { '<%' }
     token inline-end   { '%>' }
