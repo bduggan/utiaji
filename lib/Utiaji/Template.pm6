@@ -33,7 +33,7 @@ grammar parser {
     }
 
     regex verbatim {
-        [ <-[<\v]> | '<' <-[%\v]> ]+ # <-[%\v]>+
+        [ <-[<\v]> | '<' <-[%\v]> ]+
     }
 
     token inline-code { <-[\v%]>+ }
@@ -46,14 +46,16 @@ grammar parser {
 
 class actions {
     method TOP($/) {
-        $/.make( map { .chomp }, grep { .defined }, map { .made }, $<line> );
+        say $<line>;
+        $/.make( grep { .defined }, map { .made }, $<line> );
     }
 
     method text($/) {
-        say " text $/";
+        say " text '$/'";
         #my $str = chomp ~$/;
         # $/.make: "@out.push: q[$str];\n";
-        $/.make: map { .made }, $<piece>
+        $/.make: [ ( map { .made }, $<piece> ), '@out.push: "\n";' ];
+        say "text made '{$/.made}'";
     }
 
     method inline-code($/) {
@@ -70,9 +72,8 @@ class actions {
     }
 
     method verbatim($/) {
-        say "-------->verbatim $/";
-        my $str = chomp ~$/;
-        $/.make: "@out.push: q[$str];\n";
+        say "-------->verbatim '$/'";
+        $/.make: "@out.push: q[$/];\n";
     }
 
    method statement($/) {
@@ -84,7 +85,7 @@ class actions {
     method expression($/) {
         my $str = chomp ~$/;
         $str .= subst(/^ '='/,'');
-        $/.make: "@out.push: $str;"
+        $/.make: "@out.push: $str\n;"
     }
 
     method comment($/) {
@@ -120,8 +121,8 @@ multi method parse {
 
 method render {
    self.parse unless $.parsed;
-   my @out = $!parsed();
-   push @out, "" if $!raw ~~ /\n$/;
-   return @out.join( "\n");
+   my $out = $!parsed().join("");
+   $out.=chomp unless $!raw ~~ /\n $/;
+   return $out;
 }
 
