@@ -3,16 +3,15 @@ var el = React.createElement;
 var Cal = React.createClass({
     getInitialState: function () {
         return {
+            day: 'today',
             events: [],
             loaded: false
         }
     },
 
-    componentDidMount: function () {
+    fetchEvents: function (day) {
         var that = this;
-        // Simple response handling
-        fetch('/today').then(function(response) {
-            // console.log(response);
+        return fetch('/' + day).then(function(response) {
             return response.json();
         }).then(function(json) {
             console.log(json);
@@ -23,10 +22,26 @@ var Cal = React.createClass({
         });
     },
 
+    componentDidMount: function () {
+        this.fetchEvents(this.state.day);
+    },
+
+    componentWillUpdate: function (nextProps, nextState) {
+        if (nextState.day !== this.state.day) {
+            this.fetchEvents(nextState.day);
+        }
+    },
+
+    handleDayChange: function (day) {
+        console.log(day);
+        this.setState({ day: day, loaded: false })
+    },
+
     render: function () {
         return (
             el('div', {},
-                el('h1', {}, 'Today'),
+                el('a', { onClick: this.handleDayChange.bind(this, 'today') }, 'Today'),
+                el('a', { onClick: this.handleDayChange.bind(this, 'tomorrow') }, 'Tomorrow'),
                 el('div', { className: 'events' },
                     this.state.events.map(evt)
                 )

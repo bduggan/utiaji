@@ -24,6 +24,12 @@ method BUILD {
 
     self.routes.get('/today', sub ($req,$res) {
         self.render: $res,
-           json => { "events" => [ "brush your teeth", "wash your face" ] }
+           json => { "events" => [ "eat", "drink", "be merry"] }
     });
+
+    self.routes.get('/tomorrow', sub ($req,$res) {
+        self.render: $res,
+           json => { "events" => [ "we die" ] }
+    });
+
 }
