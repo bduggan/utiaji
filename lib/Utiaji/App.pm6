@@ -71,7 +71,7 @@ multi method render($res, :$static!, :$status=200) {
     $res.body = $path.IO.slurp;
 }
 
-multi method render($res, :$template!) {
+multi method render($res, :$template!, :%template_params) {
     trace "rendering template $template";
     my $path = "$.template_path/$template\.$.template_suffix";
     $path.IO.e or do {
@@ -79,7 +79,9 @@ multi method render($res, :$template!) {
         return self.render_not_found($res);
     };
     $res.headers.content-type = "text/html";
-    $res.body = $.template.parse($path.IO.slurp).render;
+    $res.body = $.template
+        .parse($path.IO.slurp)
+        .render(|%template_params);
     $res.status = 200;
 }
 
