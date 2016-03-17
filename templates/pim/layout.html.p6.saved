@@ -1,3 +1,4 @@
+%- :$content
 <!DOCTYPE html>
 <!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
 <html class="no-js" lang="en">
@@ -63,7 +64,7 @@
           <div class="panel radius">
             <div class="row">
               <div class="large-6 small-6 columns">
-                  hi
+                  <%= $content %>
               </div>
             </div>
           </div>
