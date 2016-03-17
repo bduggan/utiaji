@@ -57,5 +57,11 @@ hello, <%= $name %>
 DONE
 is $t.render(name => 'joe'), "hello, joe\n", 'rendered with params';
 
+ok $t.parse(q:to/DONE/), 'parse with signature line';
+%- :$content
+hello, <%= $content %>
+DONE
+is $t.render(content => 'caffeine'), "hello, caffeine\n", 'rendered with params';
+
 done-testing;
 
