@@ -71,7 +71,7 @@ multi method render($res, :$static!, :$status=200) {
     $res.body = $path.IO.slurp;
 }
 
-multi method render($res, :$template) {
+multi method render($res, :$template!) {
     trace "rendering template $template";
     my $path = "$.template_path/$template\.$.template_suffix";
     $path.IO.e or do {
