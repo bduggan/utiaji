@@ -29,7 +29,7 @@ class Utiaji::Server {
     }
 
     method start {
-        debug "starting server on { self.url } ";
+        info "starting server on { self.url } ";
         $.loop =
         start {
             react {
