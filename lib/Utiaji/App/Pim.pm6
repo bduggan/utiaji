@@ -1,7 +1,10 @@
 use Utiaji::App;
+use Utiaji::DB;
 use Utiaji::Log;
 
-unit class Utiaji is Utiaji::App;
+unit class Utiaji::App::Pim is Utiaji::App;
+
+has $.db = Utiaji::DB.new;
 
 method BUILD {
     self.routes.get('/', sub ($req,$res) {
