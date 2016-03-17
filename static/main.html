@@ -18,8 +18,6 @@ use Utiaji::Server;
 use Utiaji::Log;
 use <b>Utiaji</b>;
 
-logger.level = 'debug';
-
 my $server = Utiaji::Server.new(host => 'localhost', port => 3333);
 $server.app = <b>Utiaji</b>.new;
 $server.start;
@@ -35,8 +33,6 @@ use lib 'lib';
 use Utiaji::Server;
 use Utiaji::Log;
 use <b>Utiaji::App::Pim</b>;
-
-logger.level = 'debug';
 
 my $server = Utiaji::Server.new(host => 'localhost', port => 3333);
 $server.app = <b>Utiaji::App::Pim</b>.new;
