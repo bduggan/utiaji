@@ -8,6 +8,6 @@ has $.db = Utiaji::DB.new;
 
 method BUILD {
     self.routes.get('/', sub ($req,$res) {
-        self.render: $res, static => 'main.html';
+        self.render: $res, static => 'pim/main.html';
     });
 }
