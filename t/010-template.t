@@ -3,7 +3,9 @@ use lib 'lib';
 use Test;
 use Utiaji::Template;
 
-my $t = Utiaji::Template.new(raw => "Four score").parse;
+my $t = Utiaji::Template.new;
+
+ok $t.parse("Four score"), 'parsed';
 is $t.render, "Four score", "simple string";
 
 ok $t.parse("nother"), 'parsed another';
@@ -48,6 +50,12 @@ is $t.render, "4 > 3", 'render two inlines';
 
 ok $t.parse('<% for 1..6 -> $x { %><%= $x %><% } %>'), 'parse inline code';
 is $t.render, '123456', 'render inline code';
+
+ok $t.parse(q:to/DONE/), 'parse with signature line';
+%- :$name
+hello, <%= $name %>
+DONE
+is $t.render(name => 'joe'), "hello, joe\n", 'rendered with params';
 
 done-testing;
 

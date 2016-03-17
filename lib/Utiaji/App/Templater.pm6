@@ -8,5 +8,10 @@ class Utiaji::App::Templater is Utiaji::App {
         self.routes.get('/hello', sub ($req, $res) {
             self.render: $res, template => "hello"
         });
+        self.routes.get('/hello/:person', sub ($req, $res, $/) {
+            self.render: $res,
+                template => "hello/person",
+                template_params => { name => $<person> }
+        });
     }
 }

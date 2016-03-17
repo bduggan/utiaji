@@ -6,18 +6,26 @@ has $.parsed;
 
 grammar parser {
     rule TOP {
-      [   <line=statement>
+     [ '%-' $<signature> = [ ':$name' ] \n ]?
+     [    <line=statement>
         | <line=text>
      ] *
     }
+
+    token ws { \h* }
 
     token statement {
         '%' [ <expression> | <comment> | <code> ] \n
     }
 
-    token expression { '=' \V* }
-    token comment { '#' \V* }
-    token code { \V* }
+    token expression {
+        '=' \V* }
+    token comment {
+        '#' \V* }
+    token signature {
+        '- :$name' }
+    token code {
+        \V* }
 
     regex text {
         <!after '%'>
@@ -46,7 +54,13 @@ grammar parser {
 
 class actions {
     method TOP($/) {
-        $/.make( grep { .defined }, map { .made }, $<line> );
+        my $head = ' sub (';
+        $head ~= $<signature> ?? $<signature> !! ':%args';
+        $head ~= ') { ' ~ "\n";
+        $head ~=  'my @out = (); ';
+        my @lines = grep { .defined }, map { .made }, $<line>;
+        my $tail = ' return @out; } ';
+        $/.make( join "\n", $head, @lines, $tail );
     }
 
     method text($/) {
@@ -83,6 +97,11 @@ class actions {
         $/.make: ~$/;
     }
 
+    method signature($/) {
+        my $str = $/.subst(/^ '-'/,'');
+        $/.make: $str;
+    }
+
 }
 
 multi method parse($!raw) {
@@ -92,13 +111,12 @@ multi method parse($!raw) {
 multi method parse {
     my $act = actions.new;
     my $raw = chomp($.raw) ~ "\n";
-    my $p = parser.parse($raw, actions => $act) or die "did not parse $raw";
+    my $p = parser.parse($raw, actions => $act) or do {
+        error "did not parse $raw";
+        return
+    };
     use MONKEY-SEE-NO-EVAL;
-    my $head = ' sub { my @out = (); ';
-    my $tail = ' return @out; } ';
-
-    my @lines = $p.made;
-    my $code = join "\n", $head, @lines, $tail;
+    my $code = $p.made;
     trace "---code--";
     trace $code;
     trace "---------";
@@ -106,9 +124,11 @@ multi method parse {
     self;
 }
 
-method render {
+method render(*%params) {
    self.parse unless $.parsed;
-   my $out = $!parsed().join("");
+   return unless $!parsed;
+   trace "sending params " ~ %params.perl;
+   my $out = $!parsed(|%params).join("");
    $out.=chomp unless $!raw ~~ /\n $/;
    return $out;
 }
