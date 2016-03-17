@@ -14,6 +14,6 @@ git clone https://github.com/tadzik/rakudobrew.git $HOME/.rakudobrew
 rakudobrew build moar $version
 rakudobrew build-panda
 # panda installdeps .
-panda install DBIish
+panda --notests install DBIish
 panda install HTTP::Tinyish
 
