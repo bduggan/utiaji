@@ -3,10 +3,14 @@ use DBIish;
 
 use Utiaji::Routes;
 use Utiaji::Log;
+use Utiaji::Template;
 
 unit class Utiaji::App;
 
 has Utiaji::Routes $.routes = Utiaji::Routes.new;
+has $.template_path = join '/', $?FILE.IO.dirname, '..', '..', 'templates';
+has $.template_suffix = 'html.p6';
+has $.template = Utiaji::Template.new;
 
 method handler {
     return sub ($req, $res) {
@@ -65,6 +69,18 @@ multi method render($res, :$static!, :$status=200) {
     $path.IO ~~ :e or do { info "$path not found"; return self.render_not_found($res); };
     $res.status = $status;
     $res.body = $path.IO.slurp;
+}
+
+multi method render($res, :$template) {
+    trace "rendering template $template";
+    my $path = "$.template_path/$template\.$.template_suffix";
+    $path.IO.e or do {
+        debug "$path not found";
+        return self.render_not_found($res);
+    };
+    $res.headers.content-type = "text/html";
+    $res.body = $.template.parse($path.IO.slurp).render;
+    $res.status = 200;
 }
 
 multi method render($res, :$status!) {

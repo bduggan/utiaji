@@ -22,7 +22,8 @@ method status-is(Int $status) {
 }
 
 method content-is(Str $content) {
-    is %.res<content>, $content, "Content is $content";
+    my $printable = $content.subst("\n",'\\n',:g);
+    is %.res<content>, $content, qq[Content is "$printable"];
     self;
 }
 
