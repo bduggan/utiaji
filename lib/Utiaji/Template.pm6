@@ -6,7 +6,7 @@ has $.parsed;
 
 grammar parser {
     rule TOP {
-     [ '%-' $<signature> = [ ':$name' ] \n ]?
+     [ ^ '%-' [ $<signature>=[ \V+ ] ] \n ]?
      [    <line=statement>
         | <line=text>
      ] *
@@ -22,8 +22,6 @@ grammar parser {
         '=' \V* }
     token comment {
         '#' \V* }
-    token signature {
-        '- :$name' }
     token code {
         \V* }
 
