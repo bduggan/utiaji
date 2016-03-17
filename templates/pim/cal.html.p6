@@ -1,3 +1,17 @@
+<html>
+<head>
+<script src="//cdn.jsdelivr.net/react/15.0.0-rc.2/react.min.js"></script>
+<script src="//cdn.jsdelivr.net/react/15.0.0-rc.2/react-dom.min.js"></script>
+<script type='text/javascript' src="/utiaji"></script>
+</head>
+<body>
 
-This is the calendar.
+<div id='today'>javascript not enabled</div>
+
+<script type='text/javascript'>
+    var cal = React.createElement(Cal);
+    var ref = ReactDOM.render(cal, document.getElementById('today'))
+</script>
+</body>
+</html>
 

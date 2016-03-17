@@ -7,8 +7,23 @@ unit class Utiaji::App::Pim is Utiaji::App;
 has $.db = Utiaji::DB.new;
 
 method BUILD {
+
+    self.routes.get('/utiaji', sub ($req,$res) {
+        self.render: $res, static => 'pim/utiaji.js';
+    });
+
     self.routes.get('/cal', sub ($req,$res) {
         self.render: $res,
             template => 'pim/cal',
+    });
+
+    self.routes.get('/wiki', sub ($req,$res) {
+        self.render: $res,
+            template => 'pim/wiki',
+    });
+
+    self.routes.get('/today', sub ($req,$res) {
+        self.render: $res,
+           json => { "events" => [ "brush your teeth", "wash your face" ] }
     });
 }
