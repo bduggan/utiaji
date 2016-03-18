@@ -31,44 +31,52 @@ class Utiaji::Server {
         return handle-request($req,$.app.routes);
     }
 
+    method handle-request($bytes is rw,$buf) {
+        trace "got bytes for request";
+        $bytes = $bytes ~ $buf;
+        return unless self._header_done($bytes);
+        trace "Got a request header.";
+        my $response;
+        try {
+            $response = self.respond($bytes.decode('UTF-8'));
+            CATCH {
+                default {
+                    my $error = $_;
+                    error "caught { $error.gist }";
+                    $response = Utiaji::Response.new(
+                        :500status,
+                        :body<houston we have a problem>
+                    );
+                }
+                .resume
+            }
+        }
+        return $response;
+    }
+
+    method handle-connection($conn) {
+        my $promise = Promise.in($.timeout).then({{
+            error "timeout, closing connection";
+            $conn.close;
+        } });
+        trace "got a connection";
+        my Buf[uint8] $bytes = Buf[uint8].new();
+        whenever $conn.Supply(:bin) -> $buf {
+            if my $response = self.handle-request($bytes,$buf) {
+                $conn.write($response.to-string.encode("UTF-8"));
+                $conn.close;
+                trace "closed connection";
+            }
+        }
+
+    }
+
     method start {
         info "starting server on { self.url } ";
-        $!loop =
-        start {
+        $!loop = start {
             react {
                 whenever IO::Socket::Async.listen($.host,$.port) -> $conn {
-                    my $promise = Promise.in($.timeout).then({{
-                        return unless $conn.Supply.live;
-                        error "timeout, closing connection";
-                        $conn.close;
-                    } });
-                    trace "got a connection";
-                    my Buf[uint8] $request_bytes = Buf[uint8].new();
-                    whenever $conn.Supply(:bin) -> $buf {
-                        trace "got bytes for request";
-                        $request_bytes = $request_bytes ~ $buf;
-                        if self._header_done($request_bytes) {
-                            trace "Got a request header.";
-                            my $response;
-                            try {
-                                $response = self.respond($request_bytes.decode('UTF-8'));
-                                CATCH {
-                                    default {
-                                        my $error = $_;
-                                        error "caught { $error.gist }";
-                                        $response = Utiaji::Response.new(
-                                            :500status,
-                                            :body<houston we have a problem>
-                                        );
-                                    }
-                                    .resume
-                                }
-                            }
-                            $conn.write($response.to-string.encode("UTF-8"));
-                            $conn.close;
-                            trace "closed connection";
-                        }
-                    }
+                    self.handle-connection($conn);
                 }
             }
         }

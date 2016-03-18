@@ -7,7 +7,7 @@ use Utiaji::Log;
 use Utiaji;
 
 my $server = Utiaji::Server.new(host => 'localhost', port => 3333);
-$server.app = Utiaji.new;
+#$server.app = Utiaji.new;
 $server.start;
 $server.await;
 
