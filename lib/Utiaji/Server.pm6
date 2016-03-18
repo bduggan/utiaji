@@ -68,7 +68,6 @@ class Utiaji::Server {
                 trace "closed connection";
             }
         }
-
     }
 
     method start {
