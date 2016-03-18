@@ -5,7 +5,7 @@ unit class Utiaji::Headers;
 has $.raw;
 has %.fields;
 
-grammar parser {
+my grammar parser {
      rule TOP {
         [ <header> \n ]*
      }
@@ -21,7 +21,7 @@ grammar parser {
      }
 }
 
-class actions {
+my class actions {
     has Utiaji::Headers $.made;
     method TOP($/) {
         $.made.fields = [ map {.made }, $<header> ]

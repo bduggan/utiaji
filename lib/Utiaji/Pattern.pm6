@@ -6,7 +6,7 @@ has Str $.rex is rw;       # Compiled pattern ( used within a regex )
 has Match $.captures is rw;
 
 # Parse a route pattern.
-grammar parser {
+my grammar parser {
     token TOP          { '/' <part> *%% '/' }
     token part         { <literal> || <placeholder> }
     token literal      { <[a..z]>+ }
@@ -25,7 +25,7 @@ grammar parser {
 use MONKEY-SEE-NO-EVAL;
 # NB: It is possible to avoid the above and just use =placeholder*, but
 # then there are extra named captures.
-class actions {
+my class actions {
     method TOP($/)     {
         $/.make: q[ '/' ] ~ join q[ '/' ], map { .made }, $<part>;
     }

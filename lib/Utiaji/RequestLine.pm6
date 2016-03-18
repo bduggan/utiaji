@@ -6,7 +6,7 @@ has $.raw;
 has $.path is rw;
 has $.verb is rw;
 
-grammar parser {
+my grammar parser {
      rule TOP {
         <verb> <path> "HTTP/1.1"
      }
@@ -22,7 +22,7 @@ grammar parser {
      }
 }
 
-class actions {
+my class actions {
     has Utiaji::RequestLine $.made;
 
     method TOP($/) {
