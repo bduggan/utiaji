@@ -13,6 +13,8 @@ my $t = Utiaji::Test.new.start($app);
 
 $t.get-ok('/').status-is(200).content-is('hello');
 
+$t.stop;
+
 done-testing;
 
 

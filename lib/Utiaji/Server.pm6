@@ -3,14 +3,17 @@ use Utiaji::Log;
 use Utiaji::Handler;
 use Utiaji::Response;
 use Utiaji::App::Default;
+use NativeCall;
+sub fork returns int32 is native { * };
 
 class Utiaji::Server {
 
-    has Promise $.loop is rw;
+    has Promise $.loop;
     has $.timeout = 10;
     has Int $.port = 3333;
     has $.host = 'localhost';
     has $.app is rw = Utiaji::App::Default.new;
+    has $.child;
 
     method url {
         "http://$.host" ~ ($.port == 80 ?? "" !! ":$.port")
@@ -30,7 +33,7 @@ class Utiaji::Server {
 
     method start {
         info "starting server on { self.url } ";
-        $.loop =
+        $!loop =
         start {
             react {
                 whenever IO::Socket::Async.listen($.host,$.port) -> $conn {
@@ -73,5 +76,22 @@ class Utiaji::Server {
 
     method await {
         await $.loop;
+    }
+
+    method start-fork {
+        my $pid;
+        unless ($pid = fork) {
+          self.start;
+          self.await;
+          exit;
+        }
+        $!child = $pid;
+    }
+
+    method stop-fork {
+        if $!child {
+            say "# killing $!child";
+            shell "kill $!child"
+        }
     }
 }

@@ -7,7 +7,7 @@ use Utiaji::Server;
 my $s = Utiaji::Server.new;
 my $t = Utiaji::Test.new;
 
-$s.start;
+$s.start-fork;
 
 $t.get-ok('/')
   .status-is(200)
@@ -27,6 +27,8 @@ $t.get-ok('/placeholder/bob')
   .status-is(200)
   .content-type-is('text/plain')
   .content-is('bob');
+
+$s.stop-fork;
 
 done-testing;
 

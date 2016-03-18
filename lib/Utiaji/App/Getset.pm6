@@ -6,7 +6,7 @@ use Utiaji::Log;
 # createdb utiaji
 # psql utiaji -c "create table kv(k varchar not null primary key, v jsonb)"
 
-unit class Utiaji::Getset is Utiaji::App;
+unit class Utiaji::App::Getset is Utiaji::App;
 
 has $.db = Utiaji::DB.new;
 

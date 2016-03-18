@@ -5,7 +5,7 @@ use Utiaji::Test;
 
 my $t = Utiaji::Test.new;
 
-$t.server.start;
+$t.server.start-fork;
 $t.get-ok('/')
   .status-is(200)
   .content-type-is('text/plain')
@@ -13,5 +13,7 @@ $t.get-ok('/')
 
 $t.get-ok("/no/such/url")
   .status-is(404);
+
+$t.server.stop-fork;
 
 done-testing;

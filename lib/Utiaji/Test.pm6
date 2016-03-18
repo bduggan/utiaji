@@ -8,7 +8,7 @@ use Utiaji::Server;
 
 has %.res is rw;
 has HTTP::Tinyish $.ua = HTTP::Tinyish.new;
-has Utiaji::Server $.server = Utiaji::Server.new;
+has Utiaji::Server $.server is rw = Utiaji::Server.new;
 
 method get-ok(Str $path) {
     %.res = $.ua.get($.server_url ~ $path);
@@ -76,7 +76,12 @@ method server_url {
 }
 
 method start($app) {
-    Utiaji::Server.new(app => $app).start;
+    $.server = Utiaji::Server.new(app => $app);
+    $.server.start-fork;
     self;
+}
+
+method stop {
+    $!server.stop-fork;
 }
 

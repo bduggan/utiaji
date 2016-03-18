@@ -4,10 +4,8 @@ use Test;
 use Utiaji::Test;
 use Utiaji::App::Getset;
 
-my $s = Utiaji::Server.new(app => Utiaji::Getset.new);
-my $t = Utiaji::Test.new(server => $s);
-
-$s.start;
+my $app = Utiaji::App::Getset.new;
+my $t = Utiaji::Test.new.start($app);
 
 $t.post-ok("/set/foo", json => { abc => 123 } )
   .status-is(200)
@@ -29,6 +27,8 @@ $t.post-ok("/set/badfoo",
     headers => { "content-type" => "application/json" },
     content => 'not va ---( lid JSON ')
   .status-is(400);
+
+$t.stop;
 
 done-testing;
 
