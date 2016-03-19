@@ -9,7 +9,7 @@ has Match $.captures is rw;
 my grammar parser {
     token TOP          { '/' <part> *%% '/' }
     token part         { <literal> || <placeholder> }
-    token literal      { <[a..z]>+ }
+    token literal      { [ <[0..9]> | <[a..z]> | '-' | '_' | '.' ]+ }
 
     token placeholder  {
               <placeholder_word>
@@ -45,7 +45,7 @@ my class actions {
         $/.make: ~$/;
     }
     method literal($/) {
-        $/.make: ~$/;
+        $/.make: "'$/'";
     }
 }
 
@@ -54,16 +54,17 @@ my regex placeholder_ascii_lc { [ <[a..z]> | <[0..9]> | '_' | '-' ]+ }
 my regex placeholder_date     { <[0..9]>**4 '-' <[0..9]>**2 '-' <[0..9]>**2 }
 
 method !compile {
-    trace "compiling $.pattern";
     $.rex //= do {
-        my $parser = parser.parse( $.pattern, actions => actions.new);
+        my $parser = parser.parse( $.pattern, actions => actions.new) or
+            die "could not parse $.pattern";
         $parser.made;
     };
+    trace "compiled $.pattern into $.rex";
 }
 
 method match(Str $path) {
-    trace "Parsing $path";
     self!compile;
+    trace "comparing $path to $.rex";
     my $result = $path ~~ rx{ ^ <captured={$.rex}> $ };
     $.captures = $<captured>.clone;
     return $result;

@@ -39,7 +39,7 @@ method to-string {
     my @lines = (
         self.status-line,
         "Server: Utiaji";
-        "Content-Type: { $.headers.content-type }";
+        "Content-Type: { $.headers.content-type }; charset=utf-8";
         "Content-Length { $.headers.content-length }";
         "Connection: Close";
     );

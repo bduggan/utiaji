@@ -2,7 +2,7 @@
 <head>
 <script src="//cdn.jsdelivr.net/react/15.0.0-rc.2/react.min.js"></script>
 <script src="//cdn.jsdelivr.net/react/15.0.0-rc.2/react-dom.min.js"></script>
-<script type='text/javascript' src="/utiaji"></script>
+<script type='text/javascript' src="/utiaji.js"></script>
 </head>
 <body>
 

@@ -28,7 +28,9 @@ method content-is(Str $content) {
 }
 
 method content-type-is(Str $content_type) {
-    is %.res<headers><content-type>, $content_type, "Content type $content_type";
+    is %.res<headers><content-type>,
+        "$content_type; charset=utf-8",
+        "Content type $content_type";
     self;
 }
 
