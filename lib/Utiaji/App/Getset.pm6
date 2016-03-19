@@ -19,7 +19,7 @@ method BUILD {
             }
         );
 
-        .get('/get/_key',
+        .get('/get/∙key',
             sub ($req,$res,$/) {
                 $.db.query: "select v from kv where k=?", $<key>
                     or return self.render: $res, :404status;
@@ -28,7 +28,7 @@ method BUILD {
             }
         );
 
-        .post('/set/_key',
+        .post('/set/∙key',
             sub ($req,$res,$/) {
                 trace "running POST /set/_key";
                 my $json = $req.json;
@@ -47,7 +47,7 @@ method BUILD {
             }
         );
 
-        .post('/del/_key',
+        .post('/del/∙key',
             sub ($req,$res,$/) {
                 my $json = $req.json;
                 $.db.query: "delete from kv where k = ?", $<key>
