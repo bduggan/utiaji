@@ -16,8 +16,8 @@ my grammar parser {
             | <placeholder_ascii_lc>
             | <placeholder_date> }
     token placeholder_word     { ':' <var> }
-    token placeholder_ascii_lc { '_' <var> }
-    token placeholder_date     { 'Δ' <var> } # delta : D*
+    token placeholder_ascii_lc { '∙' <var> } # bullet : Sb
+    token placeholder_date     { 'Δ' <var> } #  delta : D*
 
     token var { <[a..z]>+ }
 }

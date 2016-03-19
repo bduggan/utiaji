@@ -24,7 +24,7 @@ my @tests = (
      captures => [ { w => '12-23-45'}, { w => 'a_b-cdEFG' } ],
      rejects  => [ '/word/a b' ],
    },
-   { pattern  => '/wiki/_page',
+   { pattern  => '/wiki/∙page',
      accepts  => [ '/wiki/abc',       '/wiki/123',       '/wiki/a_b-d' ],
      captures => [ { page => 'abc' }, { page => "123" }, { page => 'a_b-d' } ],
      rejects  => [ '/wiki/a.d', '/wiki/ABC' ],
