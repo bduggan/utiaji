@@ -55,7 +55,9 @@ class Utiaji::Server {
     }
 
     method handle-connection($conn) {
+        my $responded = False;
         my $promise = Promise.in($.timeout).then({{
+            return if $responded;
             error "timeout, closing connection";
             $conn.close;
         } });
@@ -65,6 +67,7 @@ class Utiaji::Server {
             if my $response = self.handle-request($bytes,$buf) {
                 $conn.write($response.to-string.encode("UTF-8"));
                 $conn.close;
+                $responded = True;
                 trace "closed connection";
             }
         }
@@ -97,7 +100,7 @@ class Utiaji::Server {
 
     method stop-fork {
         if $!child {
-            say "# killing $!child";
+            trace "killing $!child";
             shell "kill $!child"
         }
     }
