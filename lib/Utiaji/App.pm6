@@ -11,6 +11,7 @@ has Utiaji::Routes $.routes = Utiaji::Routes.new;
 has $.template_path = join '/', $?FILE.IO.dirname, '..', '..', 'templates';
 has $.template_suffix = 'html.p6';
 has $.template = Utiaji::Template.new;
+has $.root is rw = IO::Path.new($?FILE).dirname ~ "/../..";
 
 method handler {
     return sub ($req, $res) {
@@ -65,7 +66,7 @@ multi method render($res, :$json!, :$status=200) {
 multi method render($res, :$static!, :$status=200) {
     trace "rendering static $static";
     $res.headers.content-type = 'text/html';
-    my $path = IO::Path.new($?FILE).dirname ~ "/../../static/$static";
+    my $path = $.root ~ "/static/$static";
     $path.IO ~~ :e or do { info "$path not found"; return self.render_not_found($res); };
     $res.status = $status;
     $res.body = $path.IO.slurp;
