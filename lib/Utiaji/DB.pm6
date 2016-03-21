@@ -19,7 +19,7 @@ multi method query($sql, $key, :$json!) {
     self.query($sql,$key,$arg);
 }
 
-multi method query($sql,*@bind) {
+multi method query($sql is copy,*@bind) {
     trace "Query: $sql";
     trace "Bind: @bind" if @bind;
     $.sth = self.db.prepare($sql);

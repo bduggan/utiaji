@@ -21,7 +21,7 @@ ok $db.query("select version()"), "Selected version";
 
 diag $db.results;
 
-ok $db.query("select typname from pg_catalog.pg_type where typname = 'jsonb'"), "find jsonb";
+ok $db.query("select typname::text from pg_catalog.pg_type where typname = 'jsonb'"), "find jsonb";
 
 is $db.result, 'jsonb', 'have jsonb type';
 
@@ -29,7 +29,7 @@ ok $db.query("select 102"), "Query ok";
 
 is $db.result, 102, "Single value";
 
-ok $db.query(q[select '{"x":"999"}'::json]), "json query";
+ok $db.query(q[select '{"x":"999"}'::json::text]), "json query";
 
 is-deeply $db.json, { x => '999' }, 'json result';
 

@@ -21,7 +21,7 @@ method BUILD {
 
         .get('/get/∙key',
             sub ($req,$res,$/) {
-                $.db.query: "select v from kv where k=?", $<key>
+                $.db.query: "select v::text from kv where k=?", $<key>
                     or return self.render: $res, :404status;
                 my $json = $.db.json or return self.render: $res, :404status;
                 self.render: $res, :$json

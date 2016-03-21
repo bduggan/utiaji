@@ -30,7 +30,7 @@ ok $results, "Got results.";
 
 is $results, 42, "Got the right results.";
 
-ok $sth = $dbh.prepare(q{select '{"a":"42"}'::json->'a'}), 'JSON datatype';
+ok $sth = $dbh.prepare(q{select ( '{"a":"42"}'::json->'a' )::text as col}), 'JSON datatype';
 
 ok $sth.execute, "JSON execute";
 
@@ -38,7 +38,7 @@ $results = $sth.fetchall_arrayref();
 
 is $results, q["42"], "Got 42 for JSON element";
 
-ok $dbh.disconnect, "Disconnect.";
+ok $dbh.dispose, "Disconnect.";
 
 done-testing;
 
