@@ -80,6 +80,7 @@ method server_url {
 method start($app) {
     $.server = Utiaji::Server.new(app => $app);
     $.server.start-fork;
+    sleep 1;
     self;
 }
 
