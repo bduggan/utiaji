@@ -1,6 +1,6 @@
 #!/bin/bash -ex
 
-version=2016.01
+version=2016.02
 
 if [ -x $HOME/.rakudobrew/bin/perl6 ]; then
     rakudobrew global $version
