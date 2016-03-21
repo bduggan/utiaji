@@ -11,7 +11,7 @@ has Utiaji::Routes $.routes = Utiaji::Routes.new;
 has $.template_path = join '/', $?FILE.IO.dirname, '..', '..', 'templates';
 has $.template_suffix = 'html.p6';
 has $.template = Utiaji::Template.new;
-has $.root is rw = IO::Path.new($?FILE).dirname ~ "/../..";
+has $.root is rw = $?FILE.IO.dirname ~ "/../..";
 
 method handler {
     return sub ($req, $res) {
