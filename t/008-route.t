@@ -1,14 +1,14 @@
 use v6;
 use lib 'lib';
 use Test;
-use Utiaji::Routes;
+use Utiaji::Router;
 
 my $r = Utiaji::Route.new(name => 'hi', verb => 'GET', path => rx{\/there});
 is $r.name, 'hi', 'set name';
 is $r.verb, 'GET', 'set verb';
 #is $r.path, rx{\/there}, 'set path';
 
-my $routes = Utiaji::Routes.new;
+my $routes = Utiaji::Router.new;
 $routes.routes.push($r);
 
 $routes.routes.push(

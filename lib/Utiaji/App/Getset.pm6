@@ -12,7 +12,7 @@ has $.db = Utiaji::DB.new;
 
 method BUILD {
 
-    given self.routes {
+    given self.router {
         .get('/',
             sub ($req,$res) {
                 self.render: $res, text => 'Welcome to Utiaji.'

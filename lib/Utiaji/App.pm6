@@ -1,21 +1,21 @@
 use JSON::Fast;
 use DBIish;
 
-use Utiaji::Routes;
+use Utiaji::Router;
 use Utiaji::Log;
 use Utiaji::Template;
 
 unit class Utiaji::App;
 
-has Utiaji::Routes $.routes = Utiaji::Routes.new;
-has $.template_path = join '/', $?FILE.IO.dirname, '..', '..', 'templates';
+has Utiaji::Router $.router = Utiaji::Router.new;
+has $.root is rw = $?FILE.IO.dirname ~ "/../..";
+has $.template_path = 'templates';
 has $.template_suffix = 'html.p6';
 has $.template = Utiaji::Template.new;
-has $.root is rw = $?FILE.IO.dirname ~ "/../..";
 
 method handler {
     return sub ($req, $res) {
-        my ($route,$matches) = self.routes.lookup(
+        my ($route,$matches) = self.router.lookup(
             verb => $req.method,
             path => $req.uri,
         );
@@ -41,7 +41,7 @@ method handler {
         $res.status = 404;
         $res.headers<Connection> = 'Close';
         $res.write("Not found: { $req.method } { $req.uri }\nAvailable routes :\n");
-        for self.routes.routes.flat -> $r {
+        for self.router.routes.flat -> $r {
             $res.write($r.gist);
             $res.write("\n");
         }
@@ -74,7 +74,7 @@ multi method render($res, :$static!, :$status=200) {
 
 multi method render($res, :$template!, :%template_params) {
     trace "rendering template $template";
-    my $path = "$.template_path/$template\.$.template_suffix";
+    my $path = "$.root/$.template_path/$template\.$.template_suffix";
     $path.IO.e or do {
         debug "$path not found";
         return self.render_not_found($res);

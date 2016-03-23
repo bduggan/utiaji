@@ -3,7 +3,7 @@ unit module Utiaji::Handler;
 
 use Utiaji::Dispatcher;
 use Utiaji::Response;
-use Utiaji::Routes;
+use Utiaji::Router;
 use Utiaji::Log;
 
 sub handle-request($request,$routes) is export {

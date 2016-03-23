@@ -8,12 +8,12 @@ has $.db = Utiaji::DB.new;
 
 method BUILD {
 
-    self.routes.get('/cal', sub ($req,$res) {
+    self.router.get('/cal', sub ($req,$res) {
         self.render: $res,
             template => 'pim/cal',
     });
 
-    self.routes.get('/wiki', sub ($req,$res) {
+    self.router.get('/wiki', sub ($req,$res) {
         self.render: $res,
             template => 'pim/wiki',
     });

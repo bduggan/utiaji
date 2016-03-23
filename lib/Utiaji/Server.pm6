@@ -28,7 +28,7 @@ class Utiaji::Server {
             warn "did not parse request [[$request]]";
             return Utiaji::Response.new(status => 500);
         }
-        return handle-request($req,$.app.routes);
+        return handle-request($req,$.app.router);
     }
 
     method handle-request($bytes is rw,$buf) {
