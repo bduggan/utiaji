@@ -8,7 +8,7 @@ use Utiaji::Template;
 unit class Utiaji::App;
 
 has Utiaji::Router $.router = Utiaji::Router.new;
-has $.root is rw = $?FILE.IO.dirname ~ "/../..";
+has $.root is rw = $?FILE.IO.parent.parent.dirname;
 has $.template_path = 'templates';
 has $.template_suffix = 'html.p6';
 has $.template = Utiaji::Template.new;
@@ -67,7 +67,7 @@ multi method render($res, :$static!, :$status=200) {
     trace "rendering static $static";
     $res.headers.content-type = 'text/html';
     my $path = $.root ~ "/static/$static";
-    $path.IO ~~ :e or do { info "$path not found"; return self.render_not_found($res); };
+    $path.IO.e or do { info "$path not found"; return self.render_not_found($res); };
     $res.status = $status;
     $res.body = $path.IO.slurp;
 }

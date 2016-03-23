@@ -4,7 +4,7 @@ use Utiaji::Test;
 
 class Utiaji::App::React is Utiaji::App {
     method BUILD {
-        $.root = $?FILE.IO.dirname ~ '/react';
+        $.root = $?FILE.IO.dirname.child('react');
 
         $.routes.get('/react.js', sub ($req,$res) {
             self.render: $res, static => 'react.js';
