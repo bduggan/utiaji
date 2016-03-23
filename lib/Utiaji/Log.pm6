@@ -1,4 +1,3 @@
-
 class Utiaji::Log {
 
     has            $.level  is rw = %*ENV<UTIAJI_LOG_LEVEL> || 'info';
@@ -41,6 +40,7 @@ class Utiaji::Log {
         $.fh.say("# info: $msg");
     }
 }
+
 sub logger is export {
     state $logger //= Utiaji::Log.new;
     $logger;

@@ -1,6 +1,5 @@
-use Utiaji::Log;
-
 unit class Utiaji::Headers;
+use Utiaji::Log;
 
 has $.raw;
 has %.fields;
