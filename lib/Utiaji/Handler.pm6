@@ -5,10 +5,10 @@ use Utiaji::Response;
 use Utiaji::Router;
 use Utiaji::Log;
 
-sub handle-request($request,$routes) is export {
+sub handle-request(Utiaji::Request $request,Utiaji::Router $router) is export {
     debug $request.gist;
     my ($route,$captures) =
-        $routes.lookup(
+        $router.lookup(
             verb => $request.verb,
             path => $request.path);
 
