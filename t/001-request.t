@@ -11,7 +11,7 @@ use Utiaji::Request;
     is $req.WHAT, Utiaji::Request, 'made a request';
     is $req.path, '/', 'path';
     is $req.verb, 'GET', 'verb';
-    is $req.headers.host, 'localhost', 'host';
+    is $req.headers<host>, 'localhost', 'host';
 }
 
 {
@@ -36,8 +36,8 @@ use Utiaji::Request;
     my $str = q:to/DONE/;
         POST /set HTTP/1.1
         Host: localhost
-        Content-type:application/json
-        Content-length:10
+        Content-Type:application/json
+        Content-Length:10
 
         {"a":"2"}
         DONE
@@ -45,8 +45,8 @@ use Utiaji::Request;
     ok $req.parse, "parsed request";
     is $req.path, '/set', 'path';
     is $req.body.raw, q[{"a":"2"}] ~ "\n", 'body';
-    is $req.headers.content-type, 'application/json', 'parsed type';
-    is $req.headers.content-length, 10, 'parsed length';
+    is $req.headers<content-type>, 'application/json', 'parsed type';
+    is $req.headers<content-length>, 10, 'parsed length';
 }
 
 done-testing;

@@ -11,7 +11,7 @@ for dir 't/requests/in' -> $file {
     ok $req.verb, "got a method";
     ok $req.path, "got a path";
     ok $req.headers, "got a headers object";
-    ok $req.headers.host, "got a host";
+    ok $req.headers<host>, "got a host";
     #is $req.headers.content-length, $req.body.raw.chars;
     #my $out = file "requests/out/$file";
     #is-deeply $req.gist, $out, "got structure";

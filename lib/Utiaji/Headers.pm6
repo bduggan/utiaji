@@ -1,59 +1,53 @@
-unit class Utiaji::Headers;
+unit class Utiaji::Headers does Associative;
 use Utiaji::Log;
 
+# See https://doc.perl6.org/language/subscripts#Custom_type_example
+subset StrOrInt where Str | Int;
+
 has $.raw;
-has %.fields;
+has %!fields of StrOrInt handles <list kv keys values>;
 
 my grammar parser {
-     rule TOP {
-        [ <header> \n ]*
-     }
+     rule TOP { [ <header> \n ]* }
      token ws { \h* }
-     rule header {
-        <field-name> ':' <field-value>
-     }
-     token field-name {
-         <-[:]>+
-     }
-     token field-value {
-         <-[\n\r]>+
-     }
+     rule header { <field-name> ':' <field-value> }
+     token field-name { <-[:]>+ }
+     token field-value { <-[\n\r]>+ }
 }
 
 my class actions {
-    has Utiaji::Headers $.made;
+    # see http://docs.perl6.org/language/grammars
     method TOP($/) {
-        $.made.fields = [ map {.made }, $<header> ]
+        $/.make: $<header>».made
     }
     method header($/) {
         $/.make: $<field-name>.made => $<field-value>.made
     }
-    method path($/) { $/.make: ~$/; }
-    method verb($/) { $/.make: ~$/; }
     method field-name($/) { $/.make: ~$/ }
     method field-value($/) { $/.make: ~$/ }
 }
 
-method normalize {
-    my %new;
-    for %!fields.kv -> $k, $v {
-        %new{lc $k} = $v;
+# TODO: exceptions: Content-MD5, DNT
+sub normalize-key ($key) { $key.subst(/\w+/, *.tc, :g) }
+method AT-KEY     ($key) is rw { %!fields{normalize-key $key}        }
+method EXISTS-KEY ($key)       { %!fields{normalize-key $key}:exists }
+method DELETE-KEY ($key)       { %!fields{normalize-key $key}:delete }
+method push (*@list) {
+    for @list -> $p {
+        self{ $p.key } = $p.value;
     }
-    %!fields = %new;
 }
 
-method content-type is rw { return-rw %!fields<content-type> }
-method content-length is rw { return-rw %!fields<content-length> }
-method host is rw { return-rw %!fields<host>; }
-
 method parse {
-    my $actions = actions.new(made => self);
+    my $actions = actions.new;
     my $match = parser.parse("$!raw\n", :$actions);
     unless $match {
         error "did not parse headers { $!raw.perl }";
         return;
     }
-    self.normalize;
+    for $match.made -> $p {
+        self.push: $p
+    }
     self
 }
 

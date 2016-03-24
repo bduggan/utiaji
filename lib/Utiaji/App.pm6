@@ -16,21 +16,21 @@ has $.template = Utiaji::Template.new;
 
 multi method render($res, :$text!, :$status=200) {
     trace "rendering text";
-    $res.headers.content-type = 'text/plain';
+    $res.headers<content-type> = 'text/plain';
     $res.body = $text;
     $res.status = $status;
 }
 
 multi method render($res, :$json!, :$status=200) {
     trace "rendering json";
-    $res.headers.content-type = 'application/json';
+    $res.headers<content-type> = 'application/json';
     $res.status = $status;
     $res.body = to-json($json);
 }
 
 multi method render($res, :$static!, :$status=200) {
     trace "rendering static $static";
-    $res.headers.content-type = 'text/html';
+    $res.headers<content-type> = 'text/html';
     my $path = $.root ~ "/static/$static";
     $path.IO.e or do { info "$path not found"; return self.render_not_found($res); };
     $res.status = $status;
@@ -44,7 +44,7 @@ multi method render($res, :$template!, :%template_params) {
         debug "$path not found";
         return self.render_not_found($res);
     };
-    $res.headers.content-type = "text/html";
+    $res.headers<content-type> = "text/html";
     $res.body = $.template
         .parse($path.IO.slurp)
         .render(|%template_params);
@@ -54,13 +54,13 @@ multi method render($res, :$template!, :%template_params) {
 multi method render($res, :$status!) {
     # NB, must be declared below the ones above.
     trace "rendering status $status";
-    $res.headers.content-type = 'text/plain';
+    $res.headers<content-type> = 'text/plain';
     $res.status = $status;
 }
 
 method render_not_found($res) {
     $res.status = 404;
     $res.body = 'not found';
-    $res.headers.content-type = 'text/plain';
+    $res.headers<content-type> = 'text/plain';
 }
 

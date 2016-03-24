@@ -24,10 +24,10 @@ has $.body is rw = "";
 has Utiaji::Headers $.headers is rw = Utiaji::Headers.new;
 
 method prepare-response {
-    unless $.headers.content-type {
-        $.headers.content-type = 'text/plain';
+    unless $.headers<content-type> {
+        $.headers<content-type> = 'text/plain';
     }
-    $.headers.content-length = $.body.chars;
+    $.headers<content-length> = $.body.chars;
 }
 
 method status-line {
@@ -35,12 +35,12 @@ method status-line {
 }
 
 method to-string {
-    self.prepare-response unless $.headers.content-length.defined;
+    self.prepare-response unless $.headers<content-length>.defined;
     my @lines = (
         self.status-line,
         "Server: Utiaji";
-        "Content-Type: { $.headers.content-type }; charset=utf-8";
-        "Content-Length { $.headers.content-length }";
+        "Content-Type: { $.headers<content-type> }; charset=utf-8";
+        "Content-Length { $.headers<content-length> }";
         "Connection: Close";
     );
     my $str = @lines.join("\r\n");
