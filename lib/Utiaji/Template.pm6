@@ -114,7 +114,7 @@ sub include($app, $template, *%args) {
     debug "including $template";
     debug "args : { %args.gist } " if %args;
     my $t = $app.load-template($template) or return "";
-    %args{$app} = $app;
+    %args<app> = $app;
     return $t.render(|%args);
 }
 

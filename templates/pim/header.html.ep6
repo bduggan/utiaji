@@ -1,3 +1,4 @@
+%- :$tab
 ----------------- this is the header--------------------------
-tab is <%= %args<tab> %>
+tab is <%= $tab %>
 
