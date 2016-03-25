@@ -11,7 +11,7 @@ unit class Utiaji::App;
 has Utiaji::Router $.router = Utiaji::Router.new;
 has $.root is rw = $?FILE.IO.parent.parent.dirname;
 has $.template_path = 'templates';
-has $.template_suffix = 'html.p6';
+has $.template_suffix = 'html.ep6';
 has $.template = Utiaji::Template.new;
 
 multi method render($res, :$text!, :$status=200) {

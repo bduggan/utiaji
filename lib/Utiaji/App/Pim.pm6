@@ -12,7 +12,7 @@ method BUILD {
     $r.get: '/',
     sub ($req, $res) {
         $res.headers{"Location"} = "/cal";
-        self.render: :302status;
+        $res.status = 302;
     };
 
     $r.get: '/cal',

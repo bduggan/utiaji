@@ -10,7 +10,7 @@ sub dispatch-request($route,
     Utiaji::Response $res is rw
 ) is export {
     $res.status = 200;
-    $res.body = '-- no response rendered --';
+    $res.body = "";
 
    my $cb = $route.code;
    if $captures && $captures.hash.elems {

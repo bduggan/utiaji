@@ -18,8 +18,7 @@ has %.codes =
     501 => "Not Implemented",
 ;
 
-has $.status is rw;
-has $.status-line is rw;
+has Int $.status is rw;
 has $.body is rw = "";
 has Utiaji::Headers $.headers is rw = Utiaji::Headers.new;
 
@@ -36,14 +35,12 @@ method status-line {
 
 method to-string {
     self.prepare-response unless $.headers<content-length>.defined;
-    my @lines = (
+    $!headers<server> = "Utiaji";
+    $!headers<connection> = "close";
+    return (
         self.status-line,
-        "Server: Utiaji";
-        "Content-Type: { $.headers<content-type> }; charset=utf-8";
-        "Content-Length { $.headers<content-length> }";
-        "Connection: Close";
-    );
-    my $str = @lines.join("\r\n");
-    $str ~= "\r\n\r\n$.body";
-    return $str;
+        $.headers,
+        "",
+        $.body
+    ).join("\r\n");
 }

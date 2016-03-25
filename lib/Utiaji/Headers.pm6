@@ -27,8 +27,21 @@ my class actions {
     method field-value($/) { $/.make: ~$/ }
 }
 
-# TODO: exceptions: Content-MD5, DNT
-sub normalize-key ($key) { $key.subst(/\w+/, *.tc, :g) }
+
+sub normalize-key ($key) {
+    return "Content-MD5" if $key ~~ m:i/^ 'content-md5' $/;
+    return "DNT"         if $key ~~ m:i/^  DNT          $/;
+    return $key.subst(/\w+/, *.tc, :g);
+}
+
+multi method normalize-value("Content-Type", $value) {
+    return $value if $value ~~ /charset/;
+    return $value ~ '; charset=utf-8';
+}
+multi method normalize-value($key, $value) {
+    return $value;
+}
+
 method AT-KEY     ($key) is rw { %!fields{normalize-key $key}        }
 method EXISTS-KEY ($key)       { %!fields{normalize-key $key}:exists }
 method DELETE-KEY ($key)       { %!fields{normalize-key $key}:delete }
@@ -51,3 +64,9 @@ method parse {
     self
 }
 
+method Str {
+    %!fields
+      .pairs
+      .map({ .key ~ ': ' ~ self.normalize-value(.key,.value)})
+      .join("\r\n");
+}
