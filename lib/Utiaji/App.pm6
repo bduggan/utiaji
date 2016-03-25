@@ -12,7 +12,6 @@ has Utiaji::Router $.router = Utiaji::Router.new;
 has $.root is rw = $?FILE.IO.parent.parent.dirname;
 has $.template-path = 'templates';
 has $.template-suffix = 'html.ep6';
-has $.template = Utiaji::Template.new;
 
 multi method render($res, :$text!, :$status=200) {
     trace "rendering text";
@@ -37,17 +36,21 @@ multi method render($res, :$static!, :$status=200) {
     $res.body = $path.IO.slurp;
 }
 
-multi method render($res, :$template!, :%template_params) {
-    trace "rendering template $template";
+method load-template($template) {
     my $path = "$.root/$.template-path/$template\.$.template-suffix";
     $path.IO.e or do {
         debug "$path not found";
-        return self.render_not_found($res);
-    };
+        return;
+    }
+    Utiaji::Template.new.parse($path.IO.slurp)
+}
+
+multi method render($res, :$template!, :%template_params is copy) {
+    trace "rendering template $template";
+    my $t = self.load-template($template) or return self.render_not_found($res);
     $res.headers<content-type> = "text/html";
-    $res.body = $.template
-        .parse($path.IO.slurp)
-        .render(|%template_params);
+    %template_params<app> = self;
+    $res.body = $t.render(|%template_params);
     $res.status = 200;
 }
 

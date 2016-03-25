@@ -50,19 +50,23 @@ grammar parser {
 
 }
 
+sub common-args {
+    ':$app, '
+}
+
 class actions {
     method TOP($/) {
         my $head = ' sub (';
-        $head ~= $<signature> ?? $<signature> !! ':%args';
+        $head ~= common-args() ~ ($<signature> ?? $<signature> !! ':%*args');
         $head ~= ') { ' ~ "\n";
         $head ~=  'my @out = (); ';
-        my @lines = grep { .defined }, map { .made }, $<line>;
+        my @lines = grep { .defined }, $<line>».made;
         my $tail = ' return @out; } ';
         $/.make( join "\n", $head, @lines, $tail );
     }
 
     method text($/) {
-        $/.make: [ ( map { .made }, $<piece> ), $<cr>, '@out.push: "\n";' ];
+        $/.make: [ $<piece>».made, $<cr>, '@out.push: "\n";' ];
     }
 
     method inline-code($/) {
@@ -71,7 +75,7 @@ class actions {
 
     method inline-expression($/) {
         my $str = $/.subst( /^ '=' /,'');
-        $/.make: "@out.push: $str;\n";
+        $/.make: "@out.push: $str;";
     }
 
     method verbatim($/) {
@@ -84,7 +88,7 @@ class actions {
 
     method expression($/) {
         my $str = $/.subst(/^ '='/,'');
-        $/.make: qq|@out.push: $str ~ "\n";\n|
+        $/.make: qq|@out.push: $str;\n @out.push: "\n";\n|
     }
 
     method comment($/) {
@@ -106,6 +110,12 @@ multi method parse($!raw) {
     self.parse;
 }
 
+sub include($app, $template) {
+    debug "including $template from $app";
+    my $t = $app.load-template($template) or return "";
+    return $t.render(); # TODO args
+}
+
 multi method parse {
     my $act = actions.new;
     my $raw = chomp($.raw) ~ "\n";
@@ -125,8 +135,8 @@ multi method parse {
 method render(*%params) {
    self.parse unless $.parsed;
    return unless $!parsed;
-   trace "sending params " ~ %params.perl;
-   my $out = $!parsed(|%params).join("");
+   my @lines = $!parsed(|%params);
+   my $out = @lines.join("");
    $out.=chomp unless $!raw ~~ /\n $/;
    return $out;
 }
