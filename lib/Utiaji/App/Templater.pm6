@@ -3,7 +3,7 @@ use Utiaji::Log;
 use Utiaji::Template;
 
 class Utiaji::App::Templater is Utiaji::App {
-    has $.templates = Utiaji::Template.new;
+    has $.template-path = 'templates/templater';
     method BUILD {
         self.router.get('/hello', sub ($req, $res) {
             self.render: $res, template => "hello"
@@ -13,5 +13,9 @@ class Utiaji::App::Templater is Utiaji::App {
                 template => "hello/person",
                 template_params => { name => $<person> }
         });
+        self.router.get('/headfoot', sub ($req, $res) {
+            self.render: $res, template => "headfoot"
+        });
+
     }
 }
