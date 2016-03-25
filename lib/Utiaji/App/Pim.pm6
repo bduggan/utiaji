@@ -20,6 +20,7 @@ method BUILD {
     sub ($req,$res) {
         self.render: $res,
             template => 'cal',
+            template_params => { tab => "cal" }
     };
 
     $r.get: '/wiki',

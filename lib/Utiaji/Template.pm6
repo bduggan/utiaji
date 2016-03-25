@@ -57,7 +57,7 @@ sub common-args {
 class actions {
     method TOP($/) {
         my $head = ' sub (';
-        $head ~= common-args() ~ ($<signature> ?? $<signature> !! ':%*args');
+        $head ~= common-args() ~ ($<signature> ?? $<signature> !! '*%args');
         $head ~= ') { ' ~ "\n";
         $head ~=  'my @out = (); ';
         my @lines = grep { .defined }, $<line>».made;
@@ -110,10 +110,12 @@ multi method parse($!raw) {
     self.parse;
 }
 
-sub include($app, $template) {
-    debug "including $template from $app";
+sub include($app, $template, *%args) {
+    debug "including $template";
+    debug "args : { %args.gist } " if %args;
     my $t = $app.load-template($template) or return "";
-    return $t.render(); # TODO args
+    %args{$app} = $app;
+    return $t.render(|%args);
 }
 
 multi method parse {

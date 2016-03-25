@@ -1,11 +1,11 @@
 <pre>
-%= include $app,'header'
+%= include $app, 'header', |%args;
 
 %= $app.^name
 
 this is the body
 
-%= include $app,'footer'
+%= include $app, 'footer', |%args;
 
 </pre>
 
