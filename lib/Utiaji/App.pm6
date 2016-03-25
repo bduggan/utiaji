@@ -10,8 +10,8 @@ unit class Utiaji::App;
 
 has Utiaji::Router $.router = Utiaji::Router.new;
 has $.root is rw = $?FILE.IO.parent.parent.dirname;
-has $.template_path = 'templates';
-has $.template_suffix = 'html.ep6';
+has $.template-path = 'templates';
+has $.template-suffix = 'html.ep6';
 has $.template = Utiaji::Template.new;
 
 multi method render($res, :$text!, :$status=200) {
@@ -39,7 +39,7 @@ multi method render($res, :$static!, :$status=200) {
 
 multi method render($res, :$template!, :%template_params) {
     trace "rendering template $template";
-    my $path = "$.root/$.template_path/$template\.$.template_suffix";
+    my $path = "$.root/$.template-path/$template\.$.template-suffix";
     $path.IO.e or do {
         debug "$path not found";
         return self.render_not_found($res);

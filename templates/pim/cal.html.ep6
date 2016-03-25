@@ -1,10 +1,9 @@
 <pre>
-I will include a header
-
+%# include 'header'
 
 this is the body
 
-I will include a footer
+%# include 'footer'
 
 </pre>
 
