@@ -52,13 +52,13 @@ ok $t.parse('<% for 1..6 -> $x { %><%= $x %><% } %>'), 'parse inline code';
 is $t.render, '123456', 'render inline code';
 
 ok $t.parse(q:to/DONE/), 'parse with signature line';
-%- :$name
+%| :$name
 hello, <%= $name %>
 DONE
 is $t.render(name => 'joe'), "hello, joe\n", 'rendered with params';
 
 ok $t.parse(q:to/DONE/), 'parse with signature line';
-%- :$content
+%| :$content
 hello, <%= $content %>
 DONE
 is $t.render(content => 'caffeine'), "hello, caffeine\n", 'rendered with params';

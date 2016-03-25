@@ -1,4 +1,4 @@
-%- :$today, *%args
+%| :$today, *%args
 
 <pre>
 %= include $app, 'header', |%args;

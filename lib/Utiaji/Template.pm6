@@ -6,7 +6,7 @@ has $.parsed;
 
 grammar parser {
     rule TOP {
-     [ ^ '%-' [ $<signature>=[ \V+ ] ] \n ]?
+     [ ^ '%|' [ $<signature>=[ \V+ ] ] \n ]?
      [    <line=statement>
         | <line=text>
      ] *
