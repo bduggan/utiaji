@@ -1,12 +1,9 @@
-%- :$today, *%args
-
 <pre>
 %= include $app, 'header', |%args;
 
 %= $app.^name
 
-this is the body of the calendar
-Today is <%= $today %>
+this is the body of the wiki
 
 %= include $app, 'footer', |%args;
 

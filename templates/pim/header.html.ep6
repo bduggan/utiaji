@@ -2,3 +2,8 @@
 ----------------- this is the header--------------------------
 tab is <%= $tab %>
 
+menu goes here
+<a href="/cal">cal</a>
+<a href="/wiki">wiki</a>
+<a href="/people">people</a>
+----------------- this was a header--------------------------

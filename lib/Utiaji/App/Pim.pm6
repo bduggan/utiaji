@@ -20,13 +20,22 @@ method BUILD {
     sub ($req,$res) {
         self.render: $res,
             template => 'cal',
-            template_params => { tab => "cal" }
+            template_params => { tab => "cal", today => "monday" }
     };
 
     $r.get: '/wiki',
     sub ($req,$res) {
         self.render: $res,
             template => 'wiki',
+            template_params => { tab => "wiki" }
     };
+
+    $r.get: '/people',
+    sub ($req,$res) {
+        self.render: $res,
+            template => 'wiki',
+            template_params => { tab => "people" }
+    };
+
 
 }
