@@ -96,6 +96,33 @@ class Utiaji::Server {
           exit;
         }
         $!child = $pid;
+        self.ping or error "Failed to start server";
+    }
+
+    method ping($timeout = 10) {
+        my $p = Promise.in($timeout);
+        my $conn;
+        while (!$p.status) {
+            $conn = try {
+                CATCH {
+                  default {
+                    $conn = Nil;
+                  }
+                }
+                IO::Socket::INET.new(host => $.host, port => $.port);
+            }
+            last if $conn;
+            NEXT {
+              trace "Waiting for server (sleep 1)";
+              sleep 1;
+            }
+        }
+        if $conn {
+            $conn.close;
+            return True;
+        }
+        error "ping failed";
+        return False;
     }
 
     method stop-fork {

@@ -2,6 +2,7 @@ unit class Utiaji::Test;
 
 use HTTP::Tinyish;
 use JSON::Fast;
+use Utiaji::Log;
 use Test;
 
 use Utiaji::Server;
@@ -80,7 +81,7 @@ method server_url {
 method start($app) {
     $.server = Utiaji::Server.new(app => $app);
     $.server.start-fork;
-    sleep 2;
+    $.server.ping or error "Could not start server";
     self;
 }
 
