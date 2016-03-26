@@ -1,6 +1,6 @@
 #!/bin/bash -ex
 
-version=2016.02
+version=2016.03
 
 if [ -x $HOME/.rakudobrew/bin/perl6 \
     && $HOME/.rakudobrew/bin/perl6 --version | grep -q $version ]; then
