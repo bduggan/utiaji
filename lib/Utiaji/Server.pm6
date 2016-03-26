@@ -99,7 +99,7 @@ class Utiaji::Server {
         self.ping or error "Failed to start server";
     }
 
-    method ping($timeout = 10) {
+    method ping($timeout = 20) {
         my $p = Promise.in($timeout);
         my $conn;
         while (!$p.status) {
@@ -113,7 +113,7 @@ class Utiaji::Server {
             }
             last if $conn;
             NEXT {
-              trace "Waiting for server (sleep 1)";
+              error "Waiting for server (sleep 1)";
               sleep 1;
             }
         }
