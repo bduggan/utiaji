@@ -113,7 +113,7 @@ class Utiaji::Server {
             }
             last if $conn;
             NEXT {
-              error "Waiting for server (sleep 1)";
+              info "Waiting for server (sleep 1)";
               sleep 1;
             }
         }
