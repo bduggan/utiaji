@@ -6,6 +6,8 @@ use Utiaji::Server;
 use Utiaji::Log;
 use Utiaji::App::Pim;
 
+logger.level('debug');
+
 my $server = Utiaji::Server.new(host => 'localhost', port => 3333);
 $server.app = Utiaji::App::Pim.new;
 $server.start;

@@ -1,0 +1,8 @@
+
+%= include $app, 'header';
+
+doc goes here
+
+%= include $app, 'footer';
+
+

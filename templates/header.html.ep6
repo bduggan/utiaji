@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.2.0/foundation.css" />
+</head>
+<body>
+
+<div class="title-bar">
+  <div class="title-bar-title">Utiaji</div>
+</div>
+
+<container>

@@ -1,7 +1,7 @@
 class Utiaji::Log {
 
-    has            $.level  is rw = %*ENV<UTIAJI_LOG_LEVEL> || 'info';
-    has IO::Handle $!fh;
+    has            $.level is rw = %*ENV<UTIAJI_LOG_LEVEL> || 'info';
+    has IO::Handle $!fh; #= filehandle
     has            $.path   is rw;
 
     method fh {
@@ -45,4 +45,17 @@ sub logger is export {
     state $logger //= Utiaji::Log.new;
     $logger;
 }
+
+=begin pod
+
+=head1 SYNOPSIS
+
+    use Utiaji::Log;
+
+    logger.level = 'debug';
+    debug 'debug message';
+    error 'error mesaage';
+    info 'some info';
+
+=end pod
 

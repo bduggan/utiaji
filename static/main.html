@@ -1,49 +1,18 @@
 <html>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.2.0/foundation.css" />
 <style>
 pre { border: 1px solid grey; background-color: white; }
 body { background-color: #eee; }
 </style>
 <body>
-<p>This is Utiaji which inherits from Utiaji::App.
+<h1>Welcome to Utiaji!</h1>
+<container>
+<div class="columns">
+<a href="/doc">docs</a>
 <br>
-To run another app, change the portion in bold in bin/utiaji :
-</p>
-
-<pre>
-#!/usr/bin/env perl6
-
-use lib 'lib';
-
-use Utiaji::Server;
-use Utiaji::Log;
-use <b>Utiaji</b>;
-
-my $server = Utiaji::Server.new(host => 'localhost', port => 3333);
-$server.app = <b>Utiaji</b>.new;
-$server.start;
-$server.await;
-</pre>
-
-e.g.
-<pre>
-#!/usr/bin/env perl6
-
-use lib 'lib';
-
-use Utiaji::Server;
-use Utiaji::Log;
-use <b>Utiaji::App::Pim</b>;
-
-my $server = Utiaji::Server.new(host => 'localhost', port => 3333);
-$server.app = <b>Utiaji::App::Pim</b>.new;
-$server.start;
-$server.await;
-
-</pre>
-
-Some other apps are here :
-<a href="https://github.com/bduggan/utiaji/tree/master/lib/Utiaji/App">https://github.com/bduggan/utiaji/tree/master/lib/Utiaji/App</a>
-
+<a href="https://github.com/bduggan/utiaji">github</a>
+</div>
+</container>
 </body>
 </html>
 

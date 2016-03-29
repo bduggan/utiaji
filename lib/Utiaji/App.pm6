@@ -5,13 +5,13 @@ use Utiaji::Router;
 use Utiaji::Log;
 use Utiaji::Template;
 
-#| Utiaji::App is the base class for app.s
+#| Utiaji::App is the base class for apps.
 unit class Utiaji::App;
 
-has Utiaji::Router $.router = Utiaji::Router.new;
 has $.root is rw = $?FILE.IO.parent.parent.dirname;
 has $.template-path = 'templates';
 has $.template-suffix = 'html.ep6';
+has $.router handles <get post put> = Utiaji::Router.new;
 
 multi method render($res, :$text!, :$status=200) {
     trace "rendering text";
@@ -67,3 +67,17 @@ method render_not_found($res) {
     $res.headers<content-type> = 'text/plain';
 }
 
+my $app;
+method new {
+    my $self = callsame(|%_);
+    warn "redefining app" if $app.defined;
+    $app = $self;
+    $self.setup();
+    $self;
+}
+
+sub app is export { $app }
+
+method setup {
+    # override in subclasses
+}
