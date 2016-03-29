@@ -1,3 +1,4 @@
+#| Utiaji::DB provides a layer of abstraction around a postgres database.
 unit class Utiaji::DB;
 
 use Utiaji::Log;
@@ -43,7 +44,8 @@ multi method query($sql is copy,*@bind) {
     return True;
 }
 
-method result {
+#| The most recent result if there is only one value.
+method result() {
     return @.results unless @.results==1;
     return @.results[0] unless @.results[0]==1;
     return @.results[0][0];
@@ -54,3 +56,4 @@ method json {
     return from-json($.result);
 
 }
+

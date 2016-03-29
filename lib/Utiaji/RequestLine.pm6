@@ -18,7 +18,7 @@ my grammar parser {
          '/' <segment>* %% '/'
      }
      token segment {
-         [ <alpha> | <digit> | '+' | '-' | '.' ]*
+         [ <alpha> | <digit> | '+' | '-' | '.' | ':' ]*
      }
 }
 

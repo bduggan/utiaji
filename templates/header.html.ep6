@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.2.0/foundation.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.2.0/foundation.css" />
 </head>
 <body>
+<style>
+.white { color: white; }
+</style>
 
 <div class="title-bar">
-  <div class="title-bar-title">Utiaji</div>
+    <div class="title-bar-title"><a class="white" href="/">Utiaji</a></div>
 </div>
 
 <container>

@@ -1,7 +1,46 @@
+%| :$class, :$pod
 
 %= include $app, 'header';
 
-doc goes here
+<style>
+.normal {
+    font-weight:normal;
+}
+</style>
+
+<center>
+<h1><pre>
+<%= $class.perl %>
+</pre></h1>
+% if $pod.defined {
+  % for $pod -> $pea {
+  %= $pea.gist
+  % }
+% }
+</p>
+</center>
+
+<row>
+<div class="columns">
+Attributes:
+<pre>
+% for $class.^attributes -> $a {
+    <%= $a %>
+% }
+</pre>
+
+Methods:
+<dl>
+% for $class.^methods(:local).grep({ .name ~~ / <[a..z]>+ /}) -> $m {
+    <dt><%= $m.name %> <i class='normal'><%= $m.signature.perl %></i></dt>
+    <dd>
+    % if $m.WHY {
+    <%= $m.WHY.gist; %>
+    % }
+    </dd>
+% }
+</dl>
+</row>
 
 %= include $app, 'footer';
 

@@ -14,10 +14,13 @@ my grammar parser {
     token placeholder  {
               <placeholder_word>
             | <placeholder_ascii_lc>
-            | <placeholder_date> }
+            | <placeholder_date>
+            | <placeholder_class>
+        }
     token placeholder_word     { ':' <var> }
     token placeholder_ascii_lc { '∙' <var> } # bullet : Sb
     token placeholder_date     { 'Δ' <var> } #  delta : D*
+    token placeholder_class    { '∷' <var> } #  proportion : ::
 
     token var { <[a..z]>+ }
 }
@@ -35,11 +38,14 @@ my class actions {
     method placeholder($/){
         $/.make: $<placeholder_word>.made
               // $<placeholder_ascii_lc>.made
-              // $<placeholder_date>.made}
+              // $<placeholder_date>.made
+              // $<placeholder_class>.made
+          }
 
     method placeholder_word($/)     { $/.make: "<" ~ $<var>.made ~ '=&placeholder_word>'; }
     method placeholder_ascii_lc($/) { $/.make: "<" ~ $<var>.made ~ '=&placeholder_ascii_lc>'; }
     method placeholder_date($/)     { $/.make: "<" ~ $<var>.made ~ '=&placeholder_date>'; }
+    method placeholder_class($/)     { $/.make: "<" ~ $<var>.made ~ '=&placeholder_class>'; }
 
     method var($/)     {
         $/.make: ~$/;
@@ -52,6 +58,7 @@ my class actions {
 my regex placeholder_word     { [ \w | '-' ]+ }
 my regex placeholder_ascii_lc { [ <[a..z]> | <[0..9]> | '_' | '-' ]+ }
 my regex placeholder_date     { <[0..9]>**4 '-' <[0..9]>**2 '-' <[0..9]>**2 }
+my regex placeholder_class    { [ \w | ':' ]+ }
 
 method !compile {
     $.rex //= do {
