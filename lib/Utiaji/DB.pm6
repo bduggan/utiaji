@@ -5,10 +5,10 @@ use Utiaji::Log;
 use DBIish;
 use JSON::Fast;
 
-has $.db is rw;
-has $.sth is rw;
-has $.errors is rw;
-has @.results is rw;
+has DBIish $.db is rw; #= Database handle.
+has $.sth is rw;       #= Most recent statement handle.
+has $.errors is rw;    #= Most recent errors.
+has @.results is rw;   #= Most recent result set.
 
 method BUILD {
     die "Please set PGDATABASE" unless %*ENV<PGDATABASE>;

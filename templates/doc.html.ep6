@@ -24,12 +24,17 @@
     <div class="columns">
     <div class='secondary callout'>
     Attributes
+    <ul>
     % for $class.^attributes -> $a {
-    <br>
+    <li>
     <code>
-        <%= $a %>
+        <%= $a.gist %>
     </code>
+    % if $a.WHY {
+        <br><%= $a.WHY %>
     % }
+    % }
+    </ul>
     </div>
 
     <div class='primary callout'>
