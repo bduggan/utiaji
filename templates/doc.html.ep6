@@ -1,4 +1,4 @@
-%| :$class, :$pod
+%| :$class, :$pod, :$source
 
 %= include $app, 'header';
 
@@ -9,9 +9,7 @@
 </style>
 
 <center>
-<h1><pre>
-<%= $class.perl %>
-</pre></h1>
+<h1><a href="<%= $source %>" target="_new"><%= $class.perl %></a></h1>
 % if $pod.defined {
   % for $pod -> $pea {
   %= $pea.gist

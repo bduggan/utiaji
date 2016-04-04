@@ -18,11 +18,12 @@ method setup {
     app.get: '/doc/∷class',
        sub ( $req, $res, $/ ) {
            my $class = str2class($<class>);
+           my $source = str2url($<class>);
            return app.render_not_found: $res if $class eqv False;
            my $why = $class.WHY;
            app.render: $res,
            template => 'doc',
-           template_params => { class => $class, pod => $why }
+           template_params => { class => $class, pod => $why, source => $source }
        }
 }
 
@@ -34,6 +35,11 @@ sub str2class($str) {
         return EVAL $str;
     }
     return False;
+}
+
+sub str2url($str) {
+    my $file = $str.subst('::','/'):g;
+    return 'https://github.com/bduggan/utiaji/blob/master/lib/' ~ $file ~ '.pm6';
 }
 
 =begin pod
