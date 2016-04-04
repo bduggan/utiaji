@@ -28,9 +28,11 @@ method setup {
 
 sub str2class($str) {
     if $str eq 'Utiaji' { return Utiaji; }
-    if $str eq 'Utiaji::DB' { use Utiaji::DB; return Utiaji::DB; }
-    if $str eq 'Utiaji::App' { use Utiaji::App; return Utiaji::App; }
-    if $str eq 'Utiaji::Body' { use Utiaji::Body; return Utiaji::Body; }
+    if $str ~~ /Utiaji '::' (<[a..zA..Z]>+)/ {
+        use MONKEY-SEE-NO-EVAL;
+        EVAL "use $str;";
+        return EVAL $str;
+    }
     return False;
 }
 

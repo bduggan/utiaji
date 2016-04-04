@@ -1,3 +1,4 @@
+#| Dispatch HTTP requests.
 unit module Utiaji::Dispatcher;
 
 use Utiaji::Request;

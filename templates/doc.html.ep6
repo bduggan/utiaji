@@ -20,28 +20,38 @@
 </p>
 </center>
 
-<row>
-<div class="columns">
-Attributes:
-<pre>
-% for $class.^attributes -> $a {
-    <%= $a %>
-% }
-</pre>
+% if $class.HOW.^name ~~ /ClassHOW/ {
 
-Methods:
-<dl>
-% for $class.^methods(:local).grep({ .name ~~ / <[a..z]>+ /}) -> $m {
-    <dt><%= $m.name %> <i class='normal'><%= $m.signature.perl %></i></dt>
-    <dd>
-    % if $m.WHY {
-    <%= $m.WHY.gist; %>
+    <row>
+    <div class="columns">
+    <div class='secondary callout'>
+    Attributes
+    % for $class.^attributes -> $a {
+    <br>
+    <code>
+        <%= $a %>
+    </code>
     % }
-    </dd>
+    </div>
+
+    <div class='primary callout'>
+    Methods
+    <ul>
+    % for $class.^methods(:local).grep({ .name ~~ / <[a..z]>+ /}) -> $m {
+        <li>
+        <code>
+            <%= $m.name %> <span class='normal'><%= $m.signature.perl %></span>
+        </code>
+        % if $m.WHY {
+            <br>
+        <%= $m.WHY.gist; %>
+        % }
+        </li>
+    % }
+    </ul>
+    </div>
+    </row>
 % }
-</dl>
-</row>
 
 %= include $app, 'footer';
-
 
