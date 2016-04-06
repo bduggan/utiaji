@@ -12,9 +12,9 @@ class Utiaji::App::Default is Utiaji::App {
             self.render: $res, text => "This is a test of the emergency broadcast system."
         });
 
-        self.router.post('/echo', sub ($req,$res) {
-            self.render: $res, json => $req.json
-        });
+        self.router.post: '/echo', sub {
+            self.render: $^res, json => $^req.json
+        };
 
         self.router.get('/placeholder/:here', sub ($req,$res, $/) {
             self.render: $res, text => $<here>

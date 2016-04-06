@@ -63,5 +63,18 @@ hello, <%= $content %>
 DONE
 is $t.render(content => 'caffeine'), "hello, caffeine\n", 'rendered with params';
 
+ok $t.parse("%= '<&>'"), 'parsed';
+is $t.render, '&lt;&amp;&gt;', 'escaped';
+
+ok $t.parse("<%= '<&>' %>"), 'parsed';
+is $t.render, '&lt;&amp;&gt;', 'escaped';
+
+ok $t.parse("%== '<&>'"), 'parsed';
+is $t.render, '<&>', 'not escaped';
+
+ok $t.parse("<%== '<&>' %>"), 'parsed';
+is $t.render, '<&>', 'not escaped';
+
+
 done-testing;
 

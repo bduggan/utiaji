@@ -1,11 +1,11 @@
 <pre>
-%= include $app, 'header', |%args;
+%== include $app, 'header', |%args;
 
 %= $app.^name
 
 this is the body of the wiki
 
-%= include $app, 'footer', |%args;
+%== include $app, 'footer', |%args;
 
 </pre>
 

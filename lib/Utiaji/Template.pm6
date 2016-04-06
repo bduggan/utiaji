@@ -74,8 +74,13 @@ class actions {
     }
 
     method inline-expression($/) {
-        my $str = $/.subst( /^ '=' /,'');
-        $/.make: "@out.push: $str;";
+        if ($/.substr(0,2) eq '==') {
+            my $str = $/.subst( /^ '==' /,'');
+            $/.make: "@out.push: $str;";
+        } else {
+            my $str = $/.subst( /^ '=' /,'');
+            $/.make: "@out.push: html-escape($str);";
+        }
     }
 
     method verbatim($/) {
@@ -87,8 +92,13 @@ class actions {
     }
 
     method expression($/) {
-        my $str = $/.subst(/^ '='/,'');
-        $/.make: qq|@out.push: $str;\n @out.push: "\n";\n|
+        if ($/.substr(0,2) eq '==') {
+            my $str = $/.subst(/^ '=='/,'');
+            $/.make: qq|@out.push: $str;\n @out.push: "\n";\n|
+        } else {
+            my $str = $/.subst(/^ '='/,'');
+            $/.make: qq|@out.push: html-escape($str);\n @out.push: "\n";\n|
+        }
     }
 
     method comment($/) {
@@ -108,14 +118,6 @@ class actions {
 
 multi method parse($!raw) {
     self.parse;
-}
-
-sub include($app, $template, *%args) {
-    debug "including $template";
-    debug "args : { %args.gist } " if %args;
-    my $t = $app.load-template($template) or return "";
-    %args<app> = $app;
-    return $t.render(|%args);
 }
 
 multi method parse {
@@ -141,5 +143,21 @@ method render(*%params) {
    my $out = @lines.join("");
    $out.=chomp unless $!raw ~~ /\n $/;
    return $out;
+}
+
+# helpers
+sub include($app, $template, *%args) {
+    debug "including $template";
+    debug "args : { %args.gist } " if %args;
+    my $t = $app.load-template($template) or return "";
+    %args<app> = $app;
+    return $t.render(|%args);
+}
+
+sub html-escape($str is copy) {
+   $str.subst-mutate('&','&amp;',:g);
+   $str.subst-mutate('<','&lt;',:g);
+   $str.subst-mutate('>','&gt;',:g);
+   return $str;
 }
 
