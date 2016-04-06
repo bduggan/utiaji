@@ -70,7 +70,6 @@ method render_not_found($res) {
 my $app;
 method new {
     my $self = callsame(|%_);
-    warn "redefining app" if $app.defined;
     $app = $self;
     $self.setup();
     $self;

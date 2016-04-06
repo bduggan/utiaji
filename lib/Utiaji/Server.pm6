@@ -12,7 +12,7 @@ class Utiaji::Server {
     has $.timeout = 10;
     has Int $.port = 3333;
     has $.host = 'localhost';
-    has $.app is rw;
+    has $.app is rw = Utiaji::App::Default.new;
     has $.child;
 
     method url {

@@ -3,9 +3,10 @@ unit class Utiaji::DB;
 
 use Utiaji::Log;
 use DBIish;
+use DBDish::Pg;
 use JSON::Fast;
 
-has DBIish $.db is rw; #= Database handle.
+has DBDish::Pg::Connection $.db is rw; #= Database handle.
 has $.sth is rw;       #= Most recent statement handle.
 has $.errors is rw;    #= Most recent errors.
 has @.results is rw;   #= Most recent result set.
