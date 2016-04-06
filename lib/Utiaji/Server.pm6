@@ -20,7 +20,17 @@ class Utiaji::Server {
     }
 
     method _header_done(Buf[] $request) {
-        $request.decode('UTF-8').contains("\r\n\r\n");
+        my $done;
+        try {
+            CATCH {
+                default {
+                    error .gist;
+                    $done = 0;
+                }
+            }
+            $done = $request.decode('UTF-8').contains("\r\n\r\n");
+        }
+        $done;
     }
 
     method respond(Str $request) {
