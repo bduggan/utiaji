@@ -1,6 +1,6 @@
 %| :$class, :$pod, :$source
 
-%= include $app, 'header';
+%== include $app, 'header';
 
 <style>
 .normal {
@@ -56,5 +56,5 @@
     </row>
 % }
 
-%= include $app, 'footer';
+%== include $app, 'footer';
 
