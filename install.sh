@@ -2,8 +2,7 @@
 
 version=2016.03
 
-if [ -x $HOME/.rakudobrew/bin/perl6 \
-    && $HOME/.rakudobrew/bin/perl6 --version | grep -q $version ]; then
+if [ -x $HOME/.rakudobrew/bin/perl6 && $HOME/.rakudobrew/bin/perl6 --version | grep -q $version ]; then
     echo "using $version"
     rakudobrew global $version
     rakudobrew rehash
