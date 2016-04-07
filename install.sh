@@ -9,6 +9,7 @@ if [ -x $HOME/.rakudobrew/bin/perl6 \
     rakudobrew rehash
     panda --notests install DBIish
     panda install HTTP::Tinyish
+    exit
 fi
 
 echo "building $version"
