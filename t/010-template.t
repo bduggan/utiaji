@@ -75,6 +75,8 @@ is $t.render, '<&>', 'not escaped';
 ok $t.parse("<%== '<&>' %>"), 'parsed';
 is $t.render, '<&>', 'not escaped';
 
+ok $t.parse("<%= 12 %>"), 'parsed';
+is $t.render, '12', 'escaped';
 
 done-testing;
 

@@ -154,7 +154,9 @@ sub include($app, $template, *%args) {
     return $t.render(|%args);
 }
 
-sub html-escape($str is copy) {
+sub html-escape {
+   my ($str) = @_;
+   $str = ~$str;
    $str.subst-mutate('&','&amp;',:g);
    $str.subst-mutate('<','&lt;',:g);
    $str.subst-mutate('>','&gt;',:g);

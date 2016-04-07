@@ -1,4 +1,4 @@
-%| :$class, :$pod, :$source
+%| :$class, :$pod, :$source, :$code
 
 %== include $app, 'header';
 
@@ -6,10 +6,14 @@
 .normal {
     font-weight:normal;
 }
+.code-container {
+    font-size:80%;
+    border:1px solid grey;
+}
 </style>
 
 <center>
-<h1><a href="<%= $source %>" target="_new"><%= $class.perl %></a></h1>
+<h1><%= $class.perl %></h1>
 % if $pod.defined {
   % for $pod -> $pea {
   %= $pea.gist
@@ -22,8 +26,8 @@
 
     <row>
     <div class="columns">
-    <div class='secondary callout'>
     Attributes
+    <div class='secondary callout'>
     <ul>
     % for $class.^attributes -> $a {
     <li>
@@ -37,8 +41,8 @@
     </ul>
     </div>
 
-    <div class='primary callout'>
     Methods
+    <div class='primary callout'>
     <ul>
     % for $class.^methods(:local).grep({ .name ~~ / <[a..z]>+ /}) -> $m {
         <li>
@@ -54,7 +58,22 @@
     </ul>
     </div>
     </row>
+% } else {
+    <%= $class.^name %> is a <%= $class.HOW.^name %>
 % }
+
+<row>
+<div class='columns'>
+<pre>
+<small>
+<a href="<%= $source %>" target="_new">Source</a>
+<div class='secondary callout'>
+%= $code
+</div>
+</small>
+</pre>
+</div>
+</row>
 
 %== include $app, 'footer';
 
