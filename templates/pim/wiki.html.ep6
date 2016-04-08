@@ -1,9 +1,6 @@
-<pre>
 %== include $app, 'header', |%args;
 
-%= $app.^name
-
-this is the body of the wiki
+this is the wiki
 
 %== include $app, 'footer', |%args;
 

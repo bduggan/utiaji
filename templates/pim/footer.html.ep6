@@ -1,1 +1,6 @@
-------------------------this is the footer--------------------------
+</container>
+<script>
+        $(document).foundation();
+</script>
+</body>
+</html>

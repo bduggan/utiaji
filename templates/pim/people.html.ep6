@@ -1,9 +1,6 @@
-<pre>
 %== include $app, 'header', |%args;
 
-%= $app.^name
-
-this is the body of people
+this is the address book
 
 %== include $app, 'footer', |%args;
 

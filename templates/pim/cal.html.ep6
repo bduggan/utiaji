@@ -1,12 +1,10 @@
 %| :$today, *%args
-
-<pre>
 %== include $app, 'header', |%args;
-
-%= $app.^name
+% use DateTime::Format;
+<pre>
 
 this is the body of the calendar
-Today is <%= $today %>
+Today is <%= Date.today %>
 
 %== include $app, 'footer', |%args;
 

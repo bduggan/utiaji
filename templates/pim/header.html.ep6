@@ -1,9 +1,39 @@
 %| :$tab
------------------ this is the header--------------------------
-tab is <%= $tab %>
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.2.0/foundation.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.2.0/foundation.min.js" ></script>
+</head>
+<body>
+<style>
+.white { color: white; }
+.menu li a {
+    color:white;
+}
+.menu li a:hover {
+    color:#dddd00;
+}
+</style>
 
-menu goes here
-<a href="/cal">cal</a>
-<a href="/wiki">wiki</a>
-<a href="/people">people</a>
------------------ this was a header--------------------------
+<div class="title-bar">
+  <div class="top-bar-left">
+    <ul class="dropdown menu">
+      <li>
+      <a class='menu-text' href='/'>Utiaji Pim</a>
+      </li>
+      <li<%= $tab eq 'cal'    ?? q[ class="active"] !! "" %>><a href="/cal">Calendar</a></li>
+      <li<%= $tab eq 'wiki'   ?? q[ class="active"] !! "" %>><a href="/wiki">Wiki</a></li>
+      <li<%= $tab eq 'people' ?? q[ class="active"] !! "" %>><a href="/people">People</a></li>
+    </ul>
+  </div>
+  <div class="top-bar-right">
+    <ul class="menu">
+      <li><input type="search" placeholder="Search"></li>
+      <li><button type="button" class="button">Search</button></li>
+    </ul>
+  </div>
+</div>
+
+<container>
