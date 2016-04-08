@@ -9,6 +9,7 @@ use Utiaji::Template;
 unit class Utiaji::App;
 
 has $.root is rw = $?FILE.IO.parent.parent.dirname;
+has $.static-root = 'static';
 has $.template-path = 'templates';
 has $.template-suffix = 'html.ep6';
 has $.router handles <get post put> = Utiaji::Router.new;
@@ -30,7 +31,7 @@ multi method render($res, :$json!, :$status=200) {
 multi method render($res, :$static!, :$status=200) {
     trace "rendering static $static";
     $res.headers<content-type> = 'text/html';
-    my $path = $.root ~ "/static/$static";
+    my $path = $.root ~ "/" ~ $.static-root ~ "/" ~ $static;
     $path.IO.e or do { info "$path not found"; return self.render_not_found($res); };
     $res.status = $status;
     $res.body = $path.IO.slurp;
