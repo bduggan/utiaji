@@ -7,9 +7,20 @@
 
 <row>
 <div class='column'>
+
+% if $data.defined {
 <pre class='callout'>
 %= $data
 </pre>
+% } else {
+<row>
+<div class='text-right'>
+<div class='small button'>save</div>
+</div>
+</row>
+<textarea placeholder="New Page" rows=20></textarea>
+% }
+
 </div>
 </row>
 
