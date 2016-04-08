@@ -8,33 +8,30 @@ has $.db = Utiaji::DB.new;
 has $.template-path = 'templates/pim';
 
 method BUILD {
-    my $r = self.router;
+    $_ = self.router;
 
-    $r.get: '/',
-    sub ($req, $res) {
-        $res.headers{"Location"} = "/cal";
-        $res.status = 302;
+    .get: '/',
+      -> $req, $res {
+          $res.headers{"Location"} = "/cal";
+          $res.status = 302;
+      };
+
+    .get: '/cal',
+      -> $req,$res {
+        self.render: $res,
+            'cal' => { tab => "cal", today => "monday" }
     };
 
-    $r.get: '/cal',
-    sub ($req,$res) {
-        self.render: $res,
-            template => 'cal',
-            template_params => { tab => "cal", today => "monday" }
+    .get: '/wiki',
+      -> $req,$res {
+         self.render: $res,
+             'wiki' => { tab => "wiki" }
     };
 
-    $r.get: '/wiki',
-    sub ($req,$res) {
-        self.render: $res,
-            template => 'wiki',
-            template_params => { tab => "wiki" }
-    };
-
-    $r.get: '/people',
-    sub ($req,$res) {
-        self.render: $res,
-            template => 'wiki',
-            template_params => { tab => "people" }
+    .get: '/people',
+      -> $req,$res {
+         self.render: $res,
+             'people' => { tab => "people" }
     };
 
 

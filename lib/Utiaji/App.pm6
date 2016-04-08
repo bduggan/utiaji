@@ -61,6 +61,12 @@ multi method render($res, :$status!) {
     $res.status = $status;
 }
 
+multi method render($res, Pair $p) {
+    my $template = $p.key;
+    my $params = $p.value;
+    self.render: $res, template => $template, template_params => $params;
+}
+
 method render_not_found($res) {
     $res.status = 404;
     $res.body = 'not found';
