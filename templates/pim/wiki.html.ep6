@@ -1,6 +1,17 @@
+%| :$data, :$page, *%args
 %== include $app, 'header', |%args;
 
-this is the wiki
+<h2 class='text-center'>
+  <%= $page %>
+</h2>
+
+<row>
+<div class='column'>
+<pre class='callout'>
+%= $data
+</pre>
+</div>
+</row>
 
 %== include $app, 'footer', |%args;
 

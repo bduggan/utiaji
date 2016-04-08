@@ -156,6 +156,7 @@ sub include($app, $template, *%args) {
 
 sub html-escape {
    my ($str) = @_;
+   $str = $str.gist unless $str.defined;
    $str = ~$str;
    $str.subst-mutate('&','&amp;',:g);
    $str.subst-mutate('<','&lt;',:g);

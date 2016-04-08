@@ -18,14 +18,21 @@ method BUILD {
 
     .get: '/cal',
       -> $req,$res {
-        self.render: $res,
-            'cal' => { tab => "cal", today => "monday" }
+         self.render: $res,
+             'cal' => { tab => "cal", today => "monday" }
     };
 
     .get: '/wiki',
       -> $req,$res {
          self.render: $res,
              'wiki' => { tab => "wiki" }
+    };
+
+    .get: '/wiki/:page',
+      -> $req, $res, $/ {
+          self.db.query: "select v::text from kv where k=?", "wiki:$<page>";
+          my $data = $.db.json;
+          self.render: $res, 'wiki' => { tab => "wiki", page => $<page>, data => $data }
     };
 
     .get: '/people',
