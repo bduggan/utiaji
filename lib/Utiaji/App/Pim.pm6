@@ -6,6 +6,7 @@ unit class Utiaji::App::Pim is Utiaji::App;
 
 has $.db = Utiaji::DB.new;
 has $.template-path = 'templates/pim';
+has $.static-root = 'static/pim';
 
 method BUILD {
     $_ = self.router;
@@ -39,5 +40,9 @@ method BUILD {
              'people' => { tab => "people" }
     };
 
+    .get: '/pim.js',
+      -> $req, $res {
+          self.render: $res, static => 'pim.js'
+      };
 
 }

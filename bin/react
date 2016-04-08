@@ -8,7 +8,7 @@ use Utiaji::App::React;
 
 logger.level = 'debug';
 
-my $server = Utiaji::Server.new(host => 'localhost', port => 3333);
+my $server = Utiaji::Server.new(host => 'localhost', port => 3334);
 $server.app = Utiaji::App::React.new;
 $server.start;
 $server.await;

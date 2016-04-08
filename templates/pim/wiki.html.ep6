@@ -1,30 +1,40 @@
 %| :$data, :$page, *%args
-%== include $app, 'header', |%args;
+▶== include $app, 'header', |%args;
 
 <h2 class='text-center'>
-  <%= $page %>
+
+ <%= $page %>
+
 </h2>
 
 <row>
+
 <div class='column'>
 
-% if $data.defined {
+▶ if $data.defined {
+
 <pre class='callout'>
-%= $data
+
+▶= $data
+
 </pre>
-% } else {
+
+▶ } else {
+
 <row>
-<div class='text-right'>
-<div class='small button'>save</div>
-</div>
+  <div class='text-right'>
+    <div class='small button'>save</div>
+  </div>
 </row>
-<textarea placeholder="New Page" rows=20></textarea>
-% }
+
+<textarea placeholder="New Page" rows=15></textarea>
+
+▶ }
 
 </div>
 </row>
 
-%== include $app, 'footer', |%args;
+▶== include $app, 'footer', |%args;
 
 </pre>
 
