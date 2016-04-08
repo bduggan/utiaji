@@ -12,8 +12,7 @@ method BUILD {
 
     .get: '/',
       -> $req, $res {
-          $res.headers{"Location"} = "/cal";
-          $res.status = 302;
+          self.redirect_to: $res, '/cal';
       };
 
     .get: '/cal',
@@ -24,8 +23,7 @@ method BUILD {
 
     .get: '/wiki',
       -> $req,$res {
-         self.render: $res,
-             'wiki' => { tab => "wiki" }
+         self.redirect_to: $res, '/wiki/main';
     };
 
     .get: '/wiki/:page',

@@ -73,6 +73,11 @@ method render_not_found($res) {
     $res.headers<content-type> = 'text/plain';
 }
 
+method redirect_to($res, $path) {
+   $res.headers{"Location"} = $path;
+   $res.status = 302;
+}
+
 my $app;
 method new {
     my $self = callsame(|%_);
