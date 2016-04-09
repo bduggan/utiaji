@@ -1,4 +1,5 @@
 %| :$data, :$page, *%args
+
 ▶== include $app, 'header', |%args;
 
 <h2 class='text-center'>
@@ -15,7 +16,7 @@
 
 <pre class='callout'>
 
-▶= $data
+%= $data
 
 </pre>
 
@@ -35,6 +36,3 @@
 </row>
 
 ▶== include $app, 'footer', |%args;
-
-</pre>
-
