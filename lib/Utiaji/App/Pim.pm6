@@ -34,6 +34,14 @@ method BUILD {
           self.render: $res, 'wiki' => { tab => "wiki", page => $<page>, data => $data }
     };
 
+    .post: '/wiki/:page',
+       -> $req, $res, $/ {
+          my $json = $req.json;
+          self.db.query: "delete from kv where k=? ", "wiki:$<page>";
+          self.db.query: "insert into kv (k,v) values (?,?)", "wiki:$<page>", :$json;
+          self.render: $res, json => { 'status' => 'ok' };
+    };
+
     .get: '/people',
       -> $req,$res {
          self.render: $res,
@@ -44,5 +52,6 @@ method BUILD {
       -> $req, $res {
           self.render: $res, static => 'pim.js'
       };
+
 
 }
