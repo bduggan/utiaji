@@ -1,60 +1,41 @@
 var el = React.createElement;
 
-var Cal = React.createClass({
-    getInitialState: function () {
+var Wiki = React.createClass({
+    getInitialState: function() {
         return {
-            day: 'today',
-            events: [],
-            loaded: false
+            editing: 0,
         }
     },
 
-    fetchEvents: function (day) {
-        var that = this;
-        return fetch('/' + day).then(function(response) {
-            return response.json();
-        }).then(function(json) {
-            console.log(json);
-            that.setState({ events: json.events, loaded: true });
-        }).catch(function(err) {
-            console.log(err);
-            console.warn('failed to load');
-        });
-    },
-
-    componentDidMount: function () {
-        this.fetchEvents(this.state.day);
-    },
-
-    componentWillUpdate: function (nextProps, nextState) {
-        if (nextState.day !== this.state.day) {
-            this.fetchEvents(nextState.day);
-        }
-    },
-
-    handleDayChange: function (day) {
-        console.log(day);
-        this.setState({ day: day, loaded: false })
+    save: function() {
+        var t = $("#note").val()
+        console.log('saving ' + t);
+        var url = window.location.href;
+        console.log('to ' + url);
+        fetch(url, {
+            method: 'post',
+            headers: { 'content-type':'application/json'},
+            body: JSON.stringify({content:t})
+        })
+        .then(function(data){
+            console.log('got ', data)
+        })
+        .catch(function(err) {
+            console.log('error ' + err);
+        })
     },
 
     render: function () {
-        if (!this.state.loaded) {
-            return el('div', {}, 'loading...');
-        }
         return (
             el('div', {},
-//                el(DayNav, {days: ['today', 'tomorrow']})
-                el('a', { onClick: this.handleDayChange.bind(this, 'today') }, 'Today'),
-                el('a', { onClick: this.handleDayChange.bind(this, 'tomorrow') }, 'Tomorrow'),
-                el('div', { className: 'events' },
-                    this.state.events.map(evt)
-                )
-            )
+                el('row', {},
+                    el('div', { className: 'text-right' },
+                        el('a', { className: 'button', onClick: this.save.bind(this) },'save' )
+                      )
+                   ),
+                el('textarea', { id: 'note', placeholder: 'New Page', rows: 19})
+              )
         )
     }
-})
-
-var evt = function (evt) {
-    return el('div', { className: 'event' }, evt);
-}
+});
 

@@ -39,11 +39,12 @@ var Cal = React.createClass({
 
     render: function () {
         if (!this.state.loaded) {
-            return el('div', {}, 'loading...');
         }
         return (
             el('div', {},
 //                el(DayNav, {days: ['today', 'tomorrow']})
+                el('textarea', { cols: 80, rows: 20 } ),
+                el('br'),
                 el('a', { onClick: this.handleDayChange.bind(this, 'today') }, 'Today'),
                 el('a', { onClick: this.handleDayChange.bind(this, 'tomorrow') }, 'Tomorrow'),
                 el('div', { className: 'events' },

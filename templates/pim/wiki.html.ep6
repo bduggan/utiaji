@@ -3,36 +3,16 @@
 ▶== include $app, 'header', |%args;
 
 <h2 class='text-center'>
-
- <%= $page %>
-
+▶= $page
 </h2>
 
 <row>
-
-<div class='column'>
-
-▶ if $data.defined {
-
-<pre class='callout'>
-
-%= $data
-
-</pre>
-
-▶ } else {
-
-<row>
-  <div class='text-right'>
-    <div class='small button'>save</div>
-  </div>
+    <div class='column' id='content'></div>
 </row>
 
-<textarea placeholder="New Page" rows=15></textarea>
-
-▶ }
-
-</div>
-</row>
+<script type='text/javascript'>
+  var wiki = React.createElement(Wiki);
+  var ref = ReactDOM.render(wiki, document.getElementById('content'))
+</script>
 
 ▶== include $app, 'footer', |%args;

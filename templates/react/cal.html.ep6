@@ -12,6 +12,10 @@
     var cal = React.createElement(Cal);
     var ref = ReactDOM.render(cal, document.getElementById('today'))
 </script>
+<hr>
+<div>
+<a onClick='this.handleDayChange.bind(this,"tuesday")'>last tuesday</a>
+</div>
 </body>
 </html>
 
