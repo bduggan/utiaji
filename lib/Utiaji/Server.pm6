@@ -9,7 +9,7 @@ sub fork returns int32 is native { * };
 class Utiaji::Server {
 
     has Promise $.loop;
-    has $.timeout = 10;
+    has $.timeout = 5;
     has Int $.port = 3333;
     has $.host = 'localhost';
     has $.app is rw = Utiaji::App::Default.new;
@@ -65,20 +65,22 @@ class Utiaji::Server {
     }
 
     method handle-connection($conn) {
-        my $responded = False;
+        my $responding = False;
         my $promise = Promise.in($.timeout).then({{
-            return if $responded;
+            return if $responding;
             error "timeout, closing connection";
             $conn.close;
         } });
         trace "got a connection";
         my Buf[uint8] $bytes = Buf[uint8].new();
         whenever $conn.Supply(:bin) -> $buf {
+            $responding = True;
             if my $response = self.handle-request($bytes,$buf) {
                 $conn.write($response.to-string.encode("UTF-8"));
                 $conn.close;
-                $responded = True;
                 trace "closed connection";
+            } else {
+                $responding = False;
             }
         }
     }
