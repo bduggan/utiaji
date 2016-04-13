@@ -1,14 +1,16 @@
 var el = React.createElement;
 
 var Wiki = React.createClass({
+
     getInitialState: function() {
         return {
             editing: 0,
+            text: this.props.initial_text
         }
     },
 
     save: function() {
-        var t = $("#note").val()
+        var t = this.state.text;
         console.log('saving ' + t);
         var url = window.location.href;
         console.log('to ' + url);
@@ -25,15 +27,20 @@ var Wiki = React.createClass({
         })
     },
 
+    handleChange: function(e) {
+        this.setState({ text: e.target.value } );
+    },
+
     render: function () {
         return (
             el('div', {},
                 el('row', {},
                     el('div', { className: 'text-right' },
-                        el('a', { className: 'button', onClick: this.save.bind(this) },'save' )
+                        el('a', { className: 'button', onClick: this.save },'save' )
                       )
                    ),
-                el('textarea', { id: 'note', placeholder: 'New Page', rows: 19})
+                   el('textarea', { id: 'note', onChange: this.handleChange,
+                       placeholder: 'New Page', rows: 19, value: this.state.text })
               )
         )
     }

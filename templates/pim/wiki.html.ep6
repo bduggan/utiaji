@@ -11,7 +11,8 @@
 </row>
 
 <script type='text/javascript'>
-  var wiki = React.createElement(Wiki);
+  var text = '<%= $data %>';
+  var wiki = React.createElement(Wiki, { initial_text: text });
   var ref = ReactDOM.render(wiki, document.getElementById('content'))
 </script>
 
