@@ -2,6 +2,7 @@
 
 version=2016.03
 
+export PATH=$HOME/.rakudobrew/bin:$PATH
 if [ -x $HOME/.rakudobrew/bin/perl6 ]; then
     if $HOME/.rakudobrew/bin/perl6 --version | grep -q "$version"; then
         echo "using $version"
