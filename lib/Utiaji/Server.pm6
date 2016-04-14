@@ -103,6 +103,7 @@ class Utiaji::Server {
     method start-fork {
         my $pid;
         unless ($pid = fork) {
+          sleep 0.2;
           self.start;
           self.await;
           exit;

@@ -24,20 +24,21 @@ class Utiaji::Log {
         my $line = $frame.line;
         my $out = $msg ~ " [ +$line {$file} ]";
         $out ~= " in {$frame.subname}" if $frame.subname;
-        $.fh.say("# $out");
+        $.fh.say("# {DateTime.now} $out");
     }
 
     method debug($msg) {
         return unless $.level ~~ / debug | trace /;
-        $.fh.say("# debug: $msg");
+        $.fh.say("# {DateTime.now}  debug: $msg");
     }
 
     method error($msg) {
-        $.fh.say( "# error: $msg");
+        $.fh.say( "# {DateTime.now} error: $msg");
     }
 
     method info($msg) {
-        $.fh.say("# info: $msg");
+        $.fh.say("# {DateTime.now}   info: $msg");
+        $.fh.flush;
     }
 }
 

@@ -10,7 +10,7 @@ my $tmpfile = "logfile" ~ nonce();
     my $l = Utiaji::Log.new(path => $tmpfile);
     $l.info("hi!");
     my $lines = "$tmpfile".IO.lines;
-    is $lines, "# info: hi!", 'wrote log';
+    cmp-ok $lines, '~~', rx{.* 'info: hi!'}, 'wrote info message';
     unlink $tmpfile;
 }
 
@@ -23,7 +23,9 @@ logger.error('error');
 logger.info('info');
 
 my @lines = "$tmpfile".IO.lines;
-is @lines, ["# debug: debug", "# error: error", "# info: info"], 'matched lines';
+like @lines[0], rx{.* 'debug: debug'}, 'debug message';
+like @lines[1], rx{.* 'error: error'}, 'error message';
+like @lines[2], rx{.* 'info: info'}, 'info message';
 
 done-testing;
 
