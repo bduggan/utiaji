@@ -5,4 +5,5 @@ Utiaji -- A Personal Information Organizer
 
 Description
 ===========
-Utiaji is a calender, wiki, address book and general personal information organizer.
+Utiaji is personal information organizer composed of a calender, wiki, and address book.
+
