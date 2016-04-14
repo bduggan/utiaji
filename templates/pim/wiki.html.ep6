@@ -11,8 +11,10 @@
 </row>
 
 <script type='text/javascript'>
-  var text = '<%= $data<content> %>';
-  var wiki = React.createElement(Wiki, { initial_text: text });
+  var data = <%= to-json($data // {content => ""}) %>;
+  var wiki = React.createElement(Wiki, {
+    initial_text: data['content']
+  });
   var ref = ReactDOM.render(wiki, document.getElementById('content'))
 </script>
 
