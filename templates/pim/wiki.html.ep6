@@ -11,7 +11,7 @@
 </row>
 
 <script type='text/javascript'>
-  var data = <%= to-json($data // {content => ""}) %>;
+  var data = <%== to-json($data // {content => ""}) %>;
   var wiki = React.createElement(Wiki, {
     initial_text: data['content']
   });

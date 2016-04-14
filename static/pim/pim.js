@@ -1,3 +1,24 @@
+
+function escape(str) {
+  return str.replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
+}
+function unescape(str) {
+    return str.replace('&amp;', '&', 'g')
+    .replace('&lt;','<','g')
+    .replace('&gt;','>','g')
+    .replace('&quot;', '"', 'g')
+    .replace('&apos;', "'", 'g')
+}
+
+function wikify(str) {
+    return escape(str)
+    .replace(/@(\w+)/g, "<a href='/wiki/$1'>$1</a>");
+}
+
 var el = React.createElement;
 
 var Wiki = React.createClass({
@@ -10,7 +31,7 @@ var Wiki = React.createClass({
     },
 
     save: function() {
-        var t = this.state.text;
+        var t = unescape(this.state.text);
         var url = window.location.href;
         var that = this;
         fetch(url, {
@@ -46,9 +67,12 @@ var Wiki = React.createClass({
                    ),
                    this.state.editing ?
                    el('textarea', { id: 'note', onChange: this.handleChange,
-                       placeholder: 'New Page', rows: 19, value: this.state.text })
+                       placeholder: 'New Page (use @link to make links)',
+                       rows: 19, value: this.state.text })
                    :
-                   el('pre', {}, this.state.text)
+                   el('pre', {dangerouslySetInnerHTML:
+                       { __html: (wikify(this.state.text)) }
+                   })
               )
         )
     }
