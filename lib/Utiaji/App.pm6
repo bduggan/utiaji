@@ -43,7 +43,7 @@ method load-template($template) {
         debug "$path not found";
         return;
     }
-    Utiaji::Template.new.parse($path.IO.slurp)
+    Utiaji::Template.new(cache-key => $path).parse($path.IO.slurp)
 }
 
 multi method render($res, :$template!, :%template_params is copy) {
