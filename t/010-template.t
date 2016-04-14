@@ -63,6 +63,12 @@ hello, <%= $content %>
 DONE
 is $t.render(content => 'caffeine'), "hello, caffeine\n", 'rendered with params';
 
+ok $t.parse(q:to/DONE/), 'parse with signature line with types';
+%| :$content, Int :$number where * > 0
+hello, <%= $content %> + <%= $number %>
+DONE
+is $t.render(content => 'coffee', number => 12), "hello, coffee + 12\n", 'rendered with params';
+
 ok $t.parse("%= '<&>'"), 'parsed';
 is $t.render, '&lt;&amp;&gt;', 'escaped';
 

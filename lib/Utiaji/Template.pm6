@@ -15,7 +15,7 @@ grammar parser {
     token ws { \h* }
 
     token statement {
-        [ '%' | '▷' | '▶' ] [ <expression> | <comment> | <code> ] \n
+        [ '%' | '▶' ] [ <expression> | <comment> | <code> ] \n
     }
 
     token expression {
