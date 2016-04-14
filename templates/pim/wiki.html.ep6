@@ -7,7 +7,7 @@
 </h2>
 
 <row>
-    <div class='column' id='content'></div>
+    <div class='column' id='content' class='secondary callout'></div>
 </row>
 
 <script type='text/javascript'>

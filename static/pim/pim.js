@@ -70,7 +70,9 @@ var Wiki = React.createClass({
                        placeholder: 'New Page (use @link to make links)',
                        rows: 19, value: this.state.text })
                    :
-                   el('pre', {dangerouslySetInnerHTML:
+                   el('pre', {
+                       className: 'secondary callout',
+                       dangerouslySetInnerHTML:
                        { __html: (wikify(this.state.text)) }
                    })
               )
