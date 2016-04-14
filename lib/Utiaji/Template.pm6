@@ -3,6 +3,7 @@ use Utiaji::Log;
 
 has $.raw;
 has $.parsed;
+has $.cache-key;
 
 grammar parser {
     rule TOP {
@@ -120,7 +121,14 @@ multi method parse($!raw) {
     self.parse;
 }
 
+my %cache;
 multi method parse {
+    if $!cache-key and %cache{$!cache-key}:exists {
+        $!parsed = %cache{$!cache-key};
+        debug "Using cached template $!cache-key";
+        return self;
+    }
+    debug "Compiling template {$!cache-key // 'no cache-key'}";
     my $act = actions.new;
     my $raw = chomp($.raw) ~ "\n";
     my $p = parser.parse($raw, actions => $act) or do {
@@ -133,6 +141,8 @@ multi method parse {
     trace $code;
     trace "---------";
     $!parsed = EVAL $code;
+    %cache{$!cache-key} = $!parsed if $!cache-key;
+    debug "Done compiling";
     self;
 }
 
