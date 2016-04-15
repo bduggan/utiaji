@@ -14,7 +14,17 @@
     color:white;
 }
 .menu li a:hover {
-    color:#dddd00;
+    color:#8888ff;
+}
+.menu li.active a {
+    color:#88ffff;
+    background-color:black;
+}
+.title-bar {
+   padding:0;
+}
+.brand {
+   background-color:#583189;
 }
 </style>
 
@@ -22,7 +32,7 @@
   <div class="top-bar-left">
     <ul class="dropdown menu">
       <li>
-      <a class='menu-text' href='/'>Uhitaji Pim</a>
+      <a class='menu-text brand' href='/'>Uhitaji</a>
       </li>
       <li<%= $tab eq 'cal'    ?? q[ class="active"] !! "" %>><a href="/cal">Calendar</a></li>
       <li<%= $tab eq 'wiki'   ?? q[ class="active"] !! "" %>><a href="/wiki">Wiki</a></li>
@@ -31,8 +41,7 @@
   </div>
   <div class="top-bar-right">
     <ul class="menu">
-      <li><input type="search" placeholder="Search"></li>
-      <li><button type="button" class="secondary button">Search</button></li>
+      <li><input id="search" type="search" placeholder="search"></li>
     </ul>
   </div>
 </div>
