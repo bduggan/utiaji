@@ -1,5 +1,5 @@
-unit class Uhitaji::Template;
-use Uhitaji::Log;
+unit class Hamna::Template;
+use Hamna::Log;
 
 has $.raw;
 has $.parsed;

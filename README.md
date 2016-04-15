@@ -1,9 +1,9 @@
-Uhitaji -- A Personal Information Organizer
+Hamna -- A Personal Information Organizer
 =======
-* Travis: [![Build Status](https://travis-ci.org/bduggan/uhitaji.svg?branch=master)](https://travis-ci.org/bduggan/uhitaji)
-* Circle CI: [![CircleCI Status](https://circleci.com/gh/bduggan/uhitaji/tree/master.svg?style=svg)](https://circleci.com/gh/bduggan/uhitaji/tree/master)
+* Travis: [![Build Status](https://travis-ci.org/bduggan/hamna.svg?branch=master)](https://travis-ci.org/bduggan/hamna)
+* Circle CI: [![CircleCI Status](https://circleci.com/gh/bduggan/hamna/tree/master.svg?style=svg)](https://circleci.com/gh/bduggan/hamna/tree/master)
 
 Description
 ===========
-Uhitaji is personal information organizer composed of a calender, wiki, and address book.
+Hamna is personal information organizer composed of a calender, wiki, and address book.
 

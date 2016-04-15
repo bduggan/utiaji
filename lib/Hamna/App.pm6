@@ -1,18 +1,18 @@
 use JSON::Fast;
 use DBIish;
 
-use Uhitaji::Router;
-use Uhitaji::Log;
-use Uhitaji::Template;
+use Hamna::Router;
+use Hamna::Log;
+use Hamna::Template;
 
-#| Uhitaji::App is the base class for apps.
-unit class Uhitaji::App;
+#| Hamna::App is the base class for apps.
+unit class Hamna::App;
 
 has $.root is rw = $?FILE.IO.parent.parent.dirname;
 has $.static-root = 'static';
 has $.template-path = 'templates';
 has $.template-suffix = 'html.ep6';
-has $.router handles <get post put> = Uhitaji::Router.new;
+has $.router handles <get post put> = Hamna::Router.new;
 
 multi method render($res, :$text!, :$status=200) {
     trace "rendering text";
@@ -43,7 +43,7 @@ method load-template($template) {
         debug "$path not found";
         return;
     }
-    Uhitaji::Template.new(cache-key => $path).parse($path.IO.slurp)
+    Hamna::Template.new(cache-key => $path).parse($path.IO.slurp)
 }
 
 multi method render($res, :$template!, :%template_params is copy) {

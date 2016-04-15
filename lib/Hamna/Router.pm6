@@ -1,9 +1,9 @@
-unit class Uhitaji::Router;
-use Uhitaji::Log;
-use Uhitaji::Pattern;
-use Uhitaji::Route;
+unit class Hamna::Router;
+use Hamna::Log;
+use Hamna::Pattern;
+use Hamna::Route;
 
-has Uhitaji::Route @.routes is rw = ();
+has Hamna::Route @.routes is rw = ();
 
 method lookup(:$verb!,:$path!) {
     trace "Lookup $verb $path";
@@ -33,17 +33,17 @@ method lookup(:$verb!,:$path!) {
 }
 
 multi method get(Str $pattern, $cb) {
-    my $r = Uhitaji::Route.new(
+    my $r = Hamna::Route.new(
             verb => 'GET',
             path => rx{^$pattern$},
-            matcher => Uhitaji::Pattern.new(pattern => $pattern),
+            matcher => Hamna::Pattern.new(pattern => $pattern),
             code => $cb
     );
     self.routes.push($r);
 }
 
 multi method get(Regex $path, $cb) {
-    my $r = Uhitaji::Route.new(
+    my $r = Hamna::Route.new(
             verb => 'GET',
             path => $path,
             code => $cb
@@ -52,10 +52,10 @@ multi method get(Regex $path, $cb) {
 }
 
 multi method post(Str $pattern, $cb) {
-    my $r = Uhitaji::Route.new(
+    my $r = Hamna::Route.new(
             verb => 'POST',
             path => rx{^$pattern$},
-            matcher => Uhitaji::Pattern.new(pattern => $pattern),
+            matcher => Hamna::Pattern.new(pattern => $pattern),
             code => $cb
     );
     self.routes.push($r);
@@ -63,7 +63,7 @@ multi method post(Str $pattern, $cb) {
 
 
 multi method post(Regex $path, $cb) {
-    my $r = Uhitaji::Route.new(
+    my $r = Hamna::Route.new(
             verb => 'POST',
             path => $path,
             code => $cb

@@ -1,18 +1,18 @@
-use Uhitaji::Request;
-use Uhitaji::Log;
-use Uhitaji::Handler;
-use Uhitaji::Response;
-use Uhitaji::App::Default;
+use Hamna::Request;
+use Hamna::Log;
+use Hamna::Handler;
+use Hamna::Response;
+use Hamna::App::Default;
 use NativeCall;
 sub fork returns int32 is native { * };
 
-class Uhitaji::Server {
+class Hamna::Server {
 
     has Promise $.loop;
     has $.timeout = 5;
     has Int $.port = 3333;
     has $.host = 'localhost';
-    has $.app is rw = Uhitaji::App::Default.new;
+    has $.app is rw = Hamna::App::Default.new;
     has $.child;
 
     method url {
@@ -34,9 +34,9 @@ class Uhitaji::Server {
     }
 
     method respond(Str $request) {
-        my $req = Uhitaji::Request.new(raw => $request).parse or do {
+        my $req = Hamna::Request.new(raw => $request).parse or do {
             warn "did not parse request [[$request]]";
-            return Uhitaji::Response.new(status => 500);
+            return Hamna::Response.new(status => 500);
         }
         return handle-request($req,$.app.router);
     }
@@ -53,7 +53,7 @@ class Uhitaji::Server {
                 default {
                     my $error = $_;
                     error "caught { $error.gist }";
-                    $response = Uhitaji::Response.new(
+                    $response = Hamna::Response.new(
                         :500status,
                         :body<houston we have a problem>
                     );

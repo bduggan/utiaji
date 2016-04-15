@@ -1,15 +1,15 @@
 use v6;
 use lib 'lib';
 use Test;
-use Uhitaji::Test;
+use Hamna::Test;
 
-my $t = Uhitaji::Test.new;
+my $t = Hamna::Test.new;
 
 $t.server.start-fork;
 $t.get-ok('/')
   .status-is(200)
   .content-type-is('text/plain')
-  .content-is('Welcome to Uhitaji.');
+  .content-is('Welcome to Hamna.');
 
 $t.get-ok("/no/such/url")
   .status-is(404);

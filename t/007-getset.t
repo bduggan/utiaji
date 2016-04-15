@@ -1,11 +1,11 @@
 use v6;
 use lib 'lib';
 use Test;
-use Uhitaji::Test;
-use Uhitaji::App::Getset;
+use Hamna::Test;
+use Hamna::App::Getset;
 
-my $app = Uhitaji::App::Getset.new;
-my $t = Uhitaji::Test.new.start($app);
+my $app = Hamna::App::Getset.new;
+my $t = Hamna::Test.new.start($app);
 
 $t.post-ok("/set/foo", json => { abc => 123 } )
   .status-is(200)

@@ -1,4 +1,4 @@
-class Uhitaji::Log {
+class Hamna::Log {
 
     has            $.level is rw = %*ENV<UHITAJI_LOG_LEVEL> || 'info';
     has IO::Handle $!fh; #= filehandle
@@ -43,7 +43,7 @@ class Uhitaji::Log {
 }
 
 sub logger is export {
-    state $logger //= Uhitaji::Log.new;
+    state $logger //= Hamna::Log.new;
     $logger;
 }
 
@@ -51,7 +51,7 @@ sub logger is export {
 
 =head1 SYNOPSIS
 
-    use Uhitaji::Log;
+    use Hamna::Log;
 
     logger.level = 'debug';
     debug 'debug message';

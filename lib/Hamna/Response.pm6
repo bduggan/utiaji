@@ -1,5 +1,5 @@
-unit class Uhitaji::Response;
-use Uhitaji::Headers;
+unit class Hamna::Response;
+use Hamna::Headers;
 
 has %.codes =
     200 => "OK",
@@ -20,7 +20,7 @@ has %.codes =
 
 has Int $.status is rw;
 has $.body is rw = "";
-has Uhitaji::Headers $.headers is rw = Uhitaji::Headers.new;
+has Hamna::Headers $.headers is rw = Hamna::Headers.new;
 
 method prepare-response {
     unless $.headers<content-type> {
@@ -35,7 +35,7 @@ method status-line {
 
 method to-string {
     self.prepare-response unless $.headers<content-length>.defined;
-    $!headers<server> = "Uhitaji";
+    $!headers<server> = "Hamna";
     $!headers<connection> = "close";
     return (
         self.status-line,

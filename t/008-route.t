@@ -1,22 +1,22 @@
 use v6;
 use lib 'lib';
 use Test;
-use Uhitaji::Router;
+use Hamna::Router;
 
-my $r = Uhitaji::Route.new(name => 'hi', verb => 'GET', path => rx{\/there});
+my $r = Hamna::Route.new(name => 'hi', verb => 'GET', path => rx{\/there});
 is $r.name, 'hi', 'set name';
 is $r.verb, 'GET', 'set verb';
 #is $r.path, rx{\/there}, 'set path';
 
-my $routes = Uhitaji::Router.new;
+my $routes = Hamna::Router.new;
 $routes.routes.push($r);
 
 $routes.routes.push(
-    Uhitaji::Route.new(:name<ho>, :verb<GET>, path => rx{^ \/here $})
+    Hamna::Route.new(:name<ho>, :verb<GET>, path => rx{^ \/here $})
 );
 
 $routes.routes.push(
-    Uhitaji::Route.new(
+    Hamna::Route.new(
         :name<findme>,
         :verb<GET>,
         path => rx{^ \/findme $},
@@ -29,7 +29,7 @@ is $routes.routes[0].name, 'hi', 'added a route';
 is $routes.routes[1].name, 'ho', 'added a route';
 
 $routes.routes.push(
-    Uhitaji::Route.new(
+    Hamna::Route.new(
         :name<patternroute>,
         :verb<GET>,
         path => rx{^ \/with\/pattern\d $},
@@ -39,7 +39,7 @@ $routes.routes.push(
 );
 
 $routes.routes.push(
-    Uhitaji::Route.new(
+    Hamna::Route.new(
         :name<top>,
         :verb<GET>,
         path => rx{^ \/ $})

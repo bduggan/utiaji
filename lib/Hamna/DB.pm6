@@ -1,7 +1,7 @@
-#| Uhitaji::DB provides a layer of abstraction around a postgres database.
-unit class Uhitaji::DB;
+#| Hamna::DB provides a layer of abstraction around a postgres database.
+unit class Hamna::DB;
 
-use Uhitaji::Log;
+use Hamna::Log;
 use DBIish;
 use DBDish::Pg;
 use JSON::Fast;

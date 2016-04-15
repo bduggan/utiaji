@@ -1,13 +1,13 @@
 {
     "perl" : "6.*",
-    "name" : "Uhitaji",
+    "name" : "Hamna",
     "version" : "0.1.0",
     "description" : "A personal information manager.",
     "authors" : [ "Brian Duggan" ],
     "provides" : {
-        "Uhitaji" : "lib/Uhitaji.pm"
+        "Hamna" : "lib/Hamna.pm"
     },
     "depends" : [ "DBIish", "HTTP::Tinyish" ],
     "resources" : [ ],
-    "source-url" : "git://github.com/bduggan/uhitaji.git"
+    "source-url" : "git://github.com/bduggan/hamna.git"
 }

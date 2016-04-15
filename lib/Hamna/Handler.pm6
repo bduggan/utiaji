@@ -1,11 +1,11 @@
-unit module Uhitaji::Handler;
+unit module Hamna::Handler;
 
-use Uhitaji::Dispatcher;
-use Uhitaji::Response;
-use Uhitaji::Router;
-use Uhitaji::Log;
+use Hamna::Dispatcher;
+use Hamna::Response;
+use Hamna::Router;
+use Hamna::Log;
 
-sub handle-request(Uhitaji::Request $request,Uhitaji::Router $router) is export {
+sub handle-request(Hamna::Request $request,Hamna::Router $router) is export {
     debug $request.gist;
     my ($route,$captures) =
         $router.lookup(
@@ -14,12 +14,12 @@ sub handle-request(Uhitaji::Request $request,Uhitaji::Router $router) is export 
 
     unless $route {
         trace "Not found";
-        my $response = Uhitaji::Response.new(:404status, :body<not found>);
+        my $response = Hamna::Response.new(:404status, :body<not found>);
         debug $response.status-line;
         return $response;
     }
     trace "Matched { $route.gist } ";
-    my $response = Uhitaji::Response.new;
+    my $response = Hamna::Response.new;
     dispatch-request($route, $captures, $request, $response);
     debug $response.status-line;
     return $response;

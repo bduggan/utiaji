@@ -1,8 +1,8 @@
 use lib 'lib';
 use Test;
-use Uhitaji::Test;
+use Hamna::Test;
 
-class Uhitaji::App::React is Uhitaji::App {
+class Hamna::App::React is Hamna::App {
     method BUILD {
         $.root = $?FILE.IO.dirname.child('react');
 
@@ -30,7 +30,7 @@ class Uhitaji::App::React is Uhitaji::App {
 }
 
 
-my $t = Uhitaji::Test.new.start( Uhitaji::App::React.new );
+my $t = Hamna::Test.new.start( Hamna::App::React.new );
 
 $t.get-ok('/cal').status-is(200);
 

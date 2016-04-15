@@ -1,10 +1,10 @@
-use Uhitaji::App;
-use Uhitaji::DB;
-use Uhitaji::Log;
+use Hamna::App;
+use Hamna::DB;
+use Hamna::Log;
 
-unit class Uhitaji::App::Pim is Uhitaji::App;
+unit class Hamna::App::Pim is Hamna::App;
 
-has $.db = Uhitaji::DB.new;
+has $.db = Hamna::DB.new;
 has $.template-path = 'templates/pim';
 has $.static-root = 'static/pim';
 

@@ -1,21 +1,21 @@
-use Uhitaji::App;
-use Uhitaji::DB;
-use Uhitaji::Log;
+use Hamna::App;
+use Hamna::DB;
+use Hamna::Log;
 
 # setup:
-# createdb uhitaji
-# psql uhitaji -c "create table kv(k varchar not null primary key, v jsonb)"
+# createdb hamna
+# psql hamna -c "create table kv(k varchar not null primary key, v jsonb)"
 
-unit class Uhitaji::App::Getset is Uhitaji::App;
+unit class Hamna::App::Getset is Hamna::App;
 
-has $.db = Uhitaji::DB.new;
+has $.db = Hamna::DB.new;
 
 method BUILD {
 
     given self.router {
         .get('/',
             sub ($req,$res) {
-                self.render: $res, text => 'Welcome to Uhitaji.'
+                self.render: $res, text => 'Welcome to Hamna.'
             }
         );
 

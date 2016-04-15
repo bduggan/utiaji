@@ -2,14 +2,14 @@
 
 use lib 'lib';
 
-use Uhitaji::Server;
-use Uhitaji::Log;
-use Uhitaji::App::React;
+use Hamna::Server;
+use Hamna::Log;
+use Hamna::App::React;
 
 logger.level = 'debug';
 
-my $server = Uhitaji::Server.new(host => 'localhost', port => 3334);
-$server.app = Uhitaji::App::React.new;
+my $server = Hamna::Server.new(host => 'localhost', port => 3334);
+$server.app = Hamna::App::React.new;
 $server.start;
 $server.await;
 

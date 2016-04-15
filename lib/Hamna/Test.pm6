@@ -1,15 +1,15 @@
-unit class Uhitaji::Test;
+unit class Hamna::Test;
 
 use HTTP::Tinyish;
 use JSON::Fast;
-use Uhitaji::Log;
+use Hamna::Log;
 use Test;
 
-use Uhitaji::Server;
+use Hamna::Server;
 
 has %.res is rw;
 has HTTP::Tinyish $.ua = HTTP::Tinyish.new;
-has Uhitaji::Server $.server is rw = Uhitaji::Server.new;
+has Hamna::Server $.server is rw = Hamna::Server.new;
 
 method get-ok(Str $path) {
     %.res = $.ua.get($.server_url ~ $path);
@@ -79,7 +79,7 @@ method server_url {
 }
 
 method start($app) {
-    $.server = Uhitaji::Server.new(app => $app);
+    $.server = Hamna::Server.new(app => $app);
     $.server.start-fork;
     $.server.ping or error "Could not start server";
     self;

@@ -1,8 +1,8 @@
-use Uhitaji::App;
-use Uhitaji::Log;
-use Uhitaji::Template;
+use Hamna::App;
+use Hamna::Log;
+use Hamna::Template;
 
-class Uhitaji::App::Templater is Uhitaji::App {
+class Hamna::App::Templater is Hamna::App {
     has $.template-path = 'templates/templater';
     method BUILD {
         self.router.get('/hello', sub ($req, $res) {

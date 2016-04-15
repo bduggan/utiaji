@@ -1,15 +1,15 @@
 use lib 'lib';
 use Test;
-use Uhitaji::App;
-use Uhitaji::Test;
+use Hamna::App;
+use Hamna::Test;
 
-class Hello is Uhitaji::App { }
+class Hello is Hamna::App { }
 
 my $app = Hello.new;
 
 $app.router.get('/', sub ($req,$res) { $app.render: $res, text => "hello" } );
 
-my $t = Uhitaji::Test.new.start($app);
+my $t = Hamna::Test.new.start($app);
 
 $t.get-ok('/').status-is(200).content-is('hello');
 

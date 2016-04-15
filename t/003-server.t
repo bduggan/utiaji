@@ -1,18 +1,18 @@
 use v6;
 use lib 'lib';
 use Test;
-use Uhitaji::Test;
-use Uhitaji::Server;
+use Hamna::Test;
+use Hamna::Server;
 
-my $s = Uhitaji::Server.new;
-my $t = Uhitaji::Test.new;
+my $s = Hamna::Server.new;
+my $t = Hamna::Test.new;
 
 $s.start-fork;
 
 $t.get-ok('/')
   .status-is(200)
   .content-type-is('text/plain')
-  .content-is("Welcome to Uhitaji.");
+  .content-is("Welcome to Hamna.");
 
 $t.get-ok('/test')
   .status-is(200)
