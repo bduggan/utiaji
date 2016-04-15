@@ -26,6 +26,11 @@
 .brand {
    background-color:#583189;
 }
+input#search {
+   background-color:#583189;
+   border:0px;
+   color:white;
+}
 </style>
 
 <div class="title-bar">
