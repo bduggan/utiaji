@@ -3,7 +3,8 @@
 % use DateTime::Format;
 <pre>
 
-this is the body of the calendar
+There is no calendar here yet.
+
 Today is <%= Date.today %>
 
 %== include $app, 'footer', |%args;

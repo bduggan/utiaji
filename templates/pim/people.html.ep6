@@ -1,6 +1,10 @@
 %== include $app, 'header', |%args;
 
-this is the address book
+<pre>
+
+There are no people here yet.
+
+</pre>
 
 %== include $app, 'footer', |%args;
 
