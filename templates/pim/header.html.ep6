@@ -11,7 +11,7 @@
 <style>
 .white { color: white; }
 .menu li a {
-    color:white;
+    color:#dedbdb;
 }
 .menu li a:hover {
     color:#8888ff;
@@ -25,6 +25,8 @@
 }
 .brand {
    background-color:#583189;
+   font-weight:normal;
+   font-variant:small-caps;
 }
 input#search {
    background-color:#583189;
@@ -37,7 +39,7 @@ input#search {
   <div class="top-bar-left">
     <ul class="dropdown menu">
       <li>
-      <a class='menu-text brand' href='/'>Uhitaji</a>
+      <a class='menu-text brand' href='/'>uhitaji</a>
       </li>
       <li<%= $tab eq 'cal'    ?? q[ class="active"] !! "" %>><a href="/cal">Calendar</a></li>
       <li<%= $tab eq 'wiki'   ?? q[ class="active"] !! "" %>><a href="/wiki">Wiki</a></li>
