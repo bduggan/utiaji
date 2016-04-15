@@ -1,4 +1,4 @@
-unit class Utiaji::Route;
+unit class Uhitaji::Route;
 
 has $.name;
 has $.verb;

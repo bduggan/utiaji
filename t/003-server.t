@@ -1,18 +1,18 @@
 use v6;
 use lib 'lib';
 use Test;
-use Utiaji::Test;
-use Utiaji::Server;
+use Uhitaji::Test;
+use Uhitaji::Server;
 
-my $s = Utiaji::Server.new;
-my $t = Utiaji::Test.new;
+my $s = Uhitaji::Server.new;
+my $t = Uhitaji::Test.new;
 
 $s.start-fork;
 
 $t.get-ok('/')
   .status-is(200)
   .content-type-is('text/plain')
-  .content-is("Welcome to Utiaji.");
+  .content-is("Welcome to Uhitaji.");
 
 $t.get-ok('/test')
   .status-is(200)

@@ -2,14 +2,14 @@
 
 use lib 'lib';
 
-use Utiaji::Server;
-use Utiaji::Log;
-use Utiaji;
+use Uhitaji::Server;
+use Uhitaji::Log;
+use Uhitaji;
 
 logger.level = 'debug';
 
-my $server = Utiaji::Server.new(host => 'localhost', port => 3333);
-$server.app = Utiaji.new;
+my $server = Uhitaji::Server.new(host => 'localhost', port => 3333);
+$server.app = Uhitaji.new;
 $server.start;
 $server.await;
 

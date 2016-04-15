@@ -1,10 +1,10 @@
-use Utiaji::App;
-use Utiaji::DB;
-use Utiaji::Log;
+use Uhitaji::App;
+use Uhitaji::DB;
+use Uhitaji::Log;
 
-unit class Utiaji::App::Pim is Utiaji::App;
+unit class Uhitaji::App::Pim is Uhitaji::App;
 
-has $.db = Utiaji::DB.new;
+has $.db = Uhitaji::DB.new;
 has $.template-path = 'templates/pim';
 has $.static-root = 'static/pim';
 

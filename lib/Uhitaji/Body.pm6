@@ -1,4 +1,4 @@
-unit class Utiaji::Body;
+unit class Uhitaji::Body;
 use JSON::Fast;
 
 has $.raw;

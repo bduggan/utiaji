@@ -1,5 +1,5 @@
-unit class Utiaji::Headers does Associative;
-use Utiaji::Log;
+unit class Uhitaji::Headers does Associative;
+use Uhitaji::Log;
 
 # See https://doc.perl6.org/language/subscripts#Custom_type_example
 subset StrOrInt where Str | Int;

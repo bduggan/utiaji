@@ -1,4 +1,4 @@
-class Utiaji::Log {
+class Uhitaji::Log {
 
     has            $.level is rw = %*ENV<UTIAJI_LOG_LEVEL> || 'info';
     has IO::Handle $!fh; #= filehandle
@@ -43,7 +43,7 @@ class Utiaji::Log {
 }
 
 sub logger is export {
-    state $logger //= Utiaji::Log.new;
+    state $logger //= Uhitaji::Log.new;
     $logger;
 }
 
@@ -51,7 +51,7 @@ sub logger is export {
 
 =head1 SYNOPSIS
 
-    use Utiaji::Log;
+    use Uhitaji::Log;
 
     logger.level = 'debug';
     debug 'debug message';

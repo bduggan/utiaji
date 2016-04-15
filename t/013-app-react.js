@@ -1,8 +1,8 @@
 use lib 'lib';
 use Test;
-use Utiaji::Test;
+use Uhitaji::Test;
 
-class Utiaji::App::React is Utiaji::App {
+class Uhitaji::App::React is Uhitaji::App {
     method BUILD {
         $.root = $?FILE.IO.dirname.child('react');
 
@@ -30,7 +30,7 @@ class Utiaji::App::React is Utiaji::App {
 }
 
 
-my $t = Utiaji::Test.new.start( Utiaji::App::React.new );
+my $t = Uhitaji::Test.new.start( Uhitaji::App::React.new );
 
 $t.get-ok('/cal').status-is(200);
 

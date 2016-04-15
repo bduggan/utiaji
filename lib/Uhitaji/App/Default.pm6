@@ -1,11 +1,11 @@
-use Utiaji::App;
-use Utiaji::Log;
+use Uhitaji::App;
+use Uhitaji::Log;
 
-class Utiaji::App::Default is Utiaji::App {
+class Uhitaji::App::Default is Uhitaji::App {
     method BUILD {
 
         self.router.get('/', sub ($req,$res) {
-            self.render: $res, text => "Welcome to Utiaji."
+            self.render: $res, text => "Welcome to Uhitaji."
         });
 
         self.router.get('/test', sub ($req,$res) {

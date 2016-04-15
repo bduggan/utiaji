@@ -1,5 +1,5 @@
-unit class Utiaji::Pattern;
-use Utiaji::Log;
+unit class Uhitaji::Pattern;
+use Uhitaji::Log;
 
 has Str $.pattern;
 has Str $.rex is rw;       # Compiled pattern ( used within a regex )

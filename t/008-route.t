@@ -1,22 +1,22 @@
 use v6;
 use lib 'lib';
 use Test;
-use Utiaji::Router;
+use Uhitaji::Router;
 
-my $r = Utiaji::Route.new(name => 'hi', verb => 'GET', path => rx{\/there});
+my $r = Uhitaji::Route.new(name => 'hi', verb => 'GET', path => rx{\/there});
 is $r.name, 'hi', 'set name';
 is $r.verb, 'GET', 'set verb';
 #is $r.path, rx{\/there}, 'set path';
 
-my $routes = Utiaji::Router.new;
+my $routes = Uhitaji::Router.new;
 $routes.routes.push($r);
 
 $routes.routes.push(
-    Utiaji::Route.new(:name<ho>, :verb<GET>, path => rx{^ \/here $})
+    Uhitaji::Route.new(:name<ho>, :verb<GET>, path => rx{^ \/here $})
 );
 
 $routes.routes.push(
-    Utiaji::Route.new(
+    Uhitaji::Route.new(
         :name<findme>,
         :verb<GET>,
         path => rx{^ \/findme $},
@@ -29,7 +29,7 @@ is $routes.routes[0].name, 'hi', 'added a route';
 is $routes.routes[1].name, 'ho', 'added a route';
 
 $routes.routes.push(
-    Utiaji::Route.new(
+    Uhitaji::Route.new(
         :name<patternroute>,
         :verb<GET>,
         path => rx{^ \/with\/pattern\d $},
@@ -39,7 +39,7 @@ $routes.routes.push(
 );
 
 $routes.routes.push(
-    Utiaji::Route.new(
+    Uhitaji::Route.new(
         :name<top>,
         :verb<GET>,
         path => rx{^ \/ $})

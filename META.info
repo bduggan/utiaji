@@ -1,13 +1,13 @@
 {
     "perl" : "6.*",
-    "name" : "Utiaji",
+    "name" : "Uhitaji",
     "version" : "0.1.0",
-    "description" : "Your needs.",
+    "description" : "A personal information manager.",
     "authors" : [ "Brian Duggan" ],
     "provides" : {
-        "Utiaji" : "lib/Utiaji.pm"
+        "Uhitaji" : "lib/Uhitaji.pm"
     },
     "depends" : [ "DBIish", "HTTP::Tinyish" ],
     "resources" : [ ],
-    "source-url" : "git://github.com/bduggan/Utiaji.git"
+    "source-url" : "git://github.com/bduggan/uhitaji.git"
 }

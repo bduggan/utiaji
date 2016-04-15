@@ -1,11 +1,11 @@
 use v6;
 use lib 'lib';
 use Test;
-use Utiaji::Test;
-use Utiaji::App::Getset;
+use Uhitaji::Test;
+use Uhitaji::App::Getset;
 
-my $app = Utiaji::App::Getset.new;
-my $t = Utiaji::Test.new.start($app);
+my $app = Uhitaji::App::Getset.new;
+my $t = Uhitaji::Test.new.start($app);
 
 $t.post-ok("/set/foo", json => { abc => 123 } )
   .status-is(200)

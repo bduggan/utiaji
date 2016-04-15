@@ -1,18 +1,18 @@
-use Utiaji::Request;
-use Utiaji::Log;
-use Utiaji::Handler;
-use Utiaji::Response;
-use Utiaji::App::Default;
+use Uhitaji::Request;
+use Uhitaji::Log;
+use Uhitaji::Handler;
+use Uhitaji::Response;
+use Uhitaji::App::Default;
 use NativeCall;
 sub fork returns int32 is native { * };
 
-class Utiaji::Server {
+class Uhitaji::Server {
 
     has Promise $.loop;
     has $.timeout = 5;
     has Int $.port = 3333;
     has $.host = 'localhost';
-    has $.app is rw = Utiaji::App::Default.new;
+    has $.app is rw = Uhitaji::App::Default.new;
     has $.child;
 
     method url {
@@ -34,9 +34,9 @@ class Utiaji::Server {
     }
 
     method respond(Str $request) {
-        my $req = Utiaji::Request.new(raw => $request).parse or do {
+        my $req = Uhitaji::Request.new(raw => $request).parse or do {
             warn "did not parse request [[$request]]";
-            return Utiaji::Response.new(status => 500);
+            return Uhitaji::Response.new(status => 500);
         }
         return handle-request($req,$.app.router);
     }
@@ -53,7 +53,7 @@ class Utiaji::Server {
                 default {
                     my $error = $_;
                     error "caught { $error.gist }";
-                    $response = Utiaji::Response.new(
+                    $response = Uhitaji::Response.new(
                         :500status,
                         :body<houston we have a problem>
                     );

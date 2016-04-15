@@ -1,6 +1,6 @@
 
-unit class Utiaji::RequestLine;
-use Utiaji::Log;
+unit class Uhitaji::RequestLine;
+use Uhitaji::Log;
 
 has $.raw;
 has $.path is rw;
@@ -23,7 +23,7 @@ my grammar parser {
 }
 
 my class actions {
-    has Utiaji::RequestLine $.made;
+    has Uhitaji::RequestLine $.made;
 
     method TOP($/) {
         $!made.path = $<path>.made;

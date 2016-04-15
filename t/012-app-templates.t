@@ -1,11 +1,11 @@
 use lib 'lib';
 use Test;
-use Utiaji::App::Templater;
-use Utiaji::Test;
+use Uhitaji::App::Templater;
+use Uhitaji::Test;
 
-my $app = Utiaji::App::Templater.new;
+my $app = Uhitaji::App::Templater.new;
 
-my $t = Utiaji::Test.new.start($app);
+my $t = Uhitaji::Test.new.start($app);
 
 $t.get-ok('/hello').status-is(200).content-is("<html>\n<b>Hello</b> world.\n</html>\n\n");
 

@@ -1,6 +1,6 @@
-use Utiaji::App;
+use Uhitaji::App;
 
-unit class Utiaji::App::React is Utiaji::App;
+unit class Uhitaji::App::React is Uhitaji::App;
 
 has $.template-path = 'templates/react';
 has $.static-root = 'static/react';

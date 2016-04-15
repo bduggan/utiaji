@@ -22,7 +22,7 @@
   <div class="top-bar-left">
     <ul class="dropdown menu">
       <li>
-      <a class='menu-text' href='/'>Utiaji Pim</a>
+      <a class='menu-text' href='/'>Uhitaji Pim</a>
       </li>
       <li<%= $tab eq 'cal'    ?? q[ class="active"] !! "" %>><a href="/cal">Calendar</a></li>
       <li<%= $tab eq 'wiki'   ?? q[ class="active"] !! "" %>><a href="/wiki">Wiki</a></li>

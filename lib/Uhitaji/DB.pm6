@@ -1,7 +1,7 @@
-#| Utiaji::DB provides a layer of abstraction around a postgres database.
-unit class Utiaji::DB;
+#| Uhitaji::DB provides a layer of abstraction around a postgres database.
+unit class Uhitaji::DB;
 
-use Utiaji::Log;
+use Uhitaji::Log;
 use DBIish;
 use DBDish::Pg;
 use JSON::Fast;

@@ -1,11 +1,11 @@
-unit module Utiaji::Handler;
+unit module Uhitaji::Handler;
 
-use Utiaji::Dispatcher;
-use Utiaji::Response;
-use Utiaji::Router;
-use Utiaji::Log;
+use Uhitaji::Dispatcher;
+use Uhitaji::Response;
+use Uhitaji::Router;
+use Uhitaji::Log;
 
-sub handle-request(Utiaji::Request $request,Utiaji::Router $router) is export {
+sub handle-request(Uhitaji::Request $request,Uhitaji::Router $router) is export {
     debug $request.gist;
     my ($route,$captures) =
         $router.lookup(
@@ -14,12 +14,12 @@ sub handle-request(Utiaji::Request $request,Utiaji::Router $router) is export {
 
     unless $route {
         trace "Not found";
-        my $response = Utiaji::Response.new(:404status, :body<not found>);
+        my $response = Uhitaji::Response.new(:404status, :body<not found>);
         debug $response.status-line;
         return $response;
     }
     trace "Matched { $route.gist } ";
-    my $response = Utiaji::Response.new;
+    my $response = Uhitaji::Response.new;
     dispatch-request($route, $captures, $request, $response);
     debug $response.status-line;
     return $response;

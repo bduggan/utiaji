@@ -1,21 +1,21 @@
-use Utiaji::App;
-use Utiaji::DB;
-use Utiaji::Log;
+use Uhitaji::App;
+use Uhitaji::DB;
+use Uhitaji::Log;
 
 # setup:
-# createdb utiaji
-# psql utiaji -c "create table kv(k varchar not null primary key, v jsonb)"
+# createdb uhitaji
+# psql uhitaji -c "create table kv(k varchar not null primary key, v jsonb)"
 
-unit class Utiaji::App::Getset is Utiaji::App;
+unit class Uhitaji::App::Getset is Uhitaji::App;
 
-has $.db = Utiaji::DB.new;
+has $.db = Uhitaji::DB.new;
 
 method BUILD {
 
     given self.router {
         .get('/',
             sub ($req,$res) {
-                self.render: $res, text => 'Welcome to Utiaji.'
+                self.render: $res, text => 'Welcome to Uhitaji.'
             }
         );
 

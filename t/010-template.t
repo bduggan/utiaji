@@ -1,9 +1,9 @@
 use v6;
 use lib 'lib';
 use Test;
-use Utiaji::Template;
+use Uhitaji::Template;
 
-my $t = Utiaji::Template.new;
+my $t = Uhitaji::Template.new;
 
 ok $t.parse("Four score"), 'parsed';
 is $t.render, "Four score", "simple string";

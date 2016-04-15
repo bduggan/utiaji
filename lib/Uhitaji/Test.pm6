@@ -1,15 +1,15 @@
-unit class Utiaji::Test;
+unit class Uhitaji::Test;
 
 use HTTP::Tinyish;
 use JSON::Fast;
-use Utiaji::Log;
+use Uhitaji::Log;
 use Test;
 
-use Utiaji::Server;
+use Uhitaji::Server;
 
 has %.res is rw;
 has HTTP::Tinyish $.ua = HTTP::Tinyish.new;
-has Utiaji::Server $.server is rw = Utiaji::Server.new;
+has Uhitaji::Server $.server is rw = Uhitaji::Server.new;
 
 method get-ok(Str $path) {
     %.res = $.ua.get($.server_url ~ $path);
@@ -79,7 +79,7 @@ method server_url {
 }
 
 method start($app) {
-    $.server = Utiaji::Server.new(app => $app);
+    $.server = Uhitaji::Server.new(app => $app);
     $.server.start-fork;
     $.server.ping or error "Could not start server";
     self;

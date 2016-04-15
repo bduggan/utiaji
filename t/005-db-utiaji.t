@@ -1,7 +1,7 @@
 use v6;
 use lib 'lib';
 use Test;
-use Utiaji::DB;
+use Uhitaji::DB;
 
 unless %*ENV<PGDATABASE> {
     plan 1;
@@ -9,9 +9,9 @@ unless %*ENV<PGDATABASE> {
     exit;
 }
 
-my $db = Utiaji::DB.new;
+my $db = Uhitaji::DB.new;
 
-ok $db, 'made an Utiaji::DB';
+ok $db, 'made an Uhitaji::DB';
 
 ok $db.query("select 101"), "Query ok";
 

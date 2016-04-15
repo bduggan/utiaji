@@ -1,15 +1,15 @@
 use v6;
 use lib 'lib';
 use Test;
-use Utiaji::Test;
+use Uhitaji::Test;
 
-my $t = Utiaji::Test.new;
+my $t = Uhitaji::Test.new;
 
 $t.server.start-fork;
 $t.get-ok('/')
   .status-is(200)
   .content-type-is('text/plain')
-  .content-is('Welcome to Utiaji.');
+  .content-is('Welcome to Uhitaji.');
 
 $t.get-ok("/no/such/url")
   .status-is(404);

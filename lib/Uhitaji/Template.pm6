@@ -1,5 +1,5 @@
-unit class Utiaji::Template;
-use Utiaji::Log;
+unit class Uhitaji::Template;
+use Uhitaji::Log;
 
 has $.raw;
 has $.parsed;

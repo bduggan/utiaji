@@ -1,14 +1,14 @@
 #| Dispatch HTTP requests.
-unit module Utiaji::Dispatcher;
+unit module Uhitaji::Dispatcher;
 
-use Utiaji::Request;
-use Utiaji::Log;
-use Utiaji::Response;
+use Uhitaji::Request;
+use Uhitaji::Log;
+use Uhitaji::Response;
 
 sub dispatch-request($route,
     Match $captures,
-    Utiaji::Request $req,
-    Utiaji::Response $res is rw
+    Uhitaji::Request $req,
+    Uhitaji::Response $res is rw
 ) is export {
     $res.status = 200;
     $res.body = "";
