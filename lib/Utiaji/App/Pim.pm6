@@ -48,8 +48,6 @@ method BUILD {
              'people' => { tab => "people" }
     };
 
-    .get: '/wiki.js', -> $req, $res { self.render: $res, static => 'pim.js' };
-    .get: '/cal.js', -> $req, $res { self.render: $res, static => 'pim.js' };
-
+    .get: '/∙page.js', -> $req, $res, $/ { self.render: $res, static => "$<page>.js" };
 
 }

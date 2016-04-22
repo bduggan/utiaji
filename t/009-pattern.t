@@ -33,7 +33,13 @@ my @tests = (
      accepts  => [ '/date/2012-01-01', '/date/1999-12-20' ],
      captures => [ { when => '2012-01-01' }, { when => '1999-12-20' } ],
      rejects  => [ '/date/2012', '/date/20120202','/date/abcd-ef-gh', '/date/２０１１-１１-１１'],
-   }
+   },
+   { pattern  => '/wiki/∙page.html',
+     accepts  => [ '/wiki/abc.html','/wiki/123.html',  '/wiki/a_b-d.html' ],
+     captures => [ { page => 'abc' }, { page => "123" }, { page => 'a_b-d' } ],
+     rejects  => [ '/wiki/a.d.html', '/wiki/..' ],
+   },
+
 );
 
 for @tests -> %in {

@@ -8,7 +8,7 @@ has Match $.captures is rw;
 # Parse a route pattern.
 my grammar parser {
     token TOP          { '/' <part> *%% '/' }
-    token part         { <literal> || <placeholder> }
+    token part         { [ <placeholder> '.' <literal> ] || <literal> || <placeholder> }
     token literal      { [ <[0..9]> | <[a..z]> | '-' | '_' | '.' ]+ }
 
     token placeholder  {
@@ -33,7 +33,10 @@ my class actions {
         $/.make: q[ '/' ] ~ join q[ '/' ], map { .made }, $<part>;
     }
     method part($/)    {
-        $/.make: $<literal>.made // $<placeholder>.made;
+        if $<literal>.made && $<placeholder>.made {
+            return $/.make: $<placeholder>.made ~ " '.' " ~ $<literal>.made
+        }
+        return $/.make: $<literal>.made || $<placeholder>.made;
     }
     method placeholder($/){
         $/.make: $<placeholder_word>.made
