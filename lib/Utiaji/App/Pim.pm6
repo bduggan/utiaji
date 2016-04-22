@@ -1,10 +1,10 @@
-use Hamna::App;
-use Hamna::DB;
-use Hamna::Log;
+use Utiaji::App;
+use Utiaji::DB;
+use Utiaji::Log;
 
-unit class Hamna::App::Pim is Hamna::App;
+unit class Utiaji::App::Pim is Utiaji::App;
 
-has $.db = Hamna::DB.new;
+has $.db = Utiaji::DB.new;
 has $.template-path = 'templates/pim';
 has $.static-root = 'static/pim';
 

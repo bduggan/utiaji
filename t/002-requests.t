@@ -1,13 +1,13 @@
 use v6;
 use lib 'lib';
 use Test;
-use Hamna::Request;
+use Utiaji::Request;
 
 for dir 't/requests/in' -> $file {
     my $in = $file.slurp;
-    my $req = Hamna::Request.new(raw => $in);
+    my $req = Utiaji::Request.new(raw => $in);
     ok $req.parse, "parsed $file";
-    is $req.WHAT, Hamna::Request, 'made a request';
+    is $req.WHAT, Utiaji::Request, 'made a request';
     ok $req.verb, "got a method";
     ok $req.path, "got a path";
     ok $req.headers, "got a headers object";

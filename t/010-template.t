@@ -1,9 +1,9 @@
 use v6;
 use lib 'lib';
 use Test;
-use Hamna::Template;
+use Utiaji::Template;
 
-my $t = Hamna::Template.new;
+my $t = Utiaji::Template.new;
 
 ok $t.parse("Four score"), 'parsed';
 is $t.render, "Four score", "simple string";

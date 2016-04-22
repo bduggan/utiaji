@@ -1,7 +1,7 @@
-#| Hamna::DB provides a layer of abstraction around a postgres database.
-unit class Hamna::DB;
+#| Utiaji::DB provides a layer of abstraction around a postgres database.
+unit class Utiaji::DB;
 
-use Hamna::Log;
+use Utiaji::Log;
 use DBIish;
 use DBDish::Pg;
 use JSON::Fast;

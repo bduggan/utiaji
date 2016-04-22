@@ -1,6 +1,6 @@
-use Hamna::App;
+use Utiaji::App;
 
-unit class Hamna::App::React is Hamna::App;
+unit class Utiaji::App::React is Utiaji::App;
 
 has $.template-path = 'templates/react';
 has $.static-root = 'static/react';

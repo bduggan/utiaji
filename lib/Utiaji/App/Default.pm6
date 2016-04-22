@@ -1,11 +1,11 @@
-use Hamna::App;
-use Hamna::Log;
+use Utiaji::App;
+use Utiaji::Log;
 
-class Hamna::App::Default is Hamna::App {
+class Utiaji::App::Default is Utiaji::App {
     method BUILD {
 
         self.router.get('/', sub ($req,$res) {
-            self.render: $res, text => "Welcome to Hamna."
+            self.render: $res, text => "Welcome to Utiaji."
         });
 
         self.router.get('/test', sub ($req,$res) {

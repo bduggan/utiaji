@@ -1,5 +1,5 @@
-unit class Hamna::Headers does Associative;
-use Hamna::Log;
+unit class Utiaji::Headers does Associative;
+use Utiaji::Log;
 
 # See https://doc.perl6.org/language/subscripts#Custom_type_example
 subset StrOrInt where Str | Int;

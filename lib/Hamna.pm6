@@ -1,14 +1,14 @@
-#| Hamna provides a webserver with documentation about itself.
-use Hamna::App;
-use Hamna::Log;
+#| Utiaji provides a webserver with documentation about itself.
+use Utiaji::App;
+use Utiaji::Log;
 
-unit class Hamna is Hamna::App;
+unit class Utiaji is Utiaji::App;
 
 method setup {
     app.get: '/',
        -> $req,$res {
-          my @files = |$?FILE.IO.dirname.IO.child('Hamna').dir( test => /:i '.pm6' $/);
-          my @classes = "Hamna", | @files».basename.map({ "Hamna::$_" }).map({.subst('.pm6','')});
+          my @files = |$?FILE.IO.dirname.IO.child('Utiaji').dir( test => /:i '.pm6' $/);
+          my @classes = "Utiaji", | @files».basename.map({ "Utiaji::$_" }).map({.subst('.pm6','')});
           app.render: $res,
              template => 'main',
              template_params => { classes => @classes.sort }
@@ -29,8 +29,8 @@ method setup {
 }
 
 sub str2class($str) {
-    if $str eq 'Hamna' { return Hamna; }
-    if $str ~~ /Hamna '::' (<[a..zA..Z]>+)/ {
+    if $str eq 'Utiaji' { return Utiaji; }
+    if $str ~~ /Utiaji '::' (<[a..zA..Z]>+)/ {
         use MONKEY-SEE-NO-EVAL;
         EVAL "use $str;";
         return EVAL $str;
@@ -40,7 +40,7 @@ sub str2class($str) {
 
 sub str2url($str) {
     my $file = $str.subst('::','/'):g;
-    return 'https://github.com/bduggan/hamna/blob/master/lib/' ~ $file ~ '.pm6';
+    return 'https://github.com/bduggan/utiaji/blob/master/lib/' ~ $file ~ '.pm6';
 }
 
 sub str2code($str) {

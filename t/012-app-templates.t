@@ -1,11 +1,11 @@
 use lib 'lib';
 use Test;
-use Hamna::App::Templater;
-use Hamna::Test;
+use Utiaji::App::Templater;
+use Utiaji::Test;
 
-my $app = Hamna::App::Templater.new;
+my $app = Utiaji::App::Templater.new;
 
-my $t = Hamna::Test.new.start($app);
+my $t = Utiaji::Test.new.start($app);
 
 $t.get-ok('/hello').status-is(200).content-is("<html>\n<b>Hello</b> world.\n</html>\n\n");
 

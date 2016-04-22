@@ -27,6 +27,7 @@
     <row>
     <div class="columns">
     Attributes
+    %= $class.^attributes[0].WHY
     <div class='secondary callout'>
     <ul>
     % for $class.^attributes -> $a {
@@ -34,9 +35,13 @@
     <code>
         <%= $a.gist %>
     </code>
-    % if $a.WHY {
-        <br><%= $a.WHY %>
-    % }
+    % use LREP;
+    % LREP::here;
+    %# if $a.WHY {
+        <br>
+        <%= $a.WHY.?leading %>
+        <%= $a.WHY.?trailing %>
+    %# }
     % }
     </ul>
     </div>

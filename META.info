@@ -1,13 +1,13 @@
 {
     "perl" : "6.*",
-    "name" : "Hamna",
+    "name" : "Utiaji",
     "version" : "0.1.0",
     "description" : "A personal information manager.",
     "authors" : [ "Brian Duggan" ],
     "provides" : {
-        "Hamna" : "lib/Hamna.pm"
+        "Utiaji" : "lib/Utiaji.pm"
     },
     "depends" : [ "DBIish", "HTTP::Tinyish" ],
     "resources" : [ ],
-    "source-url" : "git://github.com/bduggan/hamna.git"
+    "source-url" : "git://github.com/bduggan/utiaji.git"
 }

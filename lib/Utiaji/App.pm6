@@ -1,18 +1,18 @@
 use JSON::Fast;
 use DBIish;
 
-use Hamna::Router;
-use Hamna::Log;
-use Hamna::Template;
+use Utiaji::Router;
+use Utiaji::Log;
+use Utiaji::Template;
 
-#| Hamna::App is the base class for apps.
-unit class Hamna::App;
+#| Utiaji::App is the base class for apps.
+unit class Utiaji::App;
 
-has $.root is rw = $?FILE.IO.parent.parent.dirname;
-has $.static-root = 'static';
-has $.template-path = 'templates';
-has $.template-suffix = 'html.ep6';
-has $.router handles <get post put> = Hamna::Router.new;
+has $.root is rw = "/home/bduggan/utiaji"; #= root directory for the app
+has $.static-root = 'static'; #= something here
+has $.template-path = 'templates'; #= something here
+has $.template-suffix = 'html.ep6'; #= something here
+has $.router handles <get post put> = Utiaji::Router.new; #= something here
 
 multi method render($res, :$text!, :$status=200) {
     trace "rendering text";
@@ -43,7 +43,7 @@ method load-template($template) {
         debug "$path not found";
         return;
     }
-    Hamna::Template.new(cache-key => $path).parse($path.IO.slurp)
+    Utiaji::Template.new(cache-key => $path).parse($path.IO.slurp)
 }
 
 multi method render($res, :$template!, :%template_params is copy) {

@@ -1,18 +1,18 @@
-use Hamna::Request;
-use Hamna::Log;
-use Hamna::Handler;
-use Hamna::Response;
-use Hamna::App::Default;
+use Utiaji::Request;
+use Utiaji::Log;
+use Utiaji::Handler;
+use Utiaji::Response;
+use Utiaji::App::Default;
 use NativeCall;
 sub fork returns int32 is native { * };
 
-class Hamna::Server {
+class Utiaji::Server {
 
     has Promise $.loop;
     has $.timeout = 5;
     has Int $.port = 3333;
     has $.host = 'localhost';
-    has $.app is rw = Hamna::App::Default.new;
+    has $.app is rw = Utiaji::App::Default.new;
     has $.child;
 
     method url {
@@ -34,9 +34,9 @@ class Hamna::Server {
     }
 
     method respond(Str $request) {
-        my $req = Hamna::Request.new(raw => $request).parse or do {
+        my $req = Utiaji::Request.new(raw => $request).parse or do {
             warn "did not parse request [[$request]]";
-            return Hamna::Response.new(status => 500);
+            return Utiaji::Response.new(status => 500);
         }
         return handle-request($req,$.app.router);
     }
@@ -53,7 +53,7 @@ class Hamna::Server {
                 default {
                     my $error = $_;
                     error "caught { $error.gist }";
-                    $response = Hamna::Response.new(
+                    $response = Utiaji::Response.new(
                         :500status,
                         :body<houston we have a problem>
                     );

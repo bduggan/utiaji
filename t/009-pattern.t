@@ -1,7 +1,7 @@
 use v6;
 use lib 'lib';
 use Test;
-use Hamna::Pattern;
+use Utiaji::Pattern;
 
 my @tests = (
    { pattern  => '/',
@@ -37,7 +37,7 @@ my @tests = (
 );
 
 for @tests -> %in {
-    my $pattern = Hamna::Pattern.new(pattern => %in<pattern>);
+    my $pattern = Utiaji::Pattern.new(pattern => %in<pattern>);
     my $i = 0;
     for %in<accepts>.list Z %in<captures>.list -> ( $path, $values ) {
        ok $pattern.match($path), "$pattern matches $path";

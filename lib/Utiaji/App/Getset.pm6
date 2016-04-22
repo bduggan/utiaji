@@ -1,21 +1,21 @@
-use Hamna::App;
-use Hamna::DB;
-use Hamna::Log;
+use Utiaji::App;
+use Utiaji::DB;
+use Utiaji::Log;
 
 # setup:
-# createdb hamna
-# psql hamna -c "create table kv(k varchar not null primary key, v jsonb)"
+# createdb utiaji
+# psql utiaji -c "create table kv(k varchar not null primary key, v jsonb)"
 
-unit class Hamna::App::Getset is Hamna::App;
+unit class Utiaji::App::Getset is Utiaji::App;
 
-has $.db = Hamna::DB.new;
+has $.db = Utiaji::DB.new;
 
 method BUILD {
 
     given self.router {
         .get('/',
             sub ($req,$res) {
-                self.render: $res, text => 'Welcome to Hamna.'
+                self.render: $res, text => 'Welcome to Utiaji.'
             }
         );
 

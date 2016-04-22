@@ -1,15 +1,15 @@
 use v6;
 use lib 'lib';
 use Test;
-use Hamna::Test;
+use Utiaji::Test;
 
-my $t = Hamna::Test.new;
+my $t = Utiaji::Test.new;
 
 $t.server.start-fork;
 $t.get-ok('/')
   .status-is(200)
   .content-type-is('text/plain')
-  .content-is('Welcome to Hamna.');
+  .content-is('Welcome to Utiaji.');
 
 $t.get-ok("/no/such/url")
   .status-is(404);

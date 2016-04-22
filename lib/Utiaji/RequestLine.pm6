@@ -1,6 +1,6 @@
 
-unit class Hamna::RequestLine;
-use Hamna::Log;
+unit class Utiaji::RequestLine;
+use Utiaji::Log;
 
 has $.raw;
 has $.path is rw;
@@ -23,7 +23,7 @@ my grammar parser {
 }
 
 my class actions {
-    has Hamna::RequestLine $.made;
+    has Utiaji::RequestLine $.made;
 
     method TOP($/) {
         $!made.path = $<path>.made;

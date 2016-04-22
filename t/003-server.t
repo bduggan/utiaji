@@ -1,18 +1,18 @@
 use v6;
 use lib 'lib';
 use Test;
-use Hamna::Test;
-use Hamna::Server;
+use Utiaji::Test;
+use Utiaji::Server;
 
-my $s = Hamna::Server.new;
-my $t = Hamna::Test.new;
+my $s = Utiaji::Server.new;
+my $t = Utiaji::Test.new;
 
 $s.start-fork;
 
 $t.get-ok('/')
   .status-is(200)
   .content-type-is('text/plain')
-  .content-is("Welcome to Hamna.");
+  .content-is("Welcome to Utiaji.");
 
 $t.get-ok('/test')
   .status-is(200)

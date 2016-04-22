@@ -1,4 +1,4 @@
-unit class Hamna::Body;
+unit class Utiaji::Body;
 use JSON::Fast;
 
 has $.raw;

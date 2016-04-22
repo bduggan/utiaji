@@ -1,11 +1,11 @@
-unit module Hamna::Handler;
+unit module Utiaji::Handler;
 
-use Hamna::Dispatcher;
-use Hamna::Response;
-use Hamna::Router;
-use Hamna::Log;
+use Utiaji::Dispatcher;
+use Utiaji::Response;
+use Utiaji::Router;
+use Utiaji::Log;
 
-sub handle-request(Hamna::Request $request,Hamna::Router $router) is export {
+sub handle-request(Utiaji::Request $request,Utiaji::Router $router) is export {
     debug $request.gist;
     my ($route,$captures) =
         $router.lookup(
@@ -14,12 +14,12 @@ sub handle-request(Hamna::Request $request,Hamna::Router $router) is export {
 
     unless $route {
         trace "Not found";
-        my $response = Hamna::Response.new(:404status, :body<not found>);
+        my $response = Utiaji::Response.new(:404status, :body<not found>);
         debug $response.status-line;
         return $response;
     }
     trace "Matched { $route.gist } ";
-    my $response = Hamna::Response.new;
+    my $response = Utiaji::Response.new;
     dispatch-request($route, $captures, $request, $response);
     debug $response.status-line;
     return $response;

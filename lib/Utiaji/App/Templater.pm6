@@ -1,8 +1,8 @@
-use Hamna::App;
-use Hamna::Log;
-use Hamna::Template;
+use Utiaji::App;
+use Utiaji::Log;
+use Utiaji::Template;
 
-class Hamna::App::Templater is Hamna::App {
+class Utiaji::App::Templater is Utiaji::App {
     has $.template-path = 'templates/templater';
     method BUILD {
         self.router.get('/hello', sub ($req, $res) {

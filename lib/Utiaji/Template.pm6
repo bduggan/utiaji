@@ -1,5 +1,5 @@
-unit class Hamna::Template;
-use Hamna::Log;
+unit class Utiaji::Template;
+use Utiaji::Log;
 
 has $.raw;
 has $.parsed;

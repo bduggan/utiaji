@@ -1,14 +1,14 @@
 #| Dispatch HTTP requests.
-unit module Hamna::Dispatcher;
+unit module Utiaji::Dispatcher;
 
-use Hamna::Request;
-use Hamna::Log;
-use Hamna::Response;
+use Utiaji::Request;
+use Utiaji::Log;
+use Utiaji::Response;
 
 sub dispatch-request($route,
     Match $captures,
-    Hamna::Request $req,
-    Hamna::Response $res is rw
+    Utiaji::Request $req,
+    Utiaji::Response $res is rw
 ) is export {
     $res.status = 200;
     $res.body = "";

@@ -1,7 +1,7 @@
 use v6;
 use lib 'lib';
 use Test;
-use Hamna::DB;
+use Utiaji::DB;
 
 unless %*ENV<PGDATABASE> {
     plan 1;
@@ -9,9 +9,9 @@ unless %*ENV<PGDATABASE> {
     exit;
 }
 
-my $db = Hamna::DB.new;
+my $db = Utiaji::DB.new;
 
-ok $db, 'made an Hamna::DB';
+ok $db, 'made an Utiaji::DB';
 
 ok $db.query("select 101"), "Query ok";
 

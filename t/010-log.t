@@ -1,13 +1,13 @@
 use v6;
 use lib 'lib';
 use Test;
-use Hamna::Log;
+use Utiaji::Log;
 
 sub nonce () { return (".{$*PID}." ~ 1000.rand.Int) }
 my $tmpfile = "logfile" ~ nonce();
 
 {
-    my $l = Hamna::Log.new(path => $tmpfile);
+    my $l = Utiaji::Log.new(path => $tmpfile);
     $l.info("hi!");
     my $lines = "$tmpfile".IO.lines;
     cmp-ok $lines, '~~', rx{.* 'info: hi!'}, 'wrote info message';
