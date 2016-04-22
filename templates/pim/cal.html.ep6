@@ -1,13 +1,41 @@
 %| :$today, *%args
+
 %== include $app, 'header', |%args;
-% use DateTime::Format;
-<pre>
 
-There is no calendar here yet.
+<style>
+table.cal tr td {
+    width:14%;
+    border:1px solid #999;
+    height:90px;
+}
+</style>
 
-Today is <%= Date.today %>
+<row>
+<div class="column">
+
+<div class='text-center'>
+▶= "April 2016"
+</button>
+
+<table class='cal'>
+
+<tr>
+▶ for «sun mon tue wed thu fri sat» -> $m {
+  <th><%= $m %></th>
+▶ }
+</tr>
+
+▶ for 0..5 -> $w {
+  <tr>
+    ▶ for 0..6 -> $d {
+    <td></td>
+    ▶ }
+  </tr>
+▶ }
+
+</table>
+
+</div>
+</row>
 
 %== include $app, 'footer', |%args;
-
-</pre>
-
