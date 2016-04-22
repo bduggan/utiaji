@@ -7,14 +7,22 @@ table.cal tr td {
     width:14%;
     border:1px solid #999;
     height:90px;
+    position:relative;
+}
+table.cal tr td div.date-label {
+    position:absolute;
+    right:4px;
+    top:0px;
+    font-size:65%;
+    font-weight:bold;
 }
 </style>
 
 <row>
-<div class="column">
+<div class="column" id='content'>
 
 <div class='text-center'>
-▶= "April 2016"
+▶= "----- ----"
 </button>
 
 <table class='cal'>
@@ -28,7 +36,10 @@ table.cal tr td {
 ▶ for 0..5 -> $w {
   <tr>
     ▶ for 0..6 -> $d {
-    <td></td>
+    <td>
+    <div class='date-label'>#</div>
+    <div class='content'></div>
+    </td>
     ▶ }
   </tr>
 ▶ }

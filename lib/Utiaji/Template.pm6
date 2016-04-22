@@ -123,7 +123,7 @@ multi method parse($!raw) {
 
 my %cache;
 multi method parse {
-    if $!cache-key and %cache{$!cache-key}:exists {
+    if !%*ENV<UTIAJI_NO_CACHE> and $!cache-key and %cache{$!cache-key}:exists {
         $!parsed = %cache{$!cache-key};
         debug "Using cached template $!cache-key";
         return self;
