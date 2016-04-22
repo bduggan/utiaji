@@ -49,4 +49,9 @@ table.cal tr td div.date-label {
 </div>
 </row>
 
+<script type='text/javascript'>
+  var cal = React.createElement(Cal, { });
+  var ref = ReactDOM.render(cal, document.getElementById('content'))
+</script>
+
 %== include $app, 'footer', |%args;

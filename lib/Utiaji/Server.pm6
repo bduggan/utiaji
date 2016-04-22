@@ -28,7 +28,7 @@ class Utiaji::Server {
                     $done = 0;
                 }
             }
-            $done = $request.decode('UTF-8').contains("\r\n\r\n");
+            $done = $request.decode('ASCII').contains("\r\n\r\n");
         }
         $done;
     }
@@ -66,10 +66,12 @@ class Utiaji::Server {
 
     method handle-connection($conn) {
         my $responding = False;
+        my $closed = False;
         my $promise = Promise.in($.timeout).then({{
             return if $responding;
             error "timeout, closing connection";
-            $conn.close;
+            $conn.close unless $closed;
+            $closed = True;
         } });
         trace "got a connection";
         my Buf[uint8] $bytes = Buf[uint8].new();
@@ -78,6 +80,7 @@ class Utiaji::Server {
             if my $response = self.handle-request($bytes,$buf) {
                 $conn.write($response.to-string.encode("UTF-8"));
                 $conn.close;
+                $closed = True;
                 trace "closed connection";
             } else {
                 $responding = False;
