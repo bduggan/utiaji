@@ -1,3 +1,10 @@
+els = ['div','table', 'tr', 'td']
+
+str = els.map(function(v) {
+    return "var " + v + " = React.createFactory('" + v + "');"
+})
+eval(str.join(' '));
+
 var Cal = React.createClass({
 
     getInitialState: function() {
@@ -5,11 +12,12 @@ var Cal = React.createClass({
     },
     handleChange: function(e) {
         this.setState({ text: e.target.value } );
-    }
+    },
     render: function() {
-        return 'hi'
+        return div( {},
+            div( {className: 'text-center'} , 'April 2016' )
+        )
     }
-    }
-);
+});
 
 

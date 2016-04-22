@@ -20,11 +20,11 @@ function wikify(str) {
 }
 
 var el = React.createElement;
-var div = React.createElement.bind(this, 'div');
-var row = React.createElement.bind(this, 'row');
-var textarea = React.createElement.bind(this, 'textarea');
-var pre = React.createElement.bind(this, 'pre');
-var a = React.createElement.bind(this, 'a');
+var div = React.createFactory('div');
+var row = React.createFactory('row');
+var textarea = React.createFactory('textarea');
+var pre = React.createFactory('pre');
+var a = React.createFactory('a');
 
 var Wiki = React.createClass({
 
