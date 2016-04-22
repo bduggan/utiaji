@@ -20,6 +20,11 @@ function wikify(str) {
 }
 
 var el = React.createElement;
+var div = React.createElement.bind(this, 'div');
+var row = React.createElement.bind(this, 'row');
+var textarea = React.createElement.bind(this, 'textarea');
+var pre = React.createElement.bind(this, 'pre');
+var a = React.createElement.bind(this, 'a');
 
 var Wiki = React.createClass({
 
@@ -57,20 +62,20 @@ var Wiki = React.createClass({
     },
     render: function () {
         return (
-            el('div', {},
-                el('row', {},
-                    el('div', { className: 'text-right' },
+            div( {},
+                row( {},
+                    div( { className: 'text-right' },
                         this.state.editing ?
-                        el('a', { className: 'small-4 small-centered columns success button', onClick: this.save },'save' ) :
-                        el('a', { className: 'small-4 small-centered columns hollow button', onClick: this.editMode },'edit' )
+                        a( { className: 'small-4 small-centered columns success button', onClick: this.save },'save' ) :
+                        a( { className: 'small-4 small-centered columns hollow button', onClick: this.editMode },'edit' )
                       )
                    ),
                    this.state.editing ?
-                   el('textarea', { id: 'note', onChange: this.handleChange,
+                   textarea( { id: 'note', onChange: this.handleChange,
                        placeholder: 'New Page (use @link to make links)',
                        rows: 19, value: this.state.text })
                    :
-                   el('pre', {
+                   pre( {
                        className: 'secondary callout',
                        dangerouslySetInnerHTML:
                        { __html: (wikify(this.state.text)) }
