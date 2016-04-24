@@ -8,11 +8,11 @@ use Utiaji::Template;
 #| Utiaji::App is the base class for apps.
 unit class Utiaji::App;
 
-has $.root is rw = "/home/bduggan/utiaji"; #= root directory for the app
-has $.static-root = 'static'; #= something here
-has $.template-path = 'templates'; #= something here
-has $.template-suffix = 'html.ep6'; #= something here
-has $.router handles <get post put> = Utiaji::Router.new; #= something here
+has $.root is rw = $?FILE.IO.parent.parent.dirname;
+has $.static-root = 'static';
+has $.template-path = 'templates';
+has $.template-suffix = 'html.ep6';
+has $.router handles <get post put> = Utiaji::Router.new;
 
 multi method render($res, :$text!, :$status=200) {
     trace "rendering text";
