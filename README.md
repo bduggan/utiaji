@@ -6,4 +6,15 @@ Utiaji -- A Personal Information Organizer
 Description
 ===========
 Utiaji is personal information organizer composed of a calender, wiki, and address book.
+It is written in Perl 6.
+
+Install
+=======
+createdb utiaji
+psql utiaji -c 'create table kv(k varchar not null primary key, v jsonb)'
+./install.sh
+
+Run
+===
+PGDATABASE=utiaji ./bin/utiaji
 

@@ -66,8 +66,10 @@ var Wiki = React.createClass({
                 row( {},
                     div( { className: 'text-right' },
                         this.state.editing ?
-                        a( { className: 'small-4 small-centered columns success button', onClick: this.save },'save' ) :
-                        a( { className: 'small-4 small-centered columns hollow button', onClick: this.editMode },'edit' )
+                        a( { className: 'small-4 small-centered columns success button', onClick: this.save },
+                            'save' ) :
+                        a( { className: 'small-4 small-centered columns hollow button', onClick: this.editMode },
+                            'edit' )
                       )
                    ),
                    this.state.editing ?
