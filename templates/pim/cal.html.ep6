@@ -9,7 +9,7 @@ table.cal tr td {
     height:90px;
     position:relative;
 }
-table.cal tr td div.date-label {
+table.cal tr td span.dt {
     position:absolute;
     right:4px;
     top:0px;
