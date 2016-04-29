@@ -31,7 +31,6 @@ var Cal = React.createClass({
             }
         }
     },
-
     dt: function(i) {
         return addDays(this.state.first, i)
     },
@@ -49,7 +48,6 @@ var Cal = React.createClass({
     handleChange: function(e) {
         this.setState({ text: e.target.value } );
     },
-
     render: function() {
         return div(
             div( {className: 'text-center'} , ( this.state.month + ' ' + this.state.year ) ),
