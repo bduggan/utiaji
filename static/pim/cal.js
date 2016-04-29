@@ -1,13 +1,13 @@
-function type(obj){
-    return Object.prototype.toString.call(obj).slice(8, -1);
-}
 
 function gen(el) {
     return function() {
         var args = Array.from(arguments);
         var attrs = {};
         var contents = [];
-        if (type(args[0]) == 'Object' && ! Array.isArray(args[0])) {
+        if (typeof(args[0]) == 'object'
+             && !Array.isArray(args[0])
+             && !args[0]['type']
+        ) {
             attrs = args.shift()
         }
         if (! Array.isArray(args[0]) ) {
@@ -18,7 +18,7 @@ function gen(el) {
     }
 }
 
-['div','table','tr','th','td']
+['div','table','tbody','tr','th','td']
   .map(function(v) {
     eval( v + " = gen('" + v + "');");
 });
