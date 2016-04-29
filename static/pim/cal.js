@@ -4,22 +4,6 @@
     eval( v + " = gen('" + v + "');");
 });
 
-
-function pad(p) {
-    if ( p > 9 ) return p;
-    return '0' + p;
-}
-Date.prototype.addDays = function(days) {
-    var result = new Date(this);
-    result.setDate(result.getDate() + days);
-    return result;
-}
-Date.prototype.ymd = function(d) {
-    return [ 1900+this.getYear(), pad(this.getMonth()), pad(this.getDate())].join('-');
-}
-Date.prototype.d = function(d) {
-    return pad(this.getDate())
-}
 var Cal = React.createClass({
 
     getInitialState: function() {
