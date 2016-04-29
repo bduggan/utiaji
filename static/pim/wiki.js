@@ -1,30 +1,15 @@
 
-function escape(str) {
-  return str.replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;')
-}
-function unescape(str) {
-    return str.replace('&amp;', '&', 'g')
-    .replace('&lt;','<','g')
-    .replace('&gt;','>','g')
-    .replace('&quot;', '"', 'g')
-    .replace('&apos;', "'", 'g')
-}
-
 function wikify(str) {
     return escape(str)
     .replace(/@(\w+)/g, "<a href='/wiki/$1'>$1</a>");
 }
 
-var el = React.createElement;
-var div = React.createFactory('div');
-var row = React.createFactory('row');
-var textarea = React.createFactory('textarea');
-var pre = React.createFactory('pre');
-var a = React.createFactory('a');
+el = React.createElement;
+div = gen('div');
+row = gen('row');
+textarea = gen('textarea');
+a = gen('a');
+pre = React.createFactory('pre');
 
 var Wiki = React.createClass({
 
