@@ -1,13 +1,15 @@
+function type(obj){
+    return Object.prototype.toString.call(obj).slice(8, -1);
+}
 function gen(el) {
     return function() {
         var args = Array.from(arguments);
         var attrs = {};
         var contents = [];
-        if (typeof args[0] == 'object' && ! Array.isArray(args[0])) {
+        if (type(args[0]) == 'Object' && ! Array.isArray(args[0])) {
             attrs = args.shift()
         }
         if (! Array.isArray(args[0]) ) {
-            console.log(el,'is not an array');
             return React.createElement(el,attrs,args);
         }
         contents = args.shift();
@@ -30,7 +32,7 @@ var Cal = React.createClass({
         this.setState({ text: e.target.value } );
     },
     render: function() {
-        return div( {},
+        return div(
             div( {className: 'text-center'} , 'April 2016' ),
             table( {className: 'cal'},
                 ...tr([
