@@ -4,14 +4,15 @@
     eval( v + " = gen('" + v + "');");
 });
 
-function addDays(date, days) {
-    var result = new Date(date);
-    result.setDate(result.getDate() + days);
-    return result;
-}
+
 function pad(p) {
     if ( p > 9 ) return p;
     return '0' + p;
+}
+Date.prototype.addDays = function(days) {
+    var result = new Date(this);
+    result.setDate(result.getDate() + days);
+    return result;
 }
 Date.prototype.ymd = function(d) {
     return [ 1900+this.getYear(), pad(this.getMonth()), pad(this.getDate())].join('-');
@@ -32,7 +33,7 @@ var Cal = React.createClass({
         }
     },
     dt: function(i) {
-        return addDays(this.state.first, i)
+        return this.state.first.addDays(i)
     },
     cell: function(i) {
        var dt = this.dt(i);
