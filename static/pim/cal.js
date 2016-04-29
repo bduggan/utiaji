@@ -1,6 +1,7 @@
 function type(obj){
     return Object.prototype.toString.call(obj).slice(8, -1);
 }
+
 function gen(el) {
     return function() {
         var args = Array.from(arguments);
@@ -17,11 +18,10 @@ function gen(el) {
     }
 }
 
-table = gen('table');
-div = gen('div');
-th = gen('th');
-td = gen('td');
-tr = gen('tr');
+['div','table','tr','th','td']
+  .map(function(v) {
+    eval( v + " = gen('" + v + "');");
+});
 
 var Cal = React.createClass({
 
