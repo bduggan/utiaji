@@ -35,7 +35,7 @@ var Cal = React.createClass({
     },
     render: function() {
         return div(
-            div( {className: 'text-center'} , ( this.state.month + ' ' + this.state.year ) ),
+            div( {className: 'text-center month'} , ( this.state.month + ' ' + this.state.year ) ),
             table( {className: 'cal'},
                 tbody(
                   ...tr([

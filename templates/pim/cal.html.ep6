@@ -3,49 +3,34 @@
 %== include $app, 'header', |%args;
 
 <style>
+div.month {
+    font-family:sans-serif;
+}
+table.cal tr th {
+    font-family:sans-serif;
+}
 table.cal tr td {
     width:14%;
-    border:1px solid #999;
+    border:1px solid #ccc;
     height:90px;
     position:relative;
+}
+table.cal tr td {
+  font-family:monospace;
 }
 table.cal tr td span.dt {
     position:absolute;
     right:4px;
     top:0px;
     font-size:65%;
-    font-weight:bold;
+    font-family:sans-serif;
+    color:#444;
 }
 </style>
 
 <row>
 <div class="column" id='content'>
-
-<div class='text-center'>
-▶= "----- ----"
-</button>
-
-<table class='cal'>
-
-<tr>
-▶ for «sun mon tue wed thu fri sat» -> $m {
-  <th><%= $m %></th>
-▶ }
-</tr>
-
-▶ for 0..5 -> $w {
-  <tr>
-    ▶ for 0..6 -> $d {
-    <td>
-    <div class='date-label'>#</div>
-    <div class='content'></div>
-    </td>
-    ▶ }
-  </tr>
-▶ }
-
-</table>
-
+loading...
 </div>
 </row>
 
