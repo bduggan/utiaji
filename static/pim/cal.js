@@ -38,15 +38,15 @@ var Cal = React.createClass({
             div( {className: 'text-center'} , ( this.state.month + ' ' + this.state.year ) ),
             table( {className: 'cal'},
                 tbody(
-                    ...tr([
+                  ...tr([
                         th( ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] ),
                         td( this.cells(0,7)    ),
                         td( this.cells(14,21)  ),
                         td( this.cells(21,28)  ),
                         td( this.cells(28,35)  ),
                         td( this.cells(35,42)  ),
-                       ])
-                     )
+                      ])
+                    )
                  )
             )
     }
