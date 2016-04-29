@@ -1,25 +1,25 @@
-els = ['div','table', 'tr', 'td']
-
-str = els.map(function(v) {
-    return "var " + v + " = React.createFactory('" + v + "');"
-})
-eval(str.join(' '));
-
-function th() {
-    var args = Array.from(arguments);
-    var attrs = {};
-    var contents = [];
-    if (typeof args[0] == 'object' && ! Array.isArray(args[0])) {
-        attrs = args.shift()
+function gen(el) {
+    return function() {
+        var args = Array.from(arguments);
+        var attrs = {};
+        var contents = [];
+        if (typeof args[0] == 'object' && ! Array.isArray(args[0])) {
+            attrs = args.shift()
+        }
+        if (! Array.isArray(args[0]) ) {
+            console.log(el,'is not an array');
+            return React.createElement(el,attrs,args);
+        }
+        contents = args.shift();
+        return contents.map( function(v) { return React.createElement(el, attrs, v) } )
     }
-    contents = args.shift();
-    console.log('attrs', attrs);
-    console.log('contents', contents);
-    if (! Array.isArray(contents)) {
-        contents = [ contents ]
-    }
-    return contents.map( function(v) { return React.createElement('th', attrs, v) } )
 }
+
+table = gen('table');
+div = gen('div');
+th = gen('th');
+td = gen('td');
+tr = gen('tr');
 
 var Cal = React.createClass({
 
@@ -33,7 +33,15 @@ var Cal = React.createClass({
         return div( {},
             div( {className: 'text-center'} , 'April 2016' ),
             table( {className: 'cal'},
-                tr( {} , th( ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] ) )
+                ...tr([
+                    th( ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] ),
+                    td( ['0', '1', '2', '3', '4', '5', '6' ] ),
+                    td( ['0', '1', '2', '3', '4', '5', '6' ] ),
+                    td( ['0', '1', '2', '3', '4', '5', '6' ] ),
+                    td( ['0', '1', '2', '3', '4', '5', '6' ] ),
+                    td( ['0', '1', '2', '3', '4', '5', '6' ] ),
+                    td( ['0', '1', '2', '3', '4', '5', '6' ] )
+                 ])
             )
         )
     }
