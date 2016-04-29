@@ -4,12 +4,28 @@
     eval( v + " = gen('" + v + "');");
 });
 
+function addDays(date, days) {
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+}
+function pad(p) {
+    if ( p > 9 ) return p;
+    return '0' + p;
+}
+Date.prototype.ymd = function(d) {
+    return [ 1900+this.getYear(), pad(this.getMonth()), pad(this.getDate())].join('-');
+}
+Date.prototype.d = function(d) {
+    return pad(this.getDate())
+}
 var Cal = React.createClass({
 
     getInitialState: function() {
         return {
             month: 'April',
             year: '2016',
+            first: new Date(2016,3,27),
             dates: [
                 27,28,29,30,31, 1, 2,
                  3, 4, 5, 6, 7, 8, 9,
@@ -17,10 +33,27 @@ var Cal = React.createClass({
                 17,18,19,20,21,22,23,
                 24,25,26,27,28,29,30,
                  1, 2, 3, 4, 5, 6, 7
-                ]
+            ],
+            data: {
+                '2016-04-30' : 'birthday'
+            }
         }
     },
 
+    dt: function(i) {
+        return addDays(this.state.first, i)
+    },
+    cell: function(i) {
+       var dt = this.dt(i);
+       return [ span( {className:'dt'}, dt.d()), this.state.data[ dt.ymd() ] ];
+    },
+    cells: function(from,to) {
+        x = [];
+        for (i=from;i<to;i++) {
+            x.push( this.cell(i) );
+        }
+        return x;
+    },
     handleChange: function(e) {
         this.setState({ text: e.target.value } );
     },
@@ -32,12 +65,11 @@ var Cal = React.createClass({
                 tbody(
                     ...tr([
                         th( ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] ),
-                        td( span( {className:'dt'}, this.state.dates.slice(0,7) ) ),
-                        td( span( {className:'dt'}, this.state.dates.slice(7,14) ) ),
-                        td( span( {className:'dt'}, this.state.dates.slice(14,21) ) ),
-                        td( span( {className:'dt'}, this.state.dates.slice(21,28) ) ),
-                        td( span( {className:'dt'}, this.state.dates.slice(28,35) ) ),
-                        td( span( {className:'dt'}, this.state.dates.slice(35,42) ) )
+                        td( this.cells(0,7)    ),
+                        td( this.cells(14,21)  ),
+                        td( this.cells(21,28)  ),
+                        td( this.cells(28,35)  ),
+                        td( this.cells(35,42)  ),
                        ])
                      )
                  )
