@@ -7,14 +7,7 @@
 var Cal = React.createClass({
 
     getInitialState: function() {
-        return {
-            month: 'April',
-            year: '2016',
-            first: new Date(2016,3,27),
-            data: {
-                '2016-04-30' : 'birthday'
-            }
-        }
+        return this.props.initial_data
     },
     dt: function(i) {
         return this.state.first.addDays(i)

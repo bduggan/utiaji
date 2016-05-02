@@ -18,8 +18,15 @@ method BUILD {
 
     .get: '/cal',
       -> $req,$res {
+         my %data = <<
+            month April,
+            year 2016>>,
+            first => 'new Date(2016,3,27)',
+            data => {
+                '2016-04-30'  => 'birthday'
+            };
          self.render: $res,
-             'cal' => { tab => "cal", today => "monday" }
+             'cal' => { tab => "cal", today => "monday", data => %data }
     };
 
     .get: '/wiki',

@@ -1,4 +1,4 @@
-%| :$today, *%args
+%| :$today, :$data, *%args
 
 %== include $app, 'header', |%args;
 
@@ -35,7 +35,10 @@ loading...
 </row>
 
 <script type='text/javascript'>
-  var cal = React.createElement(Cal, { });
+  var data = <%==  to-json($data) %>;
+  var cal = React.createElement(Cal, {
+     initial_data : data
+  });
   var ref = ReactDOM.render(cal, document.getElementById('content'))
 </script>
 
