@@ -37,7 +37,12 @@ loading...
 <script type='text/javascript'>
   var data = <%==  to-json($data) %>;
   var cal = React.createElement(Cal, {
-     initial_data : data
+    initial_data : {
+     first : new Date( ...data['first'] ),
+     month : data['month'],
+     year  : data['year'],
+     data : data['data'],
+   }
   });
   var ref = ReactDOM.render(cal, document.getElementById('content'))
 </script>

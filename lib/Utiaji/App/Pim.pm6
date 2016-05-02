@@ -18,13 +18,14 @@ method BUILD {
 
     .get: '/cal',
       -> $req,$res {
-         my %data = <<
-            month April,
-            year 2016>>,
-            first => 'new Date(2016,3,27)',
+         my %data =
+            month => "May",
+            year => 2016,
+            first => [ 2016, 5, 1 ], # first sunday on calendar
             data => {
-                '2016-04-30'  => 'birthday'
+                '2016-05-05'  => 'cinco de mayo'
             };
+         say %data.perl;
          self.render: $res,
              'cal' => { tab => "cal", today => "monday", data => %data }
     };
