@@ -14,6 +14,7 @@ var Cal = React.createClass({
         return this.state.first.addDays(i)
     },
     edit: function(e) {
+        if (!e.target.firstChild) { return; }
         var index = e.target.firstChild.id;
         if (typeof index === 'undefined' ) {
             return;
