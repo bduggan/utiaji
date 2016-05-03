@@ -10,6 +10,7 @@ var Cal = React.createClass({
         return this.props.initial_data
     },
     dt: function(i) {
+        // todo: cache
         return this.state.first.addDays(i)
     },
     edit: function(e) {
@@ -27,7 +28,7 @@ var Cal = React.createClass({
                 ), this.state.data[ dt.ymd() ] ];
     },
     editcell: function(i) {
-        return textarea({defaultValue:'...'});
+        return textarea({defaultValue:this.state.data[this.dt(i).ymd()]});
     },
     cells: function(from,to) {
         var x = [];

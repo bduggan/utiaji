@@ -17,6 +17,7 @@ table.cal tr td {
 }
 table.cal tr td {
   font-family:monospace;
+  vertical-align:top;
   padding:0px;
 }
 table.cal tbody tr td textarea {
@@ -24,6 +25,8 @@ table.cal tbody tr td textarea {
    height:100%;
    padding:0px;
    margin:0px;
+   resize:none;
+   background-color:#fcfcce;
 }
 table.cal tr td span.dt {
     position:absolute;
@@ -32,6 +35,10 @@ table.cal tr td span.dt {
     font-size:65%;
     font-family:sans-serif;
     color:#444;
+}
+textarea {
+   font-family:inherit;
+   font-size:inherit;
 }
 </style>
 
