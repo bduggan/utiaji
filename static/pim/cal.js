@@ -28,7 +28,7 @@ var Cal = React.createClass({
                 ), this.state.data[ dt.ymd() ] ];
     },
     editcell: function(i) {
-        return textarea({defaultValue:this.state.data[this.dt(i).ymd()]});
+        return textarea({autoFocus: true, defaultValue:this.state.data[this.dt(i).ymd()]});
     },
     cells: function(from,to) {
         var x = [];
