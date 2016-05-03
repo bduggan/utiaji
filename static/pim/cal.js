@@ -12,9 +12,14 @@ var Cal = React.createClass({
     dt: function(i) {
         return this.state.first.addDays(i)
     },
+    edit: function(i) {
+        console.log('edit cell',i);
+    },
     cell: function(i) {
        var dt = this.dt(i);
-       return [ span( {className:'dt'}, dt.d()), this.state.data[ dt.ymd() ] ];
+       return [ span(
+           {className:'dt', id: i, onClick: this.edit}, dt.d()
+                ), this.state.data[ dt.ymd() ] ];
     },
     cells: function(from,to) {
         x = [];
