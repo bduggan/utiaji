@@ -13,6 +13,9 @@ function gen(el) {
              && !args[0]['type']
         ) {
             attrs = args.shift()
+            if (args.length == 0 ) {
+              return React.createElement(el,attrs);
+            }
         }
         if (! Array.isArray(args[0]) ) {
             attrs['key'] = next_id();

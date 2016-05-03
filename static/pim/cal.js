@@ -1,5 +1,5 @@
 
-['div','table','tbody','tr','th','td','span']
+['div','table','tbody','tr','th','td','span','textarea']
   .map(function(v) {
     eval( v + " = gen('" + v + "');");
 });
@@ -13,7 +13,12 @@ var Cal = React.createClass({
         return this.state.first.addDays(i)
     },
     edit: function(e) {
-        console.log('edit cell',e.target.firstChild.id);
+        var index = e.target.firstChild.id;
+        if (typeof index === 'undefined' ) {
+            return;
+        }
+        this.setState({ editing:index });
+        console.log('edit cell',index);
     },
     cell: function(i) {
        var dt = this.dt(i);
@@ -21,15 +26,23 @@ var Cal = React.createClass({
            {className:'dt', id: i}, dt.d()
                 ), this.state.data[ dt.ymd() ] ];
     },
+    editcell: function(i) {
+        return textarea({defaultValue:'...'});
+    },
     cells: function(from,to) {
-        x = [];
+        var x = [];
+        var e = this.state.editing;
         for (i=from;i<to;i++) {
-            x.push( this.cell(i) );
+            if (e==i) {
+              x.push( this.editcell(i) );
+            } else {
+              x.push( this.cell(i) );
+            }
         }
         return x;
     },
     handleChange: function(e) {
-        this.setState({ text: e.target.value } );
+        // this.setState({ text: e.target.value } );
     },
     render: function() {
         return div(
