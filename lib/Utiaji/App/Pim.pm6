@@ -56,6 +56,7 @@ method BUILD {
              'people' => { tab => "people" }
     };
 
-    .get: '/∙page.js', -> $req, $res, $/ { self.render: $res, static => "$<page>.js" };
+    .get: '/∙page.js',  -> $req, $res, $/ { self.render: $res, static => "$<page>.js" };
+    .get: '/∙page.css', -> $req, $res, $/ { self.render: $res, static => "$<page>.css" };
 
 }

@@ -13,6 +13,8 @@ has $.static-root = 'static';
 has $.template-path = 'templates';
 has $.template-suffix = 'html.ep6';
 has $.router handles <get post put> = Utiaji::Router.new;
+has %.mime-types = html => 'text/html', css => "text/css", js => "application/javascript";
+has $.default-mime-type = 'text/html';
 
 multi method render($res, :$text!, :$status=200) {
     trace "rendering text";
@@ -30,7 +32,9 @@ multi method render($res, :$json!, :$status=200) {
 
 multi method render($res, :$static!, :$status=200) {
     trace "rendering static $static";
-    $res.headers<content-type> = 'text/html';
+    $static ~~ /'.' $<suffix>=(<-[.]>+) $/;
+    my $suffix = $<suffix>;
+    $res.headers<content-type> = %.mime-types{$suffix} // $.default-mime-type;
     my $path = $.root ~ "/" ~ $.static-root ~ "/" ~ $static;
     $path.IO.e or do { info "$path not found"; return self.render_not_found($res); };
     $res.status = $status;
