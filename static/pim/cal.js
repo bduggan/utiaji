@@ -28,7 +28,8 @@ var Cal = React.createClass({
                 ), this.state.data[ dt.ymd() ] ];
     },
     editcell: function(i) {
-        return textarea({autoFocus: true, defaultValue:this.state.data[this.dt(i).ymd()]});
+        var txt = this.state.data[this.dt(i).ymd()];
+        return textarea({autoFocus: true, defaultValue:txt,onChange: this.handleChange });
     },
     cells: function(from,to) {
         var x = [];
@@ -43,6 +44,7 @@ var Cal = React.createClass({
         return x;
     },
     handleChange: function(e) {
+        console.log('we have a change', e.target.value);
         // this.setState({ text: e.target.value } );
     },
     render: function() {
