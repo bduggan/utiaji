@@ -4,7 +4,6 @@ function wikify(str) {
     .replace(/@(\w+)/g, "<a href='/wiki/$1'>$1</a>");
 }
 
-el = React.createElement;
 div = gen('div');
 row = gen('row');
 textarea = gen('textarea');

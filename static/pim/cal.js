@@ -12,13 +12,13 @@ var Cal = React.createClass({
     dt: function(i) {
         return this.state.first.addDays(i)
     },
-    edit: function(i) {
-        console.log('edit cell',i);
+    edit: function(e) {
+        console.log('edit cell',e.target.firstChild.id);
     },
     cell: function(i) {
        var dt = this.dt(i);
        return [ span(
-           {className:'dt', id: i, onClick: this.edit}, dt.d()
+           {className:'dt', id: i}, dt.d()
                 ), this.state.data[ dt.ymd() ] ];
     },
     cells: function(from,to) {
@@ -34,7 +34,7 @@ var Cal = React.createClass({
     render: function() {
         return div(
             div( {className: 'text-center month'} , ( this.state.month + ' ' + this.state.year ) ),
-            table( {className: 'cal'},
+            table( {className: 'cal', onClick: this.edit},
                 tbody(
                   ...tr([
                         th( ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] ),
