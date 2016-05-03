@@ -35,5 +35,20 @@ textarea {
    font-family:inherit;
    font-size:inherit;
 }
+div.status-indicator {
+    position:absolute;
+    top: 5px;
+    right: 230px;
+}
 
+div.changed::before {
+    color:red;
+    content:'×';
+    font-weight:bold;
+}
+div.saved::before {
+    content:'✓';
+    color:green;
+    font-weight:bold;
+}
 

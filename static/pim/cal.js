@@ -44,12 +44,26 @@ var Cal = React.createClass({
         }
         return x;
     },
+    maybeSave: function() {
+        if (!this.state.changed) {
+            return;
+        }
+        console.log('saving');
+        this.setState({changed: false});
+    },
+    componentDidMount: function() {
+        setInterval(this.maybeSave,1500)
+    },
     handleChange: function(e) {
-        console.log('we have a change', e.target.value);
-        // this.setState({ text: e.target.value } );
+        if (this.state.changed) {
+            return;
+        }
+        this.setState({changed: true});
     },
     render: function() {
+        var stat = this.state.changed ? 'changed' : 'saved';
         return div(
+            div( {className: 'status-indicator ' + stat }, '' ),
             div( {className: 'text-center month'} , ( this.state.month + ' ' + this.state.year ) ),
             table( {className: 'cal', onClick: this.edit},
                 tbody(
