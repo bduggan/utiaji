@@ -1,12 +1,7 @@
-k = 10000;
-function next_id() {
-    k = k + 1;
-    return k;
-}
 function gen(el) {
     return function() {
         var args = Array.from(arguments);
-        var attrs = { key: next_id() };
+        var attrs = {};
         var contents = [];
         if (typeof(args[0]) == 'object'
              && !Array.isArray(args[0])
@@ -18,12 +13,10 @@ function gen(el) {
             }
         }
         if (! Array.isArray(args[0]) ) {
-            attrs['key'] = next_id();
             return React.createElement(el,attrs,args);
         }
         contents = args.shift();
         return contents.map( function(v) {
-            attrs['key'] = next_id();
             return React.createElement(el, attrs, v)
         } )
     }
