@@ -10,33 +10,6 @@
   <script type='text/javascript' src="/<%= $tab %>.js"></script>
 </head>
 <body>
-<style>
-.white { color: white; }
-.menu li a {
-    color:#dedbdb;
-}
-.menu li a:hover {
-    color:#8888ff;
-}
-.menu li.active a {
-    color:#88ffff;
-    background-color:black;
-}
-.title-bar {
-   padding:0;
-}
-.brand {
-   background-color:#583189;
-   font-weight:normal;
-   font-variant:small-caps;
-}
-input#search {
-   background-color:#583189;
-   border:0px;
-   color:white;
-}
-</style>
-
 <div class="title-bar">
   <div class="top-bar-left">
     <ul class="dropdown menu">

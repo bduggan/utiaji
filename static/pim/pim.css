@@ -1,3 +1,28 @@
+.white { color: white; }
+.menu li a {
+    color:#dedbdb;
+}
+.menu li a:hover {
+    color:#8888ff;
+}
+.menu li.active a {
+    color:#88ffff;
+    background-color:black;
+}
+.title-bar {
+   padding:0;
+}
+.brand {
+   background-color:#583189;
+   font-weight:normal;
+   font-variant:small-caps;
+}
+input#search {
+   background-color:#583189;
+   border:0px;
+   color:white;
+}
+
 div.month {
     font-family:sans-serif;
 }
@@ -14,6 +39,7 @@ table.cal tr td {
   font-family:monospace;
   vertical-align:top;
   padding:0px;
+  color:black;
 }
 table.cal tbody tr td textarea {
    width:100%;
@@ -24,12 +50,12 @@ table.cal tbody tr td textarea {
    background-color:#fcfcce;
 }
 table.cal tr td span.dt {
-    position:absolute;
-    right:4px;
-    top:0px;
+    float:right;
     font-size:65%;
     font-family:sans-serif;
-    color:#444;
+    background-color:white;
+    border:1px solid #ccc;
+    color:#583189;
 }
 textarea {
    font-family:inherit;
