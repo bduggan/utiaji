@@ -18,10 +18,11 @@ method BUILD {
 
     .get: '/cal',
       -> $req,$res {
+         #self.db.query: "select * from kv where k > '
          my %data =
             month => "May",
             year => 2016,
-            first => [ 2016, 5, 1 ], # first sunday on calendar
+            first => [ 2016, 5 - 1, 1 ], # first sunday on calendar
             data => {
                 '2016-05-05'  => 'cinco de mayo'
             };

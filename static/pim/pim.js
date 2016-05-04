@@ -46,7 +46,7 @@ Date.prototype.addDays = function(days) {
     return result;
 }
 Date.prototype.ymd = function(d) {
-    return [ 1900+this.getYear(), pad(this.getMonth()), pad(this.getDate())].join('-');
+    return this.toISOString().substr(0,10);
 }
 Date.prototype.d = function(d) {
     return pad(this.getDate())

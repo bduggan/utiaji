@@ -4,14 +4,17 @@
     eval( v + " = gen('" + v + "');");
 });
 
+var cache = {}; // map from index to date
+
 var Cal = React.createClass({
 
     getInitialState: function() {
         return this.props.initial_data
     },
     dt: function(i) {
-        // todo: cache
-        return this.state.first.addDays(i)
+        if (cache[i]) { return cache[i] };
+        cache[i] = this.state.first.addDays(i);
+        return cache[i];
     },
     edit: function(e) {
         if (!e.target.firstChild) { return; }
@@ -30,7 +33,7 @@ var Cal = React.createClass({
     },
     editcell: function(i) {
         var txt = this.state.data[this.dt(i).ymd()];
-        return textarea({autoFocus: true, defaultValue:txt,onChange: this.handleChange });
+        return textarea({autoFocus: true, id: i, defaultValue:txt,onChange: this.handleChange });
     },
     cells: function(from,to) {
         var x = [];
@@ -71,9 +74,13 @@ var Cal = React.createClass({
         setInterval(this.maybeSave,1500)
     },
     handleChange: function(e) {
-        if (this.state.changed) {
-            return;
-        }
+        var i = e.target.id;
+        console.log('looking up',i);
+        var dt = this.dt(i);
+        console.log('date is ',dt);
+        var d = this.state.data;
+        d[dt.ymd()] = e.target.value;
+        this.setState({data: d});
         this.setState({changed: true});
     },
     render: function() {
