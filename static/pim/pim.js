@@ -49,5 +49,5 @@ Date.prototype.ymd = function(d) {
     return this.toISOString().substr(0,10);
 }
 Date.prototype.d = function(d) {
-    return pad(this.getDate())
+    return this.getDate()
 }

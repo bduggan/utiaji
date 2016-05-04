@@ -56,6 +56,8 @@ table.cal tr td span.dt {
     background-color:white;
     border:1px solid #ccc;
     color:#583189;
+    width:14%;
+    text-align:center;
 }
 textarea {
    font-family:inherit;
