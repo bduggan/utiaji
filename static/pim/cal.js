@@ -57,7 +57,7 @@ var Cal = React.createClass({
         fetch(url, {
             method: 'POST',
             headers: { 'Content-Type' : 'application/json' },
-            body: JSON.stringify({content:this.state})
+            body: JSON.stringify({data:this.state.data})
         })
         .then(function(data){
             console.log('got',data);

@@ -58,3 +58,9 @@ method json {
 
 }
 
+method upsertjson($k,$json,$table='kv') {
+    say "saving";
+    self.query: "delete from kv where k=? ", $k;
+    self.query: "insert into kv (k,v) values (?,?)", $k, :$json;
+}
+

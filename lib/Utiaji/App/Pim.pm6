@@ -29,9 +29,14 @@ method BUILD {
              'cal' => { tab => "cal", today => "monday", data => %data }
     };
     .post: '/cal',
-      -> $req, $res {
-          my $json = $req.json;
-          say "got json " ~ $json.perl;
+      sub ($req, $res) {
+          my $json = $req.json or return
+              self.render: $res, json => { status => 'error', message => 'no data' };
+          my $dates = $json<data> // {};
+          for %$dates.kv -> $k,$v {
+              self.db.upsertjson( "date:$k", $v );
+          }
+          self.render: $res, json => { status => 'ok' };
       };
 
     .get: '/wiki',
