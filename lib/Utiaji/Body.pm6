@@ -3,12 +3,11 @@ use JSON::Fast;
 
 has $.raw;
 
-
-method parse {
+method parse($!raw) {
     return self;
 }
 
 method json {
-   # TODO memoize
+   return unless $.raw;
    from-json($.raw)
 }

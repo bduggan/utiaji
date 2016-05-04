@@ -24,16 +24,16 @@ var Wiki = React.createClass({
         var url = window.location.href;
         var that = this;
         fetch(url, {
-            method: 'post',
-            headers: { 'content-type':'application/json'},
+            method: 'POST',
+            headers: { 'Content-Type':'application/json'},
             body: JSON.stringify({content:t})
         })
         .then(function(data){
-            console.log('got ', data)
+            console.log('got ', data);
             that.setState({ text: t, editing: false })
         })
         .catch(function(err) {
-            console.log('error ' + err);
+            console.log('error ' ,err);
         })
     },
 

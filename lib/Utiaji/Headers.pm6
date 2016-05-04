@@ -51,7 +51,7 @@ method push (*@list) {
     }
 }
 
-method parse {
+method parse($!raw) {
     my $actions = actions.new;
     my $match = parser.parse("$!raw\n", :$actions);
     unless $match {

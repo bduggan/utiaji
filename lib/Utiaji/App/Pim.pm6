@@ -25,10 +25,14 @@ method BUILD {
             data => {
                 '2016-05-05'  => 'cinco de mayo'
             };
-         say %data.perl;
          self.render: $res,
              'cal' => { tab => "cal", today => "monday", data => %data }
     };
+    .post: '/cal',
+      -> $req, $res {
+          my $json = $req.json;
+          say "got json " ~ $json.perl;
+      };
 
     .get: '/wiki',
       -> $req,$res {

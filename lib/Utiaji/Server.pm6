@@ -69,7 +69,7 @@ class Utiaji::Server {
         my $closed = False;
         my $promise = Promise.in($.timeout).then({{
             return if $responding;
-            error "timeout, closing connection";
+            debug "timeout, closing connection";
             $conn.close unless $closed;
             $closed = True;
         } });

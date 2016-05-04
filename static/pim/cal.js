@@ -48,8 +48,24 @@ var Cal = React.createClass({
         if (!this.state.changed) {
             return;
         }
+        this.save();
+    },
+    save: function() {
         console.log('saving');
-        this.setState({changed: false});
+        var url = window.location.href;
+        var that = this;
+        fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type' : 'application/json' },
+            body: JSON.stringify({content:this.state})
+        })
+        .then(function(data){
+            console.log('got',data);
+            that.setState({changed: false})
+        })
+        .catch(function(err) {
+            console.log('error',err);
+        })
     },
     componentDidMount: function() {
         setInterval(this.maybeSave,1500)
