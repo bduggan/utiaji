@@ -18,14 +18,18 @@ method BUILD {
 
     .get: '/cal',
       -> $req,$res {
-         #self.db.query: "select * from kv where k > '
+         $.db.query: "select k,v->>'txt' from kv where k >= ? and k <= ?", 'date:2016-05-01', 'date:2016-06-01';
+         say $.db.results;
+         my %events;
+         for $.db.results -> $row {
+             my $d = $row[0].subst: /'date:'/, '';
+             %events{$d} = $row[1];
+         }
          my %data =
             month => "May",
             year => 2016,
             first => [ 2016, 5 - 1, 1 ], # first sunday on calendar
-            data => {
-                '2016-05-05'  => 'cinco de mayo'
-            };
+            data => %events;
          self.render: $res,
              'cal' => { tab => "cal", today => "monday", data => %data }
     };
@@ -35,7 +39,7 @@ method BUILD {
               self.render: $res, json => { status => 'error', message => 'no data' };
           my $dates = $json<data> // {};
           for %$dates.kv -> $k,$v {
-              self.db.upsertjson( "date:$k", $v );
+              self.db.upsertjson( "date:$k", { txt => $v } );
           }
           self.render: $res, json => { status => 'ok' };
       };

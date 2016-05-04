@@ -27,6 +27,7 @@ var Cal = React.createClass({
     },
     cell: function(i) {
        var dt = this.dt(i);
+       console.log('generating ',i,dt.d());
        return [ span(
            {className:'dt', id: i}, dt.d()
                 ), this.state.data[ dt.ymd() ] ];
@@ -92,11 +93,11 @@ var Cal = React.createClass({
                 tbody(
                   ...tr([
                         th( ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] ),
-                        td( this.cells(0,7)    ),
-                        td( this.cells(14,21)  ),
-                        td( this.cells(21,28)  ),
-                        td( this.cells(28,35)  ),
-                        td( this.cells(35,42)  ),
+                        td( this.cells( 0, 7) ),
+                        td( this.cells( 7,14) ),
+                        td( this.cells(14,21) ),
+                        td( this.cells(21,28) ),
+                        td( this.cells(28,35) ),
                       ])
                     )
                  )
