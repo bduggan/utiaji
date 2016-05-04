@@ -9,7 +9,9 @@ var cache = {}; // map from index to date
 var Cal = React.createClass({
 
     getInitialState: function() {
-        return this.props.initial_data
+        var props = this.props.initial_data;
+        props['last_touch'] = new Date().getTime();
+        return props;
     },
     dt: function(i) {
         if (cache[i]) { return cache[i] };
@@ -23,11 +25,10 @@ var Cal = React.createClass({
             return;
         }
         this.setState({ editing:index });
-        console.log('edit cell',index);
+        this.touch();
     },
     cell: function(i) {
        var dt = this.dt(i);
-       console.log('generating ',i,dt.d());
        return [ span(
            {className:'dt', id: i}, dt.d()
                 ), this.state.data[ dt.ymd() ] ];
@@ -49,13 +50,22 @@ var Cal = React.createClass({
         return x;
     },
     maybeSave: function() {
+        if (this.state.editing !== undefined) {
+            var now = new Date().getTime();
+            var last = this.state.last_touch;
+            if (now - this.state.last_touch > 2000) {
+                this.setState({editing: undefined });
+            }
+        }
         if (!this.state.changed) {
             return;
         }
         this.save();
     },
+    touch: function() {
+        this.setState({ last_touch: new Date().getTime() });
+    },
     save: function() {
-        console.log('saving');
         var url = window.location.href;
         var that = this;
         fetch(url, {
@@ -64,8 +74,8 @@ var Cal = React.createClass({
             body: JSON.stringify({data:this.state.data})
         })
         .then(function(data){
-            console.log('got',data);
             that.setState({changed: false})
+            that.touch();
         })
         .catch(function(err) {
             console.log('error',err);
@@ -76,11 +86,10 @@ var Cal = React.createClass({
     },
     handleChange: function(e) {
         var i = e.target.id;
-        console.log('looking up',i);
         var dt = this.dt(i);
-        console.log('date is ',dt);
         var d = this.state.data;
         d[dt.ymd()] = e.target.value;
+        this.touch();
         this.setState({data: d});
         this.setState({changed: true});
     },
