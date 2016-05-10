@@ -13,13 +13,12 @@ method BUILD {
 
     .get: '/',
       -> $req, $res {
-          self.redirect_to: $res, '/wiki';
+          self.redirect_to: $res, '/cal';
       };
 
     .get: '/cal',
       -> $req,$res {
          $.db.query: "select k,v->>'txt' from kv where k >= ? and k <= ?", 'date:2016-05-01', 'date:2016-06-01';
-         say $.db.results;
          my %events;
          for $.db.results -> $row {
              my $d = $row[0].subst: /'date:'/, '';

@@ -1,9 +1,4 @@
-
-['div','table','tbody','tr','th','td','span','textarea']
-  .map(function(v) {
-    eval( v + " = gen('" + v + "');");
-});
-
+use_tags(['div','table','tbody','tr','th','td','span','textarea']);
 var cache = {}; // map from index to date
 
 var Cal = React.createClass({
@@ -30,8 +25,12 @@ var Cal = React.createClass({
     cell: function(i) {
        var dt = this.dt(i);
        return [ span(
-           {className:'dt', id: i}, dt.d()
-                ), this.state.data[ dt.ymd() ] ];
+                       {className:'dt', id: i}, dt.d()
+                   ),
+                   span(
+                       { html: wikify( this.state.data[ dt.ymd() ] ) }
+                   )
+              ];
     },
     editcell: function(i) {
         var txt = this.state.data[this.dt(i).ymd()];

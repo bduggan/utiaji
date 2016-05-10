@@ -1,15 +1,6 @@
+use_tags(['div','row','textarea','a','pre'])
 
-function wikify(str) {
-    return escape(str)
-    .replace(/@(\w+)/g, "<a href='/wiki/$1'>$1</a>");
-}
-
-div = gen('div');
-row = gen('row');
-textarea = gen('textarea');
-a = gen('a');
-pre = React.createFactory('pre');
-
+/* Wiki */
 var Wiki = React.createClass({
 
     getInitialState: function() {
@@ -61,10 +52,9 @@ var Wiki = React.createClass({
                        placeholder: 'New Page (use @link to make links)',
                        rows: 19, value: this.state.text })
                    :
-                   pre( {
+                   pre({
                        className: 'secondary callout',
-                       dangerouslySetInnerHTML:
-                       { __html: (wikify(this.state.text)) }
+                       html: wikify(this.state.text)
                    })
               )
         )

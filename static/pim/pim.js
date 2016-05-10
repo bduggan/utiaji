@@ -8,9 +8,14 @@ function gen(el) {
              && !args[0]['type']
         ) {
             attrs = args.shift()
-            if (args.length == 0 ) {
-              return React.createElement(el,attrs);
-            }
+        }
+        if (attrs['html']) {
+            var h = attrs['html'];
+            delete attrs['html'];
+            attrs['dangerouslySetInnerHTML'] = { __html: h };
+        }
+        if (args.length == 0 ) {
+           return React.createElement(el,attrs);
         }
         if (! Array.isArray(args[0]) ) {
             return React.createElement(el,attrs,args);
@@ -22,7 +27,14 @@ function gen(el) {
     }
 }
 
+function use_tags(els) {
+  els.map(function(v) {
+    eval( v + " = gen('" + v + "');");
+  });
+}
+
 function escape(str) {
+  if (str == null) { str = ''; }
   return str.replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -51,3 +63,10 @@ Date.prototype.ymd = function(d) {
 Date.prototype.d = function(d) {
     return this.getDate()
 }
+
+function wikify(str) {
+    return escape(str)
+    .replace(/@(\w+)/g, "<a href='/wiki/$1'>$1</a>");
+}
+
+
