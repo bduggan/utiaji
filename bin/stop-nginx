@@ -1,0 +1,5 @@
+#!/bin/sh
+
+[ -e /tmp/nginx.pid ] || exit
+cat /tmp/nginx.pid  | xargs kill
+
