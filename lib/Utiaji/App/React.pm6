@@ -3,15 +3,10 @@ use Utiaji::App;
 unit class Utiaji::App::React is Utiaji::App;
 
 has $.template-path = 'templates/react';
-has $.static-root = 'static/react';
 
 method BUILD {
 
     $_ = $.router;
-
-    .get: '/react.js', -> $req,$res {
-        self.render: $res, static => 'react.js';
-    };
 
     $.router.get('/cal', sub ($req,$res) {
         self.render: $res,

@@ -6,10 +6,6 @@ class Utiaji::App::React is Utiaji::App {
     method BUILD {
         $.root = $?FILE.IO.dirname.child('react');
 
-        $.routes.get('/react.js', sub ($req,$res) {
-            self.render: $res, static => 'react.js';
-        });
-
         $.routes.get('/cal', sub ($req,$res) {
             self.render: $res,
                 template => 'react/cal',
@@ -39,8 +35,6 @@ $t.get-ok('/today').status-is(200)
 
 $t.get-ok('/tomorrow').status-is(200)
   .json-is({events => ["we die"]});
-
-$t.get-ok('/react.js').status-is(200);
 
 # To test in a browser:
 # prompt 'press return to stop';

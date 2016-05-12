@@ -9,12 +9,9 @@ use Utiaji::Template;
 unit class Utiaji::App;
 
 has $.root is rw = $?FILE.IO.parent.parent.dirname;
-has $.static-root = 'static';
 has $.template-path = 'templates';
 has $.template-suffix = 'html.ep6';
 has $.router handles <get post put> = Utiaji::Router.new;
-has %.mime-types = html => 'text/html', css => "text/css", js => "application/javascript";
-has $.default-mime-type = 'text/html';
 
 multi method render($res, :$text!, :$status=200) {
     trace "rendering text";
@@ -28,17 +25,6 @@ multi method render($res, :$json!, :$status=200) {
     $res.headers<content-type> = 'application/json';
     $res.status = $status;
     $res.body = to-json($json);
-}
-
-multi method render($res, :$static!, :$status=200) {
-    trace "rendering static $static";
-    $static ~~ /'.' $<suffix>=(<-[.]>+) $/;
-    my $suffix = $<suffix>;
-    $res.headers<content-type> = %.mime-types{$suffix} // $.default-mime-type;
-    my $path = $.root ~ "/" ~ $.static-root ~ "/" ~ $static;
-    $path.IO.e or do { info "$path not found"; return self.render_not_found($res); };
-    $res.status = $status;
-    $res.body = $path.IO.slurp;
 }
 
 method load-template($template) {
