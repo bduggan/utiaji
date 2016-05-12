@@ -13,8 +13,8 @@ var Cal = React.createClass({
         cache[i] = this.state.first.addDays(i);
         return cache[i];
     },
-    edit: function(index) {
-        console.log('editing',index);
+    edit: function(index, e) {
+        if (e.target.getAttribute('href')) { return; }
         this.setState({ editing:index });
         this.touch();
     },
