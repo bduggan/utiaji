@@ -74,6 +74,7 @@ class Utiaji::Server {
             $closed = True;
         } });
         trace "got a connection";
+        my $started = now;
         my Buf[uint8] $bytes = Buf[uint8].new();
         whenever $conn.Supply(:bin) -> $buf {
             $responding = True;
@@ -83,6 +84,7 @@ class Utiaji::Server {
                     $conn.close;
                     $closed = True;
                     debug "closed connection";
+                    info "elapsed { now - $started }";
                 }
             } else {
                 $responding = False;

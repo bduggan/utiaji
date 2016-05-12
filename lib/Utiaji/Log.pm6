@@ -1,6 +1,6 @@
 class Utiaji::Log {
 
-    has            $.level is rw = %*ENV<UHITAJI_LOG_LEVEL> || 'info';
+    has            $.level is rw = %*ENV<UTIAJI_LOG_LEVEL> || 'info';
     has IO::Handle $!fh; #= filehandle
     has            $.path   is rw;
 
