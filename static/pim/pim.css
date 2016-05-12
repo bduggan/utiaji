@@ -13,14 +13,14 @@
    padding:0;
 }
 .brand {
-   background-color:#583189;
+   background-color:#21629e;
    font-weight:normal;
    font-variant:small-caps;
 }
 input#search {
-   background-color:#583189;
+   background-color:#21629e;
    border:0px;
-   color:white;
+   color:#acc9e3;
 }
 
 div.month {
