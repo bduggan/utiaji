@@ -13,28 +13,23 @@ var Cal = React.createClass({
         cache[i] = this.state.first.addDays(i);
         return cache[i];
     },
-    edit: function(e) {
-        if (!e.target.firstChild) { return; }
-        var index = e.target.firstChild.id;
-        if (typeof index === 'undefined' ) {
-            return;
-        }
+    edit: function(index) {
+        console.log('editing',index);
         this.setState({ editing:index });
         this.touch();
     },
     cell: function(i) {
        var dt = this.dt(i);
-       return [ span(
-                       {className:'dt', id: i}, dt.d()
-                   ),
-                   span(
-                       { html: wikify( this.state.data[ dt.ymd() ] ) }
-                   )
-              ];
+       return td( { onClick: this.edit.bind(this,i) },
+                  span( { className:'dt', id: i}, dt.d()),
+                  span( { html: wikify( this.state.data[ dt.ymd() ] ) })
+                );
     },
     editcell: function(i) {
         var txt = this.state.data[this.dt(i).ymd()];
-        return textarea({autoFocus: true, id: i, defaultValue:txt,onChange: this.handleChange });
+        return td(
+              textarea({autoFocus: true, id: i, defaultValue:txt,onChange: this.handleChange })
+               );
     },
     cells: function(from,to) {
         var x = [];
@@ -97,15 +92,15 @@ var Cal = React.createClass({
         return div(
             div( {className: 'status-indicator ' + stat }, '' ),
             div( {className: 'text-center month'} , ( this.state.month + ' ' + this.state.year ) ),
-            table( {className: 'cal', onClick: this.edit},
+            table( {className: 'cal' },
                 tbody(
                   ...tr([
                         th( ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] ),
-                        td( this.cells( 0, 7) ),
-                        td( this.cells( 7,14) ),
-                        td( this.cells(14,21) ),
-                        td( this.cells(21,28) ),
-                        td( this.cells(28,35) ),
+                        this.cells( 0, 7),
+                        this.cells( 7,14),
+                        this.cells(14,21),
+                        this.cells(21,28),
+                        this.cells(28,35),
                       ])
                     )
                  )
