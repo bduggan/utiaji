@@ -55,6 +55,9 @@ multi method render($res, :$type='text', :$body='', :$status!) {
     $res.status = $status;
 }
 
+method render_not_found($res) {
+    self.render: $res, :body<not found>, :type<plain>, :404status;
+}
 
 multi method render($res, Pair $p) {
     my $template = $p.key;
@@ -69,12 +72,6 @@ method load-template($template) {
         return;
     }
     Utiaji::Template.new(cache-key => $path).parse($path.IO.slurp)
-}
-
-method render_not_found($res) {
-    $res.status = 404;
-    $res.body = 'not found';
-    $res.headers<content-type> = 'text/plain';
 }
 
 method redirect_to($res, $path) {
