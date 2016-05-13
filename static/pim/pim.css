@@ -25,6 +25,7 @@ input#search {
 
 div.month {
     font-family:sans-serif;
+    font-weight:bold;
 }
 table.cal tr th {
     font-family:sans-serif;

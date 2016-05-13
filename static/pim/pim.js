@@ -69,4 +69,13 @@ function wikify(str) {
     .replace(/@(\w+)/g, "<a href='/wiki/$1'>$1</a>");
 }
 
+var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
+function next_month(str) {
+    var i = months.indexOf(str);
+    return months[ ( i + 1 ) % 12 ];
+}
 
+function prev_month(str) {
+    var i = months.indexOf(str);
+    return months[ ( i + 11 ) % 12 ];
+}

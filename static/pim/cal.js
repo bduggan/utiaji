@@ -1,10 +1,17 @@
 use_tags(['div','table','tbody','tr','th','td','span','textarea','a']);
+
 var cache = {}; // map from index to date
 
 var Cal = React.createClass({
 
     getInitialState: function() {
         var props = this.props.initial_data;
+        // initial_data:
+        // first : new Date( ...)  -- date of first sunday
+        // month : data['month'],  -- month name
+        //  year  : data['year'],
+        //  data : data['data']  -- map from yyyy-mm-dd to text for that day
+
         props['last_touch'] = new Date().getTime();
         return props;
     },
@@ -91,17 +98,47 @@ var Cal = React.createClass({
         this.setState({data: d});
         this.setState({changed: true});
     },
+    nextmonth: function(e) {
+        cache = {};
+        var first = this.state.first.addDays(6);
+        var thismonth = first.getMonth();
+        while (first.getMonth() == thismonth) {
+            first = first.addDays(7);
+        }
+        first = first.addDays(-6);
+        this.setState({ first: first } );
+        this.setState({ month: next_month(this.state.month) });
+        if (this.state.month == 'Jan' ) {
+            this.setState({ year: this.state.year + 1 });
+        }
+    },
+    prevmonth: function(e) {
+        cache = {};
+        var first = this.state.first.addDays(-1);
+        var lastmonth = first.getMonth();
+        while (first.getMonth() == lastmonth) {
+            first = first.addDays(-7);
+        }
+        first = first.addDays(1);
+        this.setState({ first: first } );
+        this.setState({ month: prev_month(this.state.month) });
+        if (this.state.month == 'Dec' ) {
+            this.setState({ year: this.state.year - 1 });
+        }
+    },
     render: function() {
         var stat = this.state.changed ? 'changed' : 'saved';
         return div(
+
             div( {className: 'status-indicator ' + stat }, '' ),
+
             div( {className: 'row text-center'},
                 div( {className: 'columns' },
-                    div( {className: 'small inlineblock secondary button-group'},
-                        a( {className: 'button'}, '<-' ),
+                    div( {className: 'tiny inlineblock secondary button-group'},
+                        a( {className: 'button', onClick: this.prevmonth }, '<-' ),
                         div( {className: 'button month'},
                             ( this.state.month + ' ' + this.state.year ) ),
-                        a( {className: 'button'}, '->' )
+                        a( {className: 'button', onClick: this.nextmonth }, '->' )
                     )
                 )
             ),
@@ -115,6 +152,7 @@ var Cal = React.createClass({
                         this.cells(14,21),
                         this.cells(21,28),
                         this.cells(28,35),
+                        this.cells(35,42),
                       ])
                     )
                  )
