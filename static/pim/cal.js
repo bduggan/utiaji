@@ -1,4 +1,4 @@
-use_tags(['div','table','tbody','tr','th','td','span','textarea']);
+use_tags(['div','table','tbody','tr','th','td','span','textarea','a']);
 var cache = {}; // map from index to date
 
 var Cal = React.createClass({
@@ -95,7 +95,17 @@ var Cal = React.createClass({
         var stat = this.state.changed ? 'changed' : 'saved';
         return div(
             div( {className: 'status-indicator ' + stat }, '' ),
-            div( {className: 'text-center month'} , ( this.state.month + ' ' + this.state.year ) ),
+            div( {className: 'row text-center'},
+                div( {className: 'columns' },
+                    div( {className: 'small inlineblock secondary button-group'},
+                        a( {className: 'button'}, '<-' ),
+                        div( {className: 'button month'},
+                            ( this.state.month + ' ' + this.state.year ) ),
+                        a( {className: 'button'}, '->' )
+                    )
+                )
+            ),
+
             table( {className: 'cal' },
                 tbody(
                   ...tr([

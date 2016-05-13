@@ -80,3 +80,6 @@ div.saved::before {
     font-weight:bold;
 }
 
+.inlineblock {
+    display:inline-block;
+}
