@@ -31,7 +31,7 @@ method setup {
 # We handle these types:
 my %types = text => 'text/plain',
             json => 'application/json',
-            html => 'application/html';
+            html => 'text/html';
 
 multi method render($res, :$text!, :$status=200) {
     self.render($res, :type<text>, :body($text), :$status);
@@ -42,14 +42,13 @@ multi method render($res, :$json!, :$status=200) {
 }
 
 multi method render($res, :$template!, :%template_params is copy, :$status=200) {
-    trace "rendering template $template";
     my $t = self.load-template($template) or return self.render_not_found($res);
     %template_params<app> = self;
     self.render($res, :type<html>, :body( $t.render(|%template_params) ), :$status);
 }
 
 multi method render($res, :$type='text', :$body='', :$status!) {
-    trace "rendering $type";
+    debug "rendering $type";
     $res.headers<content-type> = %types{$type};
     $res.body = $body;
     $res.status = $status;

@@ -28,7 +28,11 @@ var Cal = React.createClass({
     editcell: function(i) {
         var txt = this.state.data[this.dt(i).ymd()];
         return td(
-              textarea({autoFocus: true, id: i, defaultValue:txt,onChange: this.handleChange })
+            textarea({autoFocus: true,
+                id: i,
+                onKeyDown: this.touch,
+                defaultValue: txt,
+                onChange: this.handleChange })
                );
     },
     cells: function(from,to) {
@@ -47,7 +51,7 @@ var Cal = React.createClass({
         if (this.state.editing !== undefined) {
             var now = new Date().getTime();
             var last = this.state.last_touch;
-            if (now - this.state.last_touch > 2000) {
+            if (now - this.state.last_touch > 4000) {
                 this.setState({editing: undefined });
             }
         }
