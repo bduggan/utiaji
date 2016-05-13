@@ -84,7 +84,7 @@ class Utiaji::Server {
                     $conn.close;
                     $closed = True;
                     debug "closed connection";
-                    info "elapsed { now - $started }";
+                    debug "elapsed { now - $started }";
                 }
             } else {
                 $responding = False;
