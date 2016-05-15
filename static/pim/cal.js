@@ -99,6 +99,7 @@ var Cal = React.createClass({
         this.setState({changed: true});
     },
     nextmonth: function(e) {
+        this.setState({editing: undefined });
         cache = {};
         var first = this.state.first.addDays(6);
         var thismonth = first.getMonth();
@@ -113,6 +114,7 @@ var Cal = React.createClass({
         }
     },
     prevmonth: function(e) {
+        this.setState({editing: undefined });
         cache = {};
         var first = this.state.first.addDays(-1);
         var lastmonth = first.getMonth();
