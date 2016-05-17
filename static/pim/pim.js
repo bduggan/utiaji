@@ -64,6 +64,7 @@ Date.prototype.d = function(d) {
     return this.getDate()
 }
 
+
 function wikify(str) {
     return escape(str)
     .replace(/@(\w+)/g, "<a href='/wiki/$1'>$1</a>");
@@ -78,4 +79,8 @@ function next_month(str) {
 function prev_month(str) {
     var i = months.indexOf(str);
     return months[ ( i + 11 ) % 12 ];
+}
+
+Date.prototype.mon = function() {
+    return months[ this.getMonth() ];
 }

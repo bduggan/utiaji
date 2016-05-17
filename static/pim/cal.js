@@ -27,7 +27,12 @@ var Cal = React.createClass({
     },
     cell: function(i) {
        var dt = this.dt(i);
-       return td( { onClick: this.edit.bind(this,i) },
+       var cl = 'normal';
+       console.log('comparing ',dt.mon(),' to ',this.state.month);
+       if (dt.mon() != this.state.month) {
+           cl = 'other';
+       }
+       return td( { className: cl, onClick: this.edit.bind(this,i) },
                   span( { className:'dt', id: i}, dt.d()),
                   span( { html: wikify( this.state.data[ dt.ymd() ] ) })
                 );
