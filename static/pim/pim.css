@@ -48,7 +48,12 @@ table.cal tbody tr td textarea {
    padding:0px;
    margin:0px;
    resize:none;
-   background-color:#fcfcce;
+}
+textarea.changed {
+   background-color:#fcfece;
+}
+textarea.saved {
+   background-color:#fcfcfc;
 }
 table.cal tr td span.dt {
     float:right;

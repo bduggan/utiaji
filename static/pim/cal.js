@@ -37,6 +37,7 @@ var Cal = React.createClass({
         return td(
             textarea({autoFocus: true,
                 id: i,
+                className: ( this.state.changed ? 'changed' : 'saved' ),
                 onKeyDown: this.touch,
                 defaultValue: txt,
                 onChange: this.handleChange })
