@@ -15,6 +15,37 @@ var Cal = React.createClass({
         props['last_touch'] = new Date().getTime();
         return props;
     },
+    save: function() {
+        var url = window.location.href;
+        var that = this;
+        fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type' : 'application/json' },
+            body: JSON.stringify({data:this.state.data})
+        })
+        .then(function(data){
+            that.setState({changed: false})
+            that.touch();
+        })
+        .catch(function(err) {
+            console.log('error',err);
+        })
+    },
+    load: function(from,to) {
+        console.log('loading');
+        var url = window.location.href;
+        url += '/range/' + from.ymd() + '/' + to.ymd();
+        var that = this;
+        fetch(url, {
+            headers: { 'Content-Type' : 'application/json' },
+        }).then(function(res){
+            return res.json();
+        }).then(function(j){
+            that.setState({ data: j });
+        }).catch(function(err) {
+            console.log('error',err);
+        })
+    },
     dt: function(i) {
         if (cache[i]) { return cache[i] };
         cache[i] = this.state.first.addDays(i);
@@ -28,7 +59,6 @@ var Cal = React.createClass({
     cell: function(i) {
        var dt = this.dt(i);
        var cl = 'normal';
-       console.log('comparing ',dt.mon(),' to ',this.state.month);
        if (dt.mon() != this.state.month) {
            cl = 'other';
        }
@@ -76,22 +106,6 @@ var Cal = React.createClass({
     touch: function() {
         this.setState({ last_touch: new Date().getTime() });
     },
-    save: function() {
-        var url = window.location.href;
-        var that = this;
-        fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type' : 'application/json' },
-            body: JSON.stringify({data:this.state.data})
-        })
-        .then(function(data){
-            that.setState({changed: false})
-            that.touch();
-        })
-        .catch(function(err) {
-            console.log('error',err);
-        })
-    },
     componentDidMount: function() {
         setInterval(this.maybeSave,1500)
     },
@@ -118,6 +132,7 @@ var Cal = React.createClass({
         if (this.state.month == 'Jan' ) {
             this.setState({ year: this.state.year + 1 });
         }
+        this.load(first, first.addDays(41));
     },
     prevmonth: function(e) {
         this.setState({editing: undefined });
@@ -133,6 +148,7 @@ var Cal = React.createClass({
         if (this.state.month == 'Dec' ) {
             this.setState({ year: this.state.year - 1 });
         }
+        this.load(first, first.addDays(41));
     },
     render: function() {
         var stat = this.state.changed ? 'changed' : 'saved';

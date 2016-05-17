@@ -31,6 +31,12 @@ method BUILD {
          self.render: $res,
              'cal' => { tab => "cal", today => "monday", data => %data }
     };
+    .get: '/cal/range/Δfrom/Δto',
+       -> $req, $res, $/ {
+         $.db.query: "select k,v->>'txt' from kv where k >= ? and k <= ?", "date:$<from>", "date:$<to>";
+         my %results = map { .[0].subst('date:','') => .[1] }, $.db.results;
+         self.render: $res, json => %results;
+    };
     .post: '/cal',
       sub ($req, $res) {
           my $json = $req.json or return
