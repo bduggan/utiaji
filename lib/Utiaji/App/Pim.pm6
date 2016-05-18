@@ -33,6 +33,7 @@ method BUILD {
     };
     .get: '/cal/range/Δfrom/Δto',
        -> $req, $res, $/ {
+         debug "calling query";
          $.db.query: "select k,v->>'txt' from kv where k >= ? and k <= ?", "date:$<from>", "date:$<to>";
          my %results = map { .[0].subst('date:','') => .[1] }, $.db.results;
          self.render: $res, json => %results;

@@ -69,7 +69,7 @@ var Cal = React.createClass({
     },
     editcell: function(i) {
         var txt = this.state.data[this.dt(i).ymd()];
-        return td(
+        return td( {className:'edit'},
             textarea({autoFocus: true,
                 id: i,
                 className: ( this.state.changed ? 'changed' : 'saved' ),

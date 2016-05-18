@@ -38,7 +38,10 @@ multi method render($res, :$text!, :$status=200) {
 }
 
 multi method render($res, :$json!, :$status=200) {
-    self.render($res, :type<json>, :body(to-json($json)), :$status);
+    trace "encoding json";
+    my $out = to-json($json);
+    trace "done";
+    self.render($res, :type<json>, :body($out), :$status);
 }
 
 multi method render($res, :$template!, :%template_params is copy, :$status=200) {

@@ -65,11 +65,11 @@ my regex placeholder_class    { [ \w | ':' ]+ }
 
 method !compile {
     $.rex //= do {
+        trace "compiling $.pattern";
         my $parser = parser.parse( $.pattern, actions => actions.new) or
             die "could not parse $.pattern";
         $parser.made;
     };
-    trace "compiled $.pattern into $.rex";
 }
 
 method match(Str $path) {
