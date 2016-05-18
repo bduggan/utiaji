@@ -11,6 +11,7 @@ var Cal = React.createClass({
         // month : data['month'],  -- month name
         //  year  : data['year'],
         //  data : data['data']  -- map from yyyy-mm-dd to text for that day
+        //  unsaved : {}
 
         props['last_touch'] = new Date().getTime();
         return props;
@@ -21,10 +22,11 @@ var Cal = React.createClass({
         fetch(url, {
             method: 'POST',
             headers: { 'Content-Type' : 'application/json' },
-            body: JSON.stringify({data:this.state.data})
+            body: JSON.stringify({data:this.state.changed})
         })
         .then(function(data){
             that.setState({changed: false})
+            that.reload();
             that.touch();
         })
         .catch(function(err) {
@@ -45,6 +47,10 @@ var Cal = React.createClass({
         }).catch(function(err) {
             console.log('error',err);
         })
+    },
+    reload: function() {
+        var first = this.state.first;
+        this.load(first.addDays(-42), first.addDays(83));
     },
     dt: function(i) {
         if (cache[i]) { return cache[i] };
@@ -113,10 +119,12 @@ var Cal = React.createClass({
         var i = e.target.id;
         var dt = this.dt(i);
         var d = this.state.data;
+        var changed = this.state.changed || {};
         d[dt.ymd()] = e.target.value;
+        changed[dt.ymd()] = e.target.value;
         this.touch();
         this.setState({data: d});
-        this.setState({changed: true});
+        this.setState({changed: changed});
     },
     nextmonth: function(e) {
         this.setState({editing: undefined });

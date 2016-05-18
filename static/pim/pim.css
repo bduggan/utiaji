@@ -42,6 +42,18 @@ table.cal tr td {
   vertical-align:top;
   color:black;
 }
+table.cal tr td.edit {
+  width:14%;
+  border:1px solid #999;
+  height:90px;
+  padding-left:0px;
+  padding-right:0px;
+  padding-top:0px;
+  padding-bottom:0px;
+  font-family:monospace;
+  vertical-align:top;
+  color:black;
+}
 table.cal tbody tr td textarea {
    width:100%;
    height:100%;
