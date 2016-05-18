@@ -71,6 +71,9 @@ function wikify(str) {
 }
 
 var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
+function month_name(i) {
+    return months[i];
+}
 function next_month(str) {
     var i = months.indexOf(str);
     return months[ ( i + 1 ) % 12 ];

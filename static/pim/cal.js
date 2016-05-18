@@ -132,7 +132,7 @@ var Cal = React.createClass({
         if (this.state.month == 'Jan' ) {
             this.setState({ year: this.state.year + 1 });
         }
-        this.load(first, first.addDays(41));
+        this.load(first.addDays(-42), first.addDays(83));
     },
     prevmonth: function(e) {
         this.setState({editing: undefined });
@@ -148,7 +148,7 @@ var Cal = React.createClass({
         if (this.state.month == 'Dec' ) {
             this.setState({ year: this.state.year - 1 });
         }
-        this.load(first, first.addDays(41));
+        this.load(first.addDays(-42), first.addDays(83));
     },
     render: function() {
         var stat = this.state.changed ? 'changed' : 'saved';

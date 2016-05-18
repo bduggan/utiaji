@@ -13,7 +13,7 @@ loading...
   var cal = React.createElement(Cal, {
     initial_data : {
      first : new Date( ...data['first'] ),
-     month : data['month'],
+     month : month_name(data['month_index']),
      year  : data['year'],
      data : data['data'],
    }

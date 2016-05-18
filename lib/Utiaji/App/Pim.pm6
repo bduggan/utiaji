@@ -17,16 +17,15 @@ method BUILD {
 
     .get: '/cal',
       -> $req,$res {
-         $.db.query: "select k,v->>'txt' from kv where k >= ? and k <= ?", 'date:2016-05-01', 'date:2016-06-01';
-         my %events;
-         for $.db.results -> $row {
-             my $d = $row[0].subst: /'date:'/, '';
-             %events{$d} = $row[1];
-         }
+         my $f = Date.today.truncated-to("month");
+         $f .= pred until $f.day==1;
+         $.db.query: "select k,v->>'txt' from kv where k >= ? and k <= ?",
+            "date:{ $f.earlier(:6weeks) }", "date:{ $f.later(:6weeks) }";
+         my %events = map { .[0].subst('date:','') => .[1] }, $.db.results;
          my %data =
-            month => "May",
-            year => 2016,
-            first => [ 2016, 5 - 1, 1 ], # first sunday on calendar
+            first => [ $f.year, $f.month - 1, $f.day ],
+            year => $f.year,
+            month_index => Date.today.month - 1,
             data => %events;
          self.render: $res,
              'cal' => { tab => "cal", today => "monday", data => %data }
