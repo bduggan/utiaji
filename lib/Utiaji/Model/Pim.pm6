@@ -19,7 +19,13 @@ class Cal {
          $.db.query: "select k,v->>'txt' from kv where k >= ? and k <= ?", "date:$from", "date:$to";
          my %results = map { .[0].subst('date:','') => .[1] }, $.db.results;
          return %results;
+    }
+    method update(:$dates) {
+       for %$dates.kv -> $k,$v {
+           self.db.upsertjson( "date:$k", { txt => $v } );
+       }
      }
+
 }
 
 class Wiki {

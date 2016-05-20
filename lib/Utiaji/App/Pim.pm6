@@ -15,7 +15,7 @@ method BUILD {
     .get: '/',
       -> $req, $res {
           self.redirect_to: $res, '/cal';
-      };
+     };
 
     .get: '/cal',
       -> $req,$res {
@@ -23,20 +23,19 @@ method BUILD {
          self.render: $res,
              'cal' => { tab => "cal", today => "monday", data => %events }
     };
+
     .get: '/cal/range/Δfrom/Δto',
        -> $req, $res, $/ {
          self.render: $res, json => $.pim.cal.events($<from>, $<to>);
     };
+
     .post: '/cal',
       sub ($req, $res) {
           my $json = $req.json or return
               self.render: $res, json => { status => 'error', message => 'no data' };
-          my $dates = $json<data> // {};
-          for %$dates.kv -> $k,$v {
-              self.db.upsertjson( "date:$k", { txt => $v } );
-          }
+          $.pim.cal.update(dates => $json<data> || {});
           self.render: $res, json => { status => 'ok' };
-      };
+    };
 
     .get: '/wiki',
       -> $req,$res {
