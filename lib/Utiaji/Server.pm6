@@ -33,10 +33,7 @@ class Utiaji::Server {
     }
 
     method _header_valid(Buf[] $header) {
-        trace "header: " ~ $header.perl;
-        return ! $header.grep: {
-            ( $_ < 32 || $_ >= 127) && $_ != 13 && $_ != 10
-        }
+        return $header ⊂ (10,13,32..127);
     }
 
     method _header_done(Buf[] $request) {
