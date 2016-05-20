@@ -14,6 +14,7 @@ has $.errors is rw;    #= Most recent errors.
 has @.results is rw;   #= Most recent result set.
 
 method BUILD {
+    $.db = $db if $db;
     return if $.db;
     my $database =  %*ENV<PGDATABASE> or die "Please set PGDATABASE";
     debug "connecting to database $database";

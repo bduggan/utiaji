@@ -29,7 +29,17 @@ class Cal {
 }
 
 class Wiki {
+    has $.db = Utiaji::DB.new;
 
+    method save_page($page,$json) {
+        self.db.query: "delete from kv where k=? ", "wiki:$page";
+        self.db.query: "insert into kv (k,v) values (?,?)", "wiki:$page", :$json;
+    }
+
+    method page_text($page) {
+        self.db.query: "select v::text from kv where k=?", "wiki:$page";
+        return $.db.json;
+    }
 }
 
 class AddressBook {

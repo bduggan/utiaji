@@ -1,11 +1,9 @@
 use Utiaji::App;
-use Utiaji::DB;
 use Utiaji::Log;
 use Utiaji::Model::Pim;
 
 unit class Utiaji::App::Pim is Utiaji::App;
 
-has $.db = Utiaji::DB.new;
 has $.template-path = 'templates/pim';
 has $.pim = Utiaji::Model::Pim.new;
 
@@ -44,16 +42,13 @@ method BUILD {
 
     .get: '/wiki/:page',
       -> $req, $res, $/ {
-          self.db.query: "select v::text from kv where k=?", "wiki:$<page>";
-          my $data = $.db.json;
+          my $data = $.pim.wiki.page_text($<page>);
           self.render: $res, 'wiki' => { tab => "wiki", page => $<page>, data => $data }
     };
 
     .post: '/wiki/:page',
        -> $req, $res, $/ {
-          my $json = $req.json;
-          self.db.query: "delete from kv where k=? ", "wiki:$<page>";
-          self.db.query: "insert into kv (k,v) values (?,?)", "wiki:$<page>", :$json;
+          $.pim.wiki.save_page($<page>,$req.json);
           self.render: $res, json => { 'status' => 'ok' };
     };
 
