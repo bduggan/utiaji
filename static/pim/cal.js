@@ -11,7 +11,8 @@ var Cal = React.createClass({
         // month : data['month'],  -- month name
         //  year  : data['year'],
         //  data : data['data']  -- map from yyyy-mm-dd to text for that day
-        //  unsaved : {}
+        //  changed : { a subset of data: map from yyyy-mm-dd to text for that day (updated, not saved)}
+        //  last_touch : timestamp of last keystroke
 
         props['last_touch'] = new Date().getTime();
         return props;
@@ -19,17 +20,20 @@ var Cal = React.createClass({
     save: function() {
         var url = window.location.href;
         var that = this;
+        var data = this.state.changed;
+        this.setState({changed: false});
         fetch(url, {
             method: 'POST',
             headers: { 'Content-Type' : 'application/json' },
-            body: JSON.stringify({data:this.state.changed})
+            body: JSON.stringify({data:data})
         })
         .then(function(data){
-            that.setState({changed: false})
             that.touch();
         })
         .catch(function(err) {
-            console.log('error',err);
+            console.log('error',err,'unsaved:',data);
+            var reverted_state = Object.assign( data, this.state.changed || {})
+            that.setState(reverted_state);
         })
     },
     load: function(from,to) {
@@ -96,7 +100,9 @@ var Cal = React.createClass({
         return x;
     },
     maybeSave: function() {
+        console.log('maybe save');
         if (this.state.changed) {
+            console.log('save');
             this.save();
             return;
         }
@@ -108,6 +114,7 @@ var Cal = React.createClass({
             }
         }
         if (!this.state.changed && !this.state.editing && (now - this.state.last_touch) > 4000) {
+            console.log('reload');
             this.reload();
         }
     },
@@ -124,6 +131,7 @@ var Cal = React.createClass({
         var changed = this.state.changed || {};
         d[dt.ymd()] = e.target.value;
         changed[dt.ymd()] = e.target.value;
+        console.log('changed',changed);
         this.touch();
         this.setState({data: d});
         this.setState({changed: changed});
