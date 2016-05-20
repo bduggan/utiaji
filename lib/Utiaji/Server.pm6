@@ -6,13 +6,15 @@ use Utiaji::App::Default;
 use NativeCall;
 sub fork returns int32 is native { * };
 
-# $x in $y --> the elements of $x occur in $y in sequence
-sub infix:<in>(Buf[] $x, Buf[] $y) {
+# $x b4 $y -->
+#  if the elements of $x occur in $y in sequence
+#  return the subbuf before them
+sub infix:<b4>(Buf[] $x, Buf[] $y) {
     my $e = $x.elems;
     for $y.pairs -> $i {
         next unless $y.elems - $i.key >= $x.elems;
         my @check = $y[ $i.key .. $i.key + $e - 1 ];
-        return $i.key if $x.Array eqv @check;
+        return $y.subbuf(0,$i.key) if $x.Array eqv @check;
     }
     return Any;
 }
@@ -31,8 +33,7 @@ class Utiaji::Server {
     }
 
     method _header_valid(Buf[] $header) {
-        debug "in header valid";
-        debug $header.perl;
+        trace "header: " ~ $header.perl;
         return ! $header.grep: {
             ( $_ < 32 || $_ >= 127) && $_ != 13 && $_ != 10
         }
@@ -40,11 +41,11 @@ class Utiaji::Server {
 
     method _header_done(Buf[] $request) {
         my $want = Buf[uint8].new(13,10,13,10);
-        my $found = $want in $request;
-        fail "bad request" if !$found && !self._header_valid($request);
-        fail "bad header" if $found
-            && !self._header_valid($request.subbuf(0,$found));
-        return $found;
+        my $head = $want b4 $request;
+        fail "bad request" if !$head && !self._header_valid($request);
+        fail "bad header" if $head && !self._header_valid($head);
+        fail "empty header" if $head.defined && !$head.elems;
+        return $head;
     }
 
     method respond(Str $request) {
@@ -56,10 +57,14 @@ class Utiaji::Server {
     }
 
     method handle-request($bytes is rw,$buf) {
-        trace "got bytes for request";
+        trace "got buf for request : " ~ $buf.perl;
         $bytes = $bytes ~ $buf;
+        trace "all bytes : " ~ $bytes.perl;
         my $done = self._header_done($bytes);
-        return $done if $done ~~ Failure;
+        if !$done.defined and $done.isa(Failure) {
+            info $done.exception.message;
+            return $done;
+        }
         return unless $done;
         trace "Got a request header.";
         my $response;
