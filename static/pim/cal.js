@@ -1,6 +1,6 @@
-use_tags(['div','table','tbody','tr','th','td','span','textarea','a']);
+use_tags(['div','table','tbody','tr','th','td','span','textarea','a','pre']);
 
-var cache = {}; // map from index to date
+var cache = {};   // map from index to date
 
 var Cal = React.createClass({
 
@@ -26,7 +26,6 @@ var Cal = React.createClass({
         })
         .then(function(data){
             that.setState({changed: false})
-            that.reload();
             that.touch();
         })
         .catch(function(err) {
@@ -43,7 +42,7 @@ var Cal = React.createClass({
         }).then(function(res){
             return res.json();
         }).then(function(j){
-            that.setState({ data: j });
+            that.setState({ data: j, changed: false });
         }).catch(function(err) {
             console.log('error',err);
         })
@@ -97,6 +96,10 @@ var Cal = React.createClass({
         return x;
     },
     maybeSave: function() {
+        if (this.state.changed) {
+            this.save();
+            return;
+        }
         if (this.state.editing !== undefined) {
             var now = new Date().getTime();
             var last = this.state.last_touch;
@@ -104,10 +107,9 @@ var Cal = React.createClass({
                 this.setState({editing: undefined });
             }
         }
-        if (!this.state.changed) {
-            return;
+        if (!this.state.changed && !this.state.editing && (now - this.state.last_touch) > 4000) {
+            this.reload();
         }
-        this.save();
     },
     touch: function() {
         this.setState({ last_touch: new Date().getTime() });
@@ -188,6 +190,7 @@ var Cal = React.createClass({
                       ])
                     )
                  )
+               //,pre(JSON.stringify(this.state.changed))
             )
     }
 });
