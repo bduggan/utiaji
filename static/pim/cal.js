@@ -37,7 +37,6 @@ var Cal = React.createClass({
         })
     },
     load: function(from,to) {
-        console.log('loading');
         var url = window.location.href;
         url += '/range/' + from.ymd() + '/' + to.ymd();
         var that = this;
@@ -100,9 +99,7 @@ var Cal = React.createClass({
         return x;
     },
     maybeSave: function() {
-        console.log('maybe save');
         if (this.state.changed) {
-            console.log('save');
             this.save();
             return;
         }
@@ -114,7 +111,6 @@ var Cal = React.createClass({
             }
         }
         if (!this.state.changed && !this.state.editing && (now - this.state.last_touch) > 4000) {
-            console.log('reload');
             this.reload();
         }
     },
@@ -131,7 +127,6 @@ var Cal = React.createClass({
         var changed = this.state.changed || {};
         d[dt.ymd()] = e.target.value;
         changed[dt.ymd()] = e.target.value;
-        console.log('changed',changed);
         this.touch();
         this.setState({data: d});
         this.setState({changed: changed});
