@@ -6,6 +6,17 @@ use Utiaji::App::Default;
 use NativeCall;
 sub fork returns int32 is native { * };
 
+# $x in $y --> the elements of $x occur in $y in sequence
+sub infix:<in>(Buf[] $x, Buf[] $y) {
+    my $e = $x.elems;
+    for $y.pairs -> $i {
+        next unless $y.elems - $i.key >= $x.elems;
+        my @check = $y[ $i.key .. $i.key + $e - 1 ];
+        return $i.key if $x.Array eqv @check;
+    }
+    return Any;
+}
+
 class Utiaji::Server {
 
     has Promise $.loop;
@@ -19,18 +30,21 @@ class Utiaji::Server {
         "http://$.host" ~ ($.port == 80 ?? "" !! ":$.port")
     }
 
-    method _header_done(Buf[] $request) {
-        my $done;
-        try {
-            CATCH {
-                default {
-                    error .gist;
-                    $done = 0;
-                }
-            }
-            $done = $request.decode('ASCII').contains("\r\n\r\n");
+    method _header_valid(Buf[] $header) {
+        debug "in header valid";
+        debug $header.perl;
+        return ! $header.grep: {
+            ( $_ < 32 || $_ >= 127) && $_ != 13 && $_ != 10
         }
-        $done;
+    }
+
+    method _header_done(Buf[] $request) {
+        my $want = Buf[uint8].new(13,10,13,10);
+        my $found = $want in $request;
+        fail "bad request" if !$found && !self._header_valid($request);
+        fail "bad header" if $found
+            && !self._header_valid($request.subbuf(0,$found));
+        return $found;
     }
 
     method respond(Str $request) {
@@ -44,7 +58,9 @@ class Utiaji::Server {
     method handle-request($bytes is rw,$buf) {
         trace "got bytes for request";
         $bytes = $bytes ~ $buf;
-        return unless self._header_done($bytes);
+        my $done = self._header_done($bytes);
+        return $done if $done ~~ Failure;
+        return unless $done;
         trace "Got a request header.";
         my $response;
         try {
@@ -67,7 +83,7 @@ class Utiaji::Server {
     method handle-connection($conn) {
         my $responding = False;
         my $closed = False;
-        my $promise = Promise.in($.timeout).then({{
+        my $timeout = Promise.in($.timeout).then({{
             return if $responding;
             debug "timeout, closing connection";
             $conn.close unless $closed;
@@ -78,16 +94,26 @@ class Utiaji::Server {
         my Buf[uint8] $bytes = Buf[uint8].new();
         whenever $conn.Supply(:bin) -> $buf {
             $responding = True;
-            if my $response = self.handle-request($bytes,$buf) {
-                unless $closed {
-                    $conn.write($response.to-string.encode("UTF-8"));
-                    $conn.close;
-                    $closed = True;
-                    debug "closed connection";
-                    debug "elapsed { now - $started }";
-                }
+            my $response = self.handle-request($bytes,$buf);
+            if $response ~~ Failure {
+                $conn.close;
+                $closed = True;
+            } elsif $response && !$closed {
+                $conn.write($response.to-string.encode("UTF-8"));
+                $conn.close;
+                $closed = True;
+                debug "closed connection";
+                debug "elapsed { now - $started }";
             } else {
-                $responding = False;
+                $responding = False
+            }
+            QUIT {
+                $closed = True;
+                debug "connection quit";
+            }
+            LAST {
+                $closed = True;
+                debug "connection done";
             }
         }
     }
@@ -98,6 +124,12 @@ class Utiaji::Server {
             react {
                 whenever IO::Socket::Async.listen($.host,$.port) -> $conn {
                     self.handle-connection($conn);
+                    QUIT {
+                        debug "socket quit";
+                    }
+                    LAST {
+                        debug "socket done";
+                    }
                 }
             }
         }
