@@ -6,15 +6,19 @@ use DBIish;
 use DBDish::Pg;
 use JSON::Fast;
 
+my $db;
+
 has DBDish::Pg::Connection $.db is rw; #= Database handle.
 has $.sth is rw;       #= Most recent statement handle.
 has $.errors is rw;    #= Most recent errors.
 has @.results is rw;   #= Most recent result set.
 
 method BUILD {
+    return if $.db;
     my $database =  %*ENV<PGDATABASE> or die "Please set PGDATABASE";
     debug "connecting to database $database";
-    $.db = DBIish.connect("Pg", database => $database, :!RaiseError);
+    $db = DBIish.connect("Pg", database => $database, :!RaiseError);
+    $.db = $db;
 }
 
 multi method query($sql, $key, :$json!) {

@@ -1,11 +1,13 @@
 use Utiaji::App;
 use Utiaji::DB;
 use Utiaji::Log;
+use Utiaji::Model::Pim;
 
 unit class Utiaji::App::Pim is Utiaji::App;
 
 has $.db = Utiaji::DB.new;
 has $.template-path = 'templates/pim';
+has $.pim = Utiaji::Model::Pim.new;
 
 method BUILD {
     $_ = self.router;
@@ -17,25 +19,13 @@ method BUILD {
 
     .get: '/cal',
       -> $req,$res {
-         my $f = Date.today.truncated-to("month");
-         $f .= pred until $f.day==1;
-         $.db.query: "select k,v->>'txt' from kv where k >= ? and k <= ?",
-            "date:{ $f.earlier(:6weeks) }", "date:{ $f.later(:6weeks) }";
-         my %events = map { .[0].subst('date:','') => .[1] }, $.db.results;
-         my %data =
-            first => [ $f.year, $f.month - 1, $f.day ],
-            year => $f.year,
-            month_index => Date.today.month - 1,
-            data => %events;
+         my %events = $.pim.cal.initial_state;
          self.render: $res,
-             'cal' => { tab => "cal", today => "monday", data => %data }
+             'cal' => { tab => "cal", today => "monday", data => %events }
     };
     .get: '/cal/range/Δfrom/Δto',
        -> $req, $res, $/ {
-         debug "calling query";
-         $.db.query: "select k,v->>'txt' from kv where k >= ? and k <= ?", "date:$<from>", "date:$<to>";
-         my %results = map { .[0].subst('date:','') => .[1] }, $.db.results;
-         self.render: $res, json => %results;
+         self.render: $res, json => $.pim.cal.events($<from>, $<to>);
     };
     .post: '/cal',
       sub ($req, $res) {

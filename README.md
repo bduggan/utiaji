@@ -11,7 +11,7 @@ It is written in Perl 6.
 Install
 =======
 createdb utiaji
-psql utiaji -c 'create table kv(k varchar not null primary key, v jsonb)'
+psql utiaji -f schema.sql
 ./install.sh
 
 Run

@@ -28,6 +28,11 @@ method content-is(Str $content) {
     self;
 }
 
+method content-like(Regex $content) {
+    like %.res<content>, $content, qq[Content is like { $content.gist } ];
+    self;
+}
+
 method content-type-is(Str $content_type) {
     is %.res<headers><content-type>,
         "$content_type; charset=utf-8",
@@ -70,7 +75,7 @@ method json-is($json) {
             .resume;
         }
     }
-    is-deeply $json, $json_res, "JSON matches";
+    is-deeply $json_res, $json, "JSON matches";
     self;
 }
 
