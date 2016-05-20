@@ -49,7 +49,6 @@ method BUILD {
 
         .post('/del/∙key',
             sub ($req,$res,$/) {
-                my $json = $req.json;
                 $.db.query: "delete from kv where k = ?", $<key>
                     or return self.render: $res, :400status,
                        json => { status => "fail", reason => $.db.errors };
