@@ -67,11 +67,12 @@ multi method post-ok(Str $path) {
 method json-is($json) {
     self.content-type-is('application/json');
     my $json_res;
+    my $content = %.res<content>;
     try {
-        $json_res = from-json(%.res<content>);
+        $json_res = $content eq 'null' ?? Nil !! from-json($content);
         CATCH {
-            diag %.res<content>;
-            diag .message;
+            diag "json-is did not get json: " ~ $content;
+            diag "got " ~ .message;
             .resume;
         }
     }

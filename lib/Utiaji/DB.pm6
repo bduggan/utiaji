@@ -33,11 +33,7 @@ multi method query($sql is copy,*@bind) {
     $.sth = self.db.prepare($sql);
     @.results = Mu;
     try {
-        CATCH {
-            default {
-                False;
-            }
-        }
+        CATCH { default { False; } }
         $.sth.execute(|@bind);
      } or do {
         $.errors = $.sth.errstr;

@@ -33,29 +33,34 @@ method BUILD {
               self.render: $res, json => { status => 'error', message => 'no data' };
           $.pim.cal.update(dates => $json<data> || {});
           self.render: $res, json => { status => 'ok' };
-    };
+        };
 
     .get: '/wiki',
       -> $req,$res {
          self.redirect_to: $res, '/wiki/main';
-    };
+       };
 
     .get: '/wiki/:page',
       -> $req, $res, $/ {
-          my $data = $.pim.wiki.page_text($<page>);
+          my $data = $.pim.wiki.page($<page>);
           self.render: $res, 'wiki' => { tab => "wiki", page => $<page>, data => $data }
-    };
+        };
+
+    .get: '/wiki/:page.json',
+      -> $req, $res, $/ {
+          self.render: $res, json => $.pim.wiki.page($<page>);
+        };
 
     .post: '/wiki/:page',
        -> $req, $res, $/ {
           $.pim.wiki.save_page($<page>,$req.json);
           self.render: $res, json => { 'status' => 'ok' };
-    };
+        };
 
     .get: '/people',
       -> $req,$res {
          self.render: $res,
              'people' => { tab => "people" }
-    };
+        };
 
 }
