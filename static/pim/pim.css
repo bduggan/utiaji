@@ -89,8 +89,8 @@ textarea {
 }
 div.status-indicator {
     position:absolute;
-    top: 5px;
-    right: 230px;
+    top: 40px;
+    right: 10px;
 }
 
 div.changed::before {
