@@ -6,7 +6,7 @@ class Cal {
          my $f = Date.today.truncated-to("month");
          $f .= pred until $f.day==1;
          $.db.query: "select k,v->>'txt' from kv where k >= ? and k <= ?",
-            "date:{ $f.earlier(:6weeks) }", "date:{ $f.later(:6weeks) }";
+            "date:{ $f.earlier(:12weeks) }", "date:{ $f.later(:12weeks) }";
          my %events = map { .[0].subst('date:','') => .[1] }, $.db.results;
          my %data =
             first => [ $f.year, $f.month - 1, $f.day ],
