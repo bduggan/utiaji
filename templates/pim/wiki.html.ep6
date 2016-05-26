@@ -1,4 +1,4 @@
-%| :$data, :$page, *%args
+%| Page :$data, Str :$page, *%args
 
 ▶== include $app, 'header', |%args;
 
@@ -11,9 +11,9 @@
 </row>
 
 <script type='text/javascript'>
-  var data = <%== to-json($data // {content => ""}) %>;
+  var data = <%== to-json($data.value // {txt => ""}) %>;
   var wiki = React.createElement(Wiki, {
-    initial_text: data['content']
+    initial_text: data['txt']
   });
   var ref = ReactDOM.render(wiki, document.getElementById('content'))
 </script>

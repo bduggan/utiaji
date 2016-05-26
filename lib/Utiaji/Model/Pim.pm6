@@ -3,6 +3,7 @@ use Utiaji::Log;
 
 class Page {...}
 class Day {...}
+class AddressBook {...}
 
 role Referencable {
     method refs-in {
@@ -36,10 +37,11 @@ class Day is Saveable does Serializable does Referencable {
     has Date $.date is required;
     has Str $.text;
 
-    submethod BUILD(:$date,:$!text) {
+    submethod BUILD(:$date,:$text) {
+        $!text = $text if $text.defined;
         $!date = Date.new($date) if $date.isa('Str')
     }
-    method construct(:$k,:$value = { txt => ""}) {
+    method construct(:$k!,:$value = { txt => ""}) {
         Day.new( date => $k.subst('date:', ''), text => $value<txt>.Str // "");
     }
     method k {
@@ -103,7 +105,7 @@ class Cal {
 
     method update(:$dates) {
        for %$dates.kv -> $k,$v {
-           Day.new(k => $k, value => $v).save;
+           Day.construct(k => $k, value => { txt => $v}).save;
        }
      }
 }
@@ -111,18 +113,21 @@ class Cal {
 class Wiki {
     has $.db = Utiaji::DB.new;
 
-    method page($page) {
-        self.db.query: "select v::text from kv where k=?", "wiki:$page";
-        return $.db.json;
+    method page($name is copy) {
+        $name = ~$name;
+        $.db.query("select v->>'txt' from kv where k=?","wiki:$name");
+        return Page.new( name => $name, text => $.db.result ) ;
     }
 }
 
 class Page does Serializable does Saveable does Referencable {
+    # 'content' in html is 'text' in object, is 'txt' in db
     has Str $.name is required;
     has $.text;
 
     method construct(:$k,:$value) {
         my $name = $k.subst('wiki:','');
+        say "constructing from $value";
         return Page.new(name => "$name", text => $value<txt>);
         self;
     }
@@ -134,9 +139,10 @@ class Page does Serializable does Saveable does Referencable {
         return { txt => $!text }
     }
     method computed-refs-out {
-        # TODO: dates in a page
-        return;
+        # TODO: other pages etc
+        return ();
     }
+
 }
 
 class AddressBook {
@@ -146,28 +152,22 @@ class AddressBook {
 class Utiaji::Model::Pim {
     has $.db = Utiaji::DB.new;
     has $.cal = Cal.new;
-    has $.wiki = Wiki.new;
+    has $.wiki handles 'page' = Wiki.new;
     has $.addressbook = AddressBook.new;
 
-    multi method save(Day :$day) {
-        $day.save or return False;
-        my @computed = $day.computed-refs-out;
-        my @existing = $day.refs-out;
+    method save($resource) {
+        $resource.save or return False;
+        my @computed = $resource.computed-refs-out;
+        my @existing = $resource.refs-out;
         for ( @computed (-) @existing ).keys -> $to {
             $.db.query: "insert into kv (k) values (?) on conflict (k) do nothing", $to;
-            $.db.query: 'insert into kk (f,t) values (?,?)', $day.k, $to or return False;
+            $.db.query: 'insert into kk (f,t) values (?,?)', $resource.k, $to or return False;
         }
         for ( @existing (-) @computed ).keys -> $to {
             $.db.query: 'delete from kk where f=? and t=?',
-                $day.k, $to or return False;
+                $resource.k, $to or return False;
         }
         return True;
-    }
-    method days() { ... }
-
-    method page(Str $name) {
-        $.db.query("select v->>'txt' from kv where k=?",$name);
-        return Page.new( name => $name, text => $.db.result ) ;
     }
 
 }

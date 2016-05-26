@@ -17,7 +17,7 @@ var Wiki = React.createClass({
         fetch(url, {
             method: 'POST',
             headers: { 'Content-Type':'application/json'},
-            body: JSON.stringify({content:t})
+            body: JSON.stringify({txt:t})
         })
         .then(function(data){
             console.log('got ', data);

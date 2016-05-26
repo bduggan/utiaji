@@ -42,8 +42,9 @@ method BUILD {
 
     .get: '/wiki/:page',
       -> $req, $res, $/ {
-          my $data = $.pim.wiki.page($<page>);
-          self.render: $res, 'wiki' => { tab => "wiki", page => $<page>, data => $data }
+          my $page = $.pim.wiki.page($<page>);
+          say "sending data: { $page.perl }";
+          self.render: $res, 'wiki' => { tab => "wiki", page => ~$<page>, data => $page }
         };
 
     .get: '/wiki/:page.json',
@@ -53,8 +54,8 @@ method BUILD {
 
     .post: '/wiki/:page',
        -> $req, $res, $/ {
-          say "posted to $<page>";
-          if $.pim.wiki.save_page($<page>,$req.json) {
+          my $page = Page.new(name => ~$<page>, text => $req.json<txt>);
+          if $.pim.save($page) {
             self.render: $res, json => { 'status' => 'ok' };
         } else {
               self.render: $res, :400status, json => { error => 'cannot save' } ;
