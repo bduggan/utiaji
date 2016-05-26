@@ -47,6 +47,9 @@ is $page.refs-in[0], 'date:2011-01-01', "the right day";
 $page = Page.new(name => "foo", text => 'bar @baz');
 ok $pim.save($page), 'saved wiki page';
 
+my $empty = Page.new(name => "something");
+ok $pim.save($empty);
+
 $day = Day.new(date => "2011-01-01", text => 'something @small');
 ok $pim.save($day), 'saved day';
 $page = $pim.page("big");

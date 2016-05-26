@@ -1,9 +1,9 @@
-%| Page :$data, Str :$page, *%args
+%| Page :$page, *%args
 
 ▶== include $app, 'header', |%args;
 
 <h2 class='text-center'>
-▶= $page
+▶= $page.name
 </h2>
 
 <row>
@@ -11,9 +11,9 @@
 </row>
 
 <script type='text/javascript'>
-  var data = <%== to-json($data.value // {txt => ""}) %>;
+  var state = <%==  to-json($page.initial_state) %>;
   var wiki = React.createElement(Wiki, {
-    initial_text: data['txt']
+    initial_data: state
   });
   var ref = ReactDOM.render(wiki, document.getElementById('content'))
 </script>

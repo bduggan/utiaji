@@ -1,4 +1,4 @@
-%| :$today, :$data, *%args
+%| :$today, :$cal, *%args
 
 %== include $app, 'header', |%args;
 
@@ -9,15 +9,13 @@ loading...
 </row>
 
 <script type='text/javascript'>
-  var data = <%==  to-json($data) %>;
+  var state = <%==  to-json($cal.initial_state) %>;
+  state.first = new Date(...state.first);
+  state.month = month_name(state['month_index']);
   var cal = React.createElement(Cal, {
-    initial_data : {
-     first : new Date( ...data['first'] ),
-     month : month_name(data['month_index']),
-     year  : data['year'],
-     data : data['data'],
-   }
-  });
+    initial_data : state
+    }
+  );
   var ref = ReactDOM.render(cal, document.getElementById('content'))
 </script>
 

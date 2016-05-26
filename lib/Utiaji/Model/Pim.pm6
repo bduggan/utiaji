@@ -96,11 +96,12 @@ class Cal {
 
     method initial_state {
         my %data = map { .pair }, @.days;
-        return
+        my %state =
             first => [ $!from.year, $!from.month - 1, $!from.day ],
             year => $!focus.year,
             month_index => $!focus.month - 1,
-            data => %data
+            data => %data;
+        return %state;
     }
 
     method update(:$dates) {
@@ -114,16 +115,16 @@ class Wiki {
     has $.db = Utiaji::DB.new;
 
     method page($name is copy) {
-        $name = ~$name;
-        $.db.query("select v->>'txt' from kv where k=?","wiki:$name");
-        return Page.new( name => $name, text => $.db.result ) ;
+        $.db.query("select v::text from kv where k=?","wiki:$name");
+        return Page.construct( k => ~$name, value => $.db.json );
     }
+
 }
 
 class Page does Serializable does Saveable does Referencable {
     # 'content' in html is 'text' in object, is 'txt' in db
     has Str $.name is required;
-    has $.text;
+    has Str $.text;
 
     method construct(:$k,:$value) {
         my $name = $k.subst('wiki:','');
@@ -143,6 +144,10 @@ class Page does Serializable does Saveable does Referencable {
         return ();
     }
 
+    method initial_state {
+        my %state = text => $!text // "";
+        return %state;
+    }
 }
 
 class AddressBook {

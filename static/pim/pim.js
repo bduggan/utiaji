@@ -42,6 +42,7 @@ function escape(str) {
     .replace(/'/g, '&apos;')
 }
 function unescape(str) {
+  if (str == null) { str = ''; }
     return str.replace('&amp;', '&', 'g')
     .replace('&lt;','<','g')
     .replace('&gt;','>','g')

@@ -13,6 +13,13 @@ has $.sth is rw;       #= Most recent statement handle.
 has $.errors is rw;    #= Most recent errors.
 has @.results is rw;   #= Most recent result set.
 
+sub decode-json($x) {
+   info "decoding $x";
+   return Nil unless $x.defined;
+   return Nil if $x eq '[NULL]';
+   return from-json($x);
+}
+
 method BUILD {
     $.db = $db if $db;
     return if $.db;
@@ -54,13 +61,13 @@ method result {
 
 method json {
     return unless $.result;
-    return from-json($.result);
+    return decode-json($.result);
 
 }
 
 method jsonv {
     for @.results -> $r {
-        $r[1] = from-json($r[1]);
+        $r[1] = decode-json($r[1]);
     }
     self.results;
 }

@@ -17,9 +17,9 @@ method BUILD {
 
     .get: '/cal',
       -> $req,$res {
-         my %events = $.pim.cal.load(window => True).initial_state;
+         my $cal = $.pim.cal.load;
          self.render: $res,
-             'cal' => { tab => "cal", today => "monday", data => %events }
+             'cal' => { tab => "cal", today => "monday", cal => $cal }
     };
 
     .get: '/cal/range/Δfrom/Δto',
@@ -42,9 +42,8 @@ method BUILD {
 
     .get: '/wiki/:page',
       -> $req, $res, $/ {
-          my $page = $.pim.wiki.page($<page>);
-          say "sending data: { $page.perl }";
-          self.render: $res, 'wiki' => { tab => "wiki", page => ~$<page>, data => $page }
+          my $page = $.pim.wiki.page(~$<page>);
+          self.render: $res, 'wiki' => { tab => "wiki", page => $page }
         };
 
     .get: '/wiki/:page.json',

@@ -4,9 +4,10 @@ use_tags(['div','row','textarea','a','pre'])
 var Wiki = React.createClass({
 
     getInitialState: function() {
+        var text = this.props.initial_data.text;
         return {
-            editing: (this.props.initial_text ? false : true),
-            text: this.props.initial_text
+            editing: (text ? false : true),
+            text: text
         }
     },
 
