@@ -59,10 +59,10 @@ class Day is Saveable does Serializable does Referencable {
 
 class Cal {
     has $.db = Utiaji::DB.new;
-    has Date $.from;
-    has Date $.to;
-    has Day @.days;
-    has Date $!focus = Date.today; # year + month
+    has Date $.from;  # start of range
+    has Date $.to;    # end of range
+    has Day @.days;   # days in range, possibly plus a window before + after
+    has Date $!focus = Date.today; # has the year + month of interest
 
     method align {
          $!from = $!focus.truncated-to("month");
