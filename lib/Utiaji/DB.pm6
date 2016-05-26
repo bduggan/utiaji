@@ -46,7 +46,7 @@ multi method query($sql is copy,*@bind) {
 }
 
 #| The most recent result if there is only one value.
-method result() {
+method result {
     return @.results unless @.results==1;
     return @.results[0] unless @.results[0]==1;
     return @.results[0][0];
@@ -56,6 +56,13 @@ method json {
     return unless $.result;
     return from-json($.result);
 
+}
+
+method jsonv {
+    for @.results -> $r {
+        $r[1] = from-json($r[1]);
+    }
+    self.results;
 }
 
 method upsertjson($k,$json,$table='kv') {

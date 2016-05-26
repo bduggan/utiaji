@@ -17,14 +17,14 @@ method BUILD {
 
     .get: '/cal',
       -> $req,$res {
-         my %events = $.pim.cal.initial_state;
+         my %events = $.pim.cal.load(window => True).initial_state;
          self.render: $res,
              'cal' => { tab => "cal", today => "monday", data => %events }
     };
 
     .get: '/cal/range/Δfrom/Δto',
        -> $req, $res, $/ {
-         self.render: $res, json => $.pim.cal.events($<from>, $<to>);
+         self.render: $res, json => $.pim.cal.load(from => $<from>, to => $<to>, align => False).raw;
     };
 
     .post: '/cal',
@@ -53,10 +53,13 @@ method BUILD {
 
     .post: '/wiki/:page',
        -> $req, $res, $/ {
-          $.pim.wiki.save_page($<page>,$req.json);
-          self.render: $res, json => { 'status' => 'ok' };
+          say "posted to $<page>";
+          if $.pim.wiki.save_page($<page>,$req.json) {
+            self.render: $res, json => { 'status' => 'ok' };
+        } else {
+              self.render: $res, :400status, json => { error => 'cannot save' } ;
         };
-
+       };
     .get: '/people',
       -> $req,$res {
          self.render: $res,
