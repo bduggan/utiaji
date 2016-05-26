@@ -33,7 +33,7 @@ role Serializable {
 }
 
 class Day is Saveable does Serializable does Referencable {
-    has Date $.date;
+    has Date $.date is required;
     has Str $.text;
 
     submethod BUILD(:$date,:$!text) {
@@ -52,6 +52,9 @@ class Day is Saveable does Serializable does Referencable {
         my @names = ( $!text ~~ m:g/ <?after '@'> \w+ / )».Str;
         return map { Page.new(name => $_).k }, @names;
     }
+    method pair {
+        return $.date.Str => $.text
+    }
 }
 
 class Cal {
@@ -59,7 +62,6 @@ class Cal {
     has Date $.from;
     has Date $.to;
     has Day @.days;
-    has %.raw;   # map from date strings to date text
 
     method align {
          $!from = Date.today.truncated-to("month");
@@ -85,19 +87,17 @@ class Cal {
     }
 
     method initial_state {
+        my %data = map { .pair }, @.days;
         return
             first => [ $!from.year, $!from.month - 1, $!from.day ],
             year => $!from.year,
             month_index => Date.today.month - 1,
-            data => %.raw;
+            data => %data
     }
 
     method update(:$dates) {
        for %$dates.kv -> $k,$v {
            Day.new(k => $k, value => $v).save;
-           #self.db.upsertjson( "date:$k", { txt => $v } );
-           #my @refs = Wiki.extract-refs($v);
-           #say "refs:" ~ @refs.perl;
        }
      }
 }
@@ -105,25 +105,6 @@ class Cal {
 class Wiki {
     has $.db = Utiaji::DB.new;
 
-    # method save_page($page,$json) {
-    #     say "called save page";
-    #     self.db.query("insert into kv (k,v) values (?,?) on conflict (k) do update set v=?",
-    #         "wiki:$page", to-json($json), to-json($json)) or return False;
-    #     my @new = self.extract-refs($json<txt>);
-    #     say "text is " ~ $json.perl;
-    #     say "new refs { @new }";
-    #     $.db.query("select t from kk where f=?","wiki:$page") or error $.db.errors;
-    #     my @old = $.db.results;
-    #     say "new" ~ @new.perl;
-    #     say "old" ~ @old.perl;
-    #     return True;
-    #     #my @add = @new - @old;
-    #     #my @del = @old - @new;
-    #     #$.db.query: "insert into kv (k) values (?) on conflict (k) do nothing", "wiki:$_" for @add;
-    #     #$.db.query: "insert into kk (f,t) values (?,?)", "wiki:$page", $_ for @add;
-    #     #$.db.query: "delete from kk where f=?", $_ for @del;
-    # }
-    #
     method page($page) {
         self.db.query: "select v::text from kv where k=?", "wiki:$page";
         return $.db.json;
@@ -131,7 +112,7 @@ class Wiki {
 }
 
 class Page does Serializable does Saveable does Referencable {
-    has Str $.name;
+    has Str $.name is required;
     has $.text;
 
     method construct(:$k,:$value) {
@@ -141,7 +122,6 @@ class Page does Serializable does Saveable does Referencable {
     }
 
     method k {
-        die "no name for k" unless defined($!name);
         return 'wiki:' ~ $!name
     }
     method value {
@@ -164,18 +144,14 @@ class Utiaji::Model::Pim {
     has $.addressbook = AddressBook.new;
 
     multi method save(Day :$day) {
-        $day.save;
+        $day.save or return False;
         my @computed = $day.computed-refs-out;
         my @existing = $day.refs-out;
-        for @computed (-) @existing -> $pair {
-            my $to = $pair.key;
+        for ( @computed (-) @existing ).keys -> $to {
             $.db.query: "insert into kv (k) values (?) on conflict (k) do nothing", $to;
-
-            $.db.query: 'insert into kk (f,t) values (?,?)',
-                $day.k, $to or return False;
+            $.db.query: 'insert into kk (f,t) values (?,?)', $day.k, $to or return False;
         }
-        for @existing (-) @computed -> $pair {
-            my $to = $pair.key;
+        for ( @existing (-) @computed ).keys -> $to {
             $.db.query: 'delete from kk where f=? and t=?',
                 $day.k, $to or return False;
         }

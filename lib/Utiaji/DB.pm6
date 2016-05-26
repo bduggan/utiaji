@@ -37,7 +37,7 @@ multi method query($sql is copy,*@bind) {
         $.sth.execute(|@bind);
      } or do {
         $.errors = $.sth.errstr;
-        debug "Error: $.errors";
+        error "Error: $.errors";
         return False;
     };
     @.results = $.sth.allrows();
@@ -66,7 +66,8 @@ method jsonv {
 }
 
 method upsertjson($k,$json,$table='kv') {
-    self.query: "delete from kv where k=? ", $k;
-    self.query: "insert into kv (k,v) values (?,?)", $k, :$json;
+    self.query: "insert into kv (k,v) values (?,?) on conflict (k) do update set v=?",
+        $k, to-json($json), to-json($json) or return False;
+    return True;
 }
 
