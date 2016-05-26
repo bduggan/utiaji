@@ -62,19 +62,25 @@ class Cal {
     has Date $.from;
     has Date $.to;
     has Day @.days;
+    has Date $!focus = Date.today; # year + month
 
     method align {
-         $!from = Date.today.truncated-to("month");
+         $!from = $!focus.truncated-to("month");
          $!from .= pred until $!from.day==1;
          $!to = $!from.later(:6weeks).pred;
          self;
+    }
+
+    multi method load( :$month!, :$year!) {
+        $!focus = Date.new(sprintf("%04d-%02d-01",$year,$month));
+        self.load(:window, :align, from => $!focus, :to($!focus.later(:1month)));
     }
 
     multi method load(Bool :$window, Str :$from!, Bool :$align) {
         self.load(:$window,from => Date.new($from), :$align);
     }
 
-    multi method load(Bool :$window = False, :$!from = Date.today, :$!to=$!from, Bool :$align = True) {
+    multi method load(Bool :$window = False, :$!from = $!focus, :$!to=$!from, Bool :$align = True) {
         self.align if $align;
         my ($from,$to) = ($!from,$!to);
         if ($window) {
@@ -90,8 +96,8 @@ class Cal {
         my %data = map { .pair }, @.days;
         return
             first => [ $!from.year, $!from.month - 1, $!from.day ],
-            year => $!from.year,
-            month_index => Date.today.month - 1,
+            year => $!focus.year,
+            month_index => $!focus.month - 1,
             data => %data
     }
 
