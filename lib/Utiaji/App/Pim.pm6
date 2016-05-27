@@ -31,7 +31,7 @@ method BUILD {
       sub ($req, $res) {
           my $json = $req.json or return
               self.render: $res, json => { status => 'error', message => 'no data' };
-          $.pim.save: $.pim.cal.make-days(dates => $json<data>);
+          $.pim.save: Day.construct: $json<data>.kv.map: { $^k => ( txt => $^v ) }
           self.render: $res, json => { status => 'ok' };
         };
 

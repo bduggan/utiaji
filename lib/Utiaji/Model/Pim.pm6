@@ -109,10 +109,6 @@ class Cal {
             data => self.as-data
         }
     }
-
-    method make-days(:$dates) {
-        return Day.construct: %$dates.kv.map: { $^k => ( txt => $^v ) }
-     }
 }
 
 class Wiki {
