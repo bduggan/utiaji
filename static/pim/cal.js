@@ -85,7 +85,11 @@ var Cal = React.createClass({
         var txt = this.state.data[this.dt(i).ymd()];
         var dt_class = this.state.changed ? 'changed' : 'saved';
         return td( { className:'edit'},
-            span( { className:'dt ' + dt_class, id: i}, ''),
+            span(
+                { className:'dt ' + dt_class,
+                  id: i,
+                  onClick: this.saveAndStopEdit
+                }, ''),
             textarea({autoFocus: true,
                 id: i,
                 className: ( this.state.changed ? 'changed' : 'saved' ),
@@ -106,6 +110,12 @@ var Cal = React.createClass({
         }
         return x;
     },
+    saveAndStopEdit: function() {
+        if (this.state.changed) {
+            this.save();
+        }
+        this.setState({editing: undefined });
+    },
     maybeSave: function() {
         if (this.state.changed) {
             this.save();
@@ -114,7 +124,7 @@ var Cal = React.createClass({
         if (this.state.editing !== undefined) {
             var now = new Date().getTime();
             var last = this.state.last_touch;
-            if (now - this.state.last_touch > 4000) {
+            if (now - this.state.last_touch > 2000) {
                 this.setState({editing: undefined });
             }
         }
