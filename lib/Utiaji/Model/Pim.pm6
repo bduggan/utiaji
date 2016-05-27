@@ -7,11 +7,11 @@ class AddressBook {...}
 
 role Referencable {
     method refs-in {
-        $.db.query: "select f from kk where t=?", self.k;
+        $.db.query: "select f from kk where t=?", self.id;
         return $.db.column;
     }
     method refs-out {
-        $.db.query: "select t from kk where f=?", self.k;
+        $.db.query: "select t from kk where f=?", self.id;
         return $.db.column;
     }
     method computed-refs-out {
@@ -23,16 +23,16 @@ role Saveable {
     has $.db = Utiaji::DB.new;
 
     method save {
-        self.db.upsertjson( self.k, self.value );
+        self.db.upsertjson( self.id, self.value );
     }
 }
 
 role Serializable {
-    method k { ... }
+    method id { ... }
     method value { ... }
-    multi method construct(Str :$k!,:$value) { ... }
+    multi method construct(Str :$id!,:$value) { ... }
     multi method construct(@pairs) {
-        @pairs.map: { self.construct(k => .key, value => .value) };
+        @pairs.map: { self.construct(id => .key, value => .value) };
     }
 }
 
@@ -44,10 +44,10 @@ class Day is Saveable does Serializable does Referencable {
         $!text = $text if $text.defined;
         $!date = Date.new($date) if $date.isa('Str')
     }
-    multi method construct(Str :$k!,:$value = { txt => ""}) {
-        Day.new( date => $k.subst('date:', ''), text => $value<txt>.Str // "");
+    multi method construct(Str :$id!,:$value = { txt => ""}) {
+        Day.new( date => $id.subst('date:', ''), text => $value<txt>.Str // "");
     }
-    method k {
+    method id {
         return 'date:' ~ $.date.Str;
     }
     method value {
@@ -55,7 +55,7 @@ class Day is Saveable does Serializable does Referencable {
     }
     method computed-refs-out {
         my @names = ( $!text ~~ m:g/ <?after '@'> \w+ / )».Str;
-        return map { Page.new(name => $_).k }, @names;
+        return map { Page.new(name => $_).id }, @names;
     }
     method pair {
         return $.date.Str => $.text
@@ -93,7 +93,7 @@ class Cal {
             $to.= later(:12weeks);
         }
         $.db.query: "select k,v::text from kv where k >= ? and k <= ?", "date:$from", "date:$to";
-        @!days = map { Day.construct(k => .[0], value => .[1]) }, $.db.jsonv;
+        @!days = map { Day.construct(id => .[0], value => .[1]) }, $.db.jsonv;
         self;
     }
 
@@ -116,7 +116,7 @@ class Wiki {
 
     method page($name is copy) {
         $.db.query("select v::text from kv where k=?","wiki:$name");
-        return Page.construct( k => ~$name, value => $.db.json );
+        return Page.construct( id => ~$name, value => $.db.json );
     }
 
 }
@@ -126,14 +126,14 @@ class Page does Serializable does Saveable does Referencable {
     has Str $.name is required;
     has Str $.text;
 
-    multi method construct(Str :$k!,:$value) {
-        my $name = $k.subst('wiki:','');
+    multi method construct(Str :$id!,:$value) {
+        my $name = $id.subst('wiki:','');
         my $text = $value<txt> // "";
         return Page.new(name => "$name", text => $text);
         self;
     }
 
-    method k {
+    method id {
         return 'wiki:' ~ $!name
     }
     method value {
@@ -166,11 +166,11 @@ class Utiaji::Model::Pim {
         my @existing = $resource.refs-out;
         for ( @computed (-) @existing ).keys -> $to {
             $.db.query: "insert into kv (k) values (?) on conflict (k) do nothing", $to;
-            $.db.query: 'insert into kk (f,t) values (?,?)', $resource.k, $to or return False;
+            $.db.query: 'insert into kk (f,t) values (?,?)', $resource.id, $to or return False;
         }
         for ( @existing (-) @computed ).keys -> $to {
             $.db.query: 'delete from kk where f=? and t=?',
-                $resource.k, $to or return False;
+                $resource.id, $to or return False;
         }
         return True;
     }
