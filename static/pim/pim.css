@@ -53,6 +53,12 @@ table.cal tr td.edit {
   font-family:monospace;
   vertical-align:top;
   color:black;
+  position:relative;
+}
+table.cal tr td.edit span.dt {
+    position:absolute;
+    top:0px;
+    right:0px;
 }
 table.cal tbody tr td textarea {
    width:100%;
@@ -99,6 +105,16 @@ div.changed::before {
     font-weight:bold;
 }
 div.saved::before {
+    content:'✓';
+    color:green;
+    font-weight:bold;
+}
+span.changed::before {
+    color:red;
+    content:'×';
+    font-weight:bold;
+}
+span.saved::before {
     content:'✓';
     color:green;
     font-weight:bold;

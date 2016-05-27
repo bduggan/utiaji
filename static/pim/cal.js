@@ -77,13 +77,15 @@ var Cal = React.createClass({
            cl = 'other';
        }
        return td( { className: cl, onClick: this.edit.bind(this,i) },
-                  span( { className:'dt', id: i}, dt.d()),
+                  span( { className:'dt ', id: i}, dt.d()),
                   span( { html: wikify( this.state.data[ dt.ymd() ] ) })
                 );
     },
     editcell: function(i) {
         var txt = this.state.data[this.dt(i).ymd()];
-        return td( {className:'edit'},
+        var dt_class = this.state.changed ? 'changed' : 'saved';
+        return td( { className:'edit'},
+            span( { className:'dt ' + dt_class, id: i}, ''),
             textarea({autoFocus: true,
                 id: i,
                 className: ( this.state.changed ? 'changed' : 'saved' ),
