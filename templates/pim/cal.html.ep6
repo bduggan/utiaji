@@ -1,4 +1,4 @@
-%| :$today, :$cal, *%args
+%| :$cal, *%args
 
 %== include $app, 'header', |%args;
 
@@ -12,10 +12,7 @@ loading...
   var state = <%==  to-json($cal.initial-state) %>;
   state.first = new Date(...state.first);
   state.month = month_name(state['month_index']);
-  var cal = React.createElement(Cal, {
-    initial_state : state
-    }
-  );
+  var cal = React.createElement(Cal, { initial_state : state } );
   var ref = ReactDOM.render(cal, document.getElementById('content'))
 </script>
 

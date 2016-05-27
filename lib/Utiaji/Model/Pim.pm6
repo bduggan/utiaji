@@ -167,14 +167,17 @@ class Utiaji::Model::Pim {
     has $.addressbook = AddressBook.new;
 
     multi method save($resource) {
+        debug "saving $resource";
         $resource.save or return False;
         my @computed = $resource.computed-refs-out;
         my @existing = $resource.refs-out;
         for ( @computed (-) @existing ).keys -> $to {
+            debug "saving ref $to";
             $.db.query: "insert into kv (k) values (?) on conflict (k) do nothing", $to;
             $.db.query: 'insert into kk (f,t) values (?,?)', $resource.id, $to or return False;
         }
         for ( @existing (-) @computed ).keys -> $to {
+            debug "removing ref $to";
             $.db.query: 'delete from kk where f=? and t=?',
                 $resource.id, $to or return False;
         }

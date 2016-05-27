@@ -107,4 +107,6 @@ div.saved::before {
 .inlineblock {
     display:inline-block;
 }
-
+div.datelist a {
+    margin-bottom:1px;
+}

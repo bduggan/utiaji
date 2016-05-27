@@ -18,16 +18,21 @@ method BUILD {
     .get: '/cal',
       -> $req,$res {
          my $cal = $.pim.cal.load;
-         self.render: $res,
-             'cal' => { tab => "cal", today => "monday", cal => $cal }
+         self.render: $res, 'cal' => { tab => "cal", cal => $cal }
     };
+
+    .get: '/cal/Δday',
+       -> $req, $res, $/ {
+         my $cal = $.pim.cal.load(focus => ~$<day>);
+         self.render: $res, 'cal' => { tab => "cal", cal => $cal }
+       };
 
     .get: '/cal/range/Δfrom/Δto',
        -> $req, $res, $/ {
          self.render: $res,
             json => $.pim.cal.load(from => ~$<from>, to => ~$<to>, align => False, window => False)
                      .as-data;
-    };
+       };
 
     .post: '/cal',
       sub ($req, $res) {

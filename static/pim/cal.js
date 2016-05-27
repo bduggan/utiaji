@@ -21,19 +21,26 @@ var Cal = React.createClass({
         var url = window.location.href;
         var that = this;
         var data = this.state.changed;
-        this.setState({changed: false});
         fetch(url, {
             method: 'POST',
             headers: { 'Content-Type' : 'application/json' },
             body: JSON.stringify({data:data})
         })
-        .then(function(data){
-            that.touch();
+        .then(function(response){
+            if (response.ok) {
+                that.touch();
+                var changed = this.state.changed || {};
+                if (Object.getOwnPropertyNames(changed).length == 0) {
+                    that.setState({changed: false});
+                }  else {
+                    that.setState({changed: changed });
+                }
+            } else {
+                console.log('response is not ok', response);
+            }
         })
         .catch(function(err) {
-            console.log('error',err,'unsaved:',data);
-            var reverted_state = Object.assign( data, this.state.changed || {})
-            that.setState(reverted_state);
+            console.log("network error");
         })
     },
     load: function(from,to) {
@@ -47,6 +54,7 @@ var Cal = React.createClass({
         }).then(function(j){
             that.setState({ data: j, changed: false });
         }).catch(function(err) {
+            humane.log(err);
             console.log('error',err);
         })
     },

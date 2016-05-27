@@ -52,8 +52,10 @@ var Wiki = React.createClass({
                             'edit' )
                       )
                    ),
-                   pre( 'dates',
-                       JSON.stringify(this.state.dates)
+                   div( {className: 'datelist'},
+                       this.state.dates.map( function(v) {
+                           return a({className:'small hollow button', href:'/cal/' + v},v)
+                       } )
                    ),
                    this.state.editing ?
                    textarea( { id: 'note', onChange: this.handleChange,
