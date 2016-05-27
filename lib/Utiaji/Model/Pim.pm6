@@ -111,9 +111,7 @@ class Cal {
     }
 
     method make-days(:$dates) {
-        return Day.construct: %$dates.kv.map( -> $k, $v { $k => { txt => $v } })
-        #    Day.construct(:$k, value => { txt => $v } ) } );
-        #return %$dates.kv.map(-> $k, $v { Day.construct(:$k, value => { txt => $v } ) } );
+        return Day.construct: %$dates.kv.map: { $^k => ( txt => $^v ) }
      }
 }
 
