@@ -24,14 +24,14 @@ method BUILD {
 
     .get: '/cal/range/Δfrom/Δto',
        -> $req, $res, $/ {
-         self.render: $res, json => $.pim.cal.load(from => $<from>, to => $<to>, align => False).raw;
+         self.render: $res, json => $.pim.cal.load(from => ~$<from>, to => ~$<to>, align => False).as-data;
     };
 
     .post: '/cal',
       sub ($req, $res) {
           my $json = $req.json or return
               self.render: $res, json => { status => 'error', message => 'no data' };
-          $.pim.cal.update(dates => $json<data> || {});
+          $.pim.save: $.pim.cal.make-days(dates => $json<data>);
           self.render: $res, json => { status => 'ok' };
         };
 
@@ -48,7 +48,8 @@ method BUILD {
 
     .get: '/wiki/:page.json',
       -> $req, $res, $/ {
-          self.render: $res, json => $.pim.wiki.page($<page>);
+          my $page = $.pim.wiki.page($<page>);
+          self.render: $res, json => { txt => $page.text, dates => $page.refs-in».subst('date:','') };
         };
 
     .post: '/wiki/:page',
@@ -57,7 +58,7 @@ method BUILD {
           if $.pim.save($page) {
             self.render: $res, json => { 'status' => 'ok' };
         } else {
-              self.render: $res, :400status, json => { error => 'cannot save' } ;
+            self.render: $res, :400status, json => { error => 'cannot save' } ;
         };
        };
     .get: '/people',

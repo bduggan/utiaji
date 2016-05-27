@@ -14,7 +14,6 @@ has $.errors is rw;    #= Most recent errors.
 has @.results is rw;   #= Most recent result set.
 
 sub decode-json($x) {
-   info "decoding $x";
    return Nil unless $x.defined;
    return Nil if $x eq '[NULL]';
    return from-json($x);
@@ -57,6 +56,10 @@ method result {
     return @.results unless @.results==1;
     return @.results[0] unless @.results[0]==1;
     return @.results[0][0];
+}
+
+method column {
+    return @.results.map({ .[0] })
 }
 
 method json {

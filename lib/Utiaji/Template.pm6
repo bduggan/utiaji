@@ -149,7 +149,6 @@ multi method parse {
 method render(*%params) {
    self.parse unless $.parsed;
    return unless $!parsed;
-   say "parsed is { $!parsed.perl }";
    my @lines = $!parsed(|%params);
    my $out = @lines.join("");
    $out.=chomp unless $!raw ~~ /\n $/;

@@ -1,14 +1,14 @@
 use lib 'lib';
+use lib 't/tlib';
+use tlib;
 use Test;
 use Utiaji::Model::Pim;
 use Utiaji::DB;
 use Utiaji::Test;
 
-my $db = Utiaji::DB.new;
-my $pim = Utiaji::Model::Pim.new;
+clear-db;
 
-$db.query('delete from kk');
-$db.query('delete from kv');
+my $pim = Utiaji::Model::Pim.new;
 
 ok so $pim.cal, "pim has a calendar";
 ok so $pim.wiki, "pim has a wiki";
@@ -23,7 +23,7 @@ is $pim.cal.to.day-of-week, 6, 'last is saturday';
 
 $pim.cal.load(year => 2016, month => 1);
 
-my %init = $pim.cal.initial_state;
+my %init = $pim.cal.initial-state;
 my %expect =
   data => { "2016-01-02" => "jan 2 day" },
   first => [2016, 0, 1],

@@ -8,11 +8,11 @@ class AddressBook {...}
 role Referencable {
     method refs-in {
         $.db.query: "select f from kk where t=?", self.k;
-        return $.db.results;
+        return $.db.column;
     }
     method refs-out {
         $.db.query: "select t from kk where f=?", self.k;
-        return $.db.results;
+        return $.db.column;
     }
     method computed-refs-out {
         ...
@@ -30,7 +30,7 @@ role Saveable {
 role Serializable {
     method k { ... }
     method value { ... }
-    method construct(:$k,:$value) { ... }
+    multi method construct(Str :$k!,:$value) { ... }
 }
 
 class Day is Saveable does Serializable does Referencable {
@@ -41,7 +41,7 @@ class Day is Saveable does Serializable does Referencable {
         $!text = $text if $text.defined;
         $!date = Date.new($date) if $date.isa('Str')
     }
-    method construct(:$k!,:$value = { txt => ""}) {
+    multi method construct(Str :$k!,:$value = { txt => ""}) {
         Day.new( date => $k.subst('date:', ''), text => $value<txt>.Str // "");
     }
     method k {
@@ -94,20 +94,21 @@ class Cal {
         self;
     }
 
-    method initial_state {
-        my %data = map { .pair }, @.days;
-        my %state =
+    method as-data {
+        return @.days».pair.Hash;
+    }
+
+    method initial-state {
+        return {
             first => [ $!from.year, $!from.month - 1, $!from.day ],
             year => $!focus.year,
             month_index => $!focus.month - 1,
-            data => %data;
-        return %state;
+            data => self.as-data
+        }
     }
 
-    method update(:$dates) {
-       for %$dates.kv -> $k,$v {
-           Day.construct(k => $k, value => { txt => $v}).save;
-       }
+    method make-days(:$dates) {
+        return %$dates.kv.map(-> $k, $v { Day.construct(:$k, value => { txt => $v } ) } );
      }
 }
 
@@ -126,10 +127,10 @@ class Page does Serializable does Saveable does Referencable {
     has Str $.name is required;
     has Str $.text;
 
-    method construct(:$k,:$value) {
+    multi method construct(Str :$k!,:$value) {
         my $name = $k.subst('wiki:','');
-        say "constructing from $value";
-        return Page.new(name => "$name", text => $value<txt>);
+        my $text = $value<txt> // "";
+        return Page.new(name => "$name", text => $text);
         self;
     }
 
@@ -144,7 +145,7 @@ class Page does Serializable does Saveable does Referencable {
         return ();
     }
 
-    method initial_state {
+    method initial-state {
         my %state = text => $!text // "";
         return %state;
     }
@@ -160,7 +161,7 @@ class Utiaji::Model::Pim {
     has $.wiki handles 'page' = Wiki.new;
     has $.addressbook = AddressBook.new;
 
-    method save($resource) {
+    multi method save($resource) {
         $resource.save or return False;
         my @computed = $resource.computed-refs-out;
         my @existing = $resource.refs-out;
@@ -173,6 +174,10 @@ class Utiaji::Model::Pim {
                 $resource.k, $to or return False;
         }
         return True;
+    }
+
+    multi method save(@resources) {
+        self.save($_) for @resources;
     }
 
 }
