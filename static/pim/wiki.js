@@ -4,10 +4,12 @@ use_tags(['div','row','textarea','a','pre'])
 var Wiki = React.createClass({
 
     getInitialState: function() {
-        var text = this.props.initial_data.text;
+        var text = this.props.initial_state.text;
+        var dates = this.props.initial_state.dates;
         return {
             editing: (text ? false : true),
-            text: text
+            text: text,
+            dates: dates
         }
     },
 
@@ -42,11 +44,16 @@ var Wiki = React.createClass({
                 row( {},
                     div( { className: 'text-right' },
                         this.state.editing ?
-                        a( { className: 'small-4 small-centered columns success button', onClick: this.save },
+                        a( { className: 'small-4 small-centered columns success button',
+                             onClick: this.save },
                             'save' ) :
-                        a( { className: 'small-4 small-centered columns hollow button', onClick: this.editMode },
+                        a( { className: 'small-4 small-centered columns hollow button',
+                             onClick: this.editMode },
                             'edit' )
                       )
+                   ),
+                   pre( 'dates',
+                       JSON.stringify(this.state.dates)
                    ),
                    this.state.editing ?
                    textarea( { id: 'note', onChange: this.handleChange,

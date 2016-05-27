@@ -5,7 +5,7 @@ var cache = {};   // map from index to date
 var Cal = React.createClass({
 
     getInitialState: function() {
-        var props = this.props.initial_data;
+        var props = this.props.initial_state;
         // initial_data:
         // first : new Date( ...)  -- date of first sunday
         // month : data['month'],  -- month name

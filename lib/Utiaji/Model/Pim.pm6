@@ -30,6 +30,7 @@ role Saveable {
 role Serializable {
     method id { ... }
     method rep { ... }
+    method rep-ext { ... }
     multi method construct(Str :$id!,:$rep) { ... }
     multi method construct(@pairs) {
         @pairs.map: { self.construct(id => .key, rep => .value) };
@@ -51,6 +52,9 @@ class Day is Saveable does Serializable does Referencable {
         return 'date:' ~ $.date.Str;
     }
     method rep {
+        return { txt => $.text }
+    }
+    method rep-ext {
         return { txt => $.text }
     }
     method computed-refs-out {
@@ -81,11 +85,12 @@ class Cal {
         self.load(:window, :align, from => $!focus, :to($!focus.later(:1month)));
     }
 
-    multi method load(Bool :$window, Str :$from!, Bool :$align) {
-        self.load(:$window,from => Date.new($from), :$align);
+    multi method load(Bool :$window, Str :$from!, Str :$to, Bool :$align) {
+        self.load(:$window,from => Date.new($from), :$align) unless $to;
+        self.load(:$window,from => Date.new($from), to => Date.new($to), :$align);
     }
 
-    multi method load(Bool :$window = False, :$!from = $!focus, :$!to=$!from, Bool :$align = True) {
+    multi method load(Bool :$window = False, :$!from = $!focus, :$!to = $!from, Bool :$align = True) {
         self.align if $align;
         my ($from,$to) = ($!from,$!to);
         if ($window) {
@@ -122,7 +127,6 @@ class Wiki {
 }
 
 class Page does Serializable does Saveable does Referencable {
-    # 'content' in html is 'text' in object, is 'txt' in db
     has Str $.name is required;
     has Str $.text;
 
@@ -139,14 +143,16 @@ class Page does Serializable does Saveable does Referencable {
     method rep {
         return { txt => $!text }
     }
+    method rep-ext {
+        return { text => self.text, dates => self.refs-in».subst('date:','') }
+    }
     method computed-refs-out {
         # TODO: other pages etc
         return ();
     }
 
     method initial-state {
-        my %state = text => $!text // "";
-        return %state;
+        return self.rep-ext;
     }
 }
 
@@ -180,5 +186,4 @@ class Utiaji::Model::Pim {
     }
 
 }
-
 

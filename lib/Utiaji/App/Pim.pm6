@@ -24,7 +24,9 @@ method BUILD {
 
     .get: '/cal/range/Δfrom/Δto',
        -> $req, $res, $/ {
-         self.render: $res, json => $.pim.cal.load(from => ~$<from>, to => ~$<to>, align => False).as-data;
+         self.render: $res,
+            json => $.pim.cal.load(from => ~$<from>, to => ~$<to>, align => False, window => False)
+                     .as-data;
     };
 
     .post: '/cal',
@@ -49,7 +51,7 @@ method BUILD {
     .get: '/wiki/:page.json',
       -> $req, $res, $/ {
           my $page = $.pim.wiki.page($<page>);
-          self.render: $res, json => { txt => $page.text, dates => $page.refs-in».subst('date:','') };
+          self.render: $res, json => $page.rep-ext;
         };
 
     .post: '/wiki/:page',
@@ -61,6 +63,7 @@ method BUILD {
             self.render: $res, :400status, json => { error => 'cannot save' } ;
         };
        };
+
     .get: '/people',
       -> $req,$res {
          self.render: $res,

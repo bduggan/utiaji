@@ -13,7 +13,7 @@
 <script type='text/javascript'>
   var state = <%==  to-json($page.initial-state) %>;
   var wiki = React.createElement(Wiki, {
-    initial-state: state
+    initial_state: state
   });
   var ref = ReactDOM.render(wiki, document.getElementById('content'))
 </script>
