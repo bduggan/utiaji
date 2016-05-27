@@ -80,7 +80,11 @@ class Cal {
          self;
     }
 
-    multi method load( :$month!, :$year!) {
+    multi method load( :$focus! ) {
+        $!focus = $focus ~~ Str ??  Date.new($focus) !! $focus;
+        self.load( month => $!focus.month, year => $!focus.year );
+    }
+    multi method load( Int :$month!, Int :$year!) {
         $!focus = Date.new(sprintf("%04d-%02d-01",$year,$month));
         self.load(:window, :align, from => $!focus, :to($!focus.later(:1month)));
     }

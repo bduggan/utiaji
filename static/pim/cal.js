@@ -18,7 +18,7 @@ var Cal = React.createClass({
         return props;
     },
     save: function() {
-        var url = window.location.href;
+        var url = '/cal';  // window.location.href;
         var that = this;
         var data = this.state.changed;
         fetch(url, {
@@ -44,8 +44,7 @@ var Cal = React.createClass({
         })
     },
     load: function(from,to) {
-        var url = window.location.href;
-        url += '/range/' + from.ymd() + '/' + to.ymd();
+        var url = '/cal/range/' + from.ymd() + '/' + to.ymd();
         var that = this;
         fetch(url, {
             headers: { 'Content-Type' : 'application/json' },
@@ -54,7 +53,6 @@ var Cal = React.createClass({
         }).then(function(j){
             that.setState({ data: j, changed: false });
         }).catch(function(err) {
-            humane.log(err);
             console.log('error',err);
         })
     },
