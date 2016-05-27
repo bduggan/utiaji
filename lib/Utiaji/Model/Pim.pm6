@@ -23,16 +23,16 @@ role Saveable {
     has $.db = Utiaji::DB.new;
 
     method save {
-        self.db.upsertjson( self.id, self.value );
+        self.db.upsertjson( self.id, self.rep );
     }
 }
 
 role Serializable {
     method id { ... }
-    method value { ... }
-    multi method construct(Str :$id!,:$value) { ... }
+    method rep { ... }
+    multi method construct(Str :$id!,:$rep) { ... }
     multi method construct(@pairs) {
-        @pairs.map: { self.construct(id => .key, value => .value) };
+        @pairs.map: { self.construct(id => .key, rep => .value) };
     }
 }
 
@@ -44,13 +44,13 @@ class Day is Saveable does Serializable does Referencable {
         $!text = $text if $text.defined;
         $!date = Date.new($date) if $date.isa('Str')
     }
-    multi method construct(Str :$id!,:$value = { txt => ""}) {
-        Day.new( date => $id.subst('date:', ''), text => $value<txt>.Str // "");
+    multi method construct(Str :$id!,:$rep = { txt => ""}) {
+        Day.new( date => $id.subst('date:', ''), text => $rep<txt>.Str // "");
     }
     method id {
         return 'date:' ~ $.date.Str;
     }
-    method value {
+    method rep {
         return { txt => $.text }
     }
     method computed-refs-out {
@@ -93,7 +93,7 @@ class Cal {
             $to.= later(:12weeks);
         }
         $.db.query: "select k,v::text from kv where k >= ? and k <= ?", "date:$from", "date:$to";
-        @!days = map { Day.construct(id => .[0], value => .[1]) }, $.db.jsonv;
+        @!days = map { Day.construct(id => .[0], rep => .[1]) }, $.db.jsonv;
         self;
     }
 
@@ -116,7 +116,7 @@ class Wiki {
 
     method page($name is copy) {
         $.db.query("select v::text from kv where k=?","wiki:$name");
-        return Page.construct( id => ~$name, value => $.db.json );
+        return Page.construct( id => ~$name, rep => $.db.json );
     }
 
 }
@@ -126,9 +126,9 @@ class Page does Serializable does Saveable does Referencable {
     has Str $.name is required;
     has Str $.text;
 
-    multi method construct(Str :$id!,:$value) {
+    multi method construct(Str :$id!,:$rep) {
         my $name = $id.subst('wiki:','');
-        my $text = $value<txt> // "";
+        my $text = $rep<txt> // "";
         return Page.new(name => "$name", text => $text);
         self;
     }
@@ -136,7 +136,7 @@ class Page does Serializable does Saveable does Referencable {
     method id {
         return 'wiki:' ~ $!name
     }
-    method value {
+    method rep {
         return { txt => $!text }
     }
     method computed-refs-out {
