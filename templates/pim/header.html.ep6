@@ -3,11 +3,9 @@
 <html>
 <head>
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundation/6.2.0/foundation.css" />
-  <link rel="stylesheet" ref="//cdnjs.cloudflare.com/ajax/libs/humane-js/3.2.2/themes/libnotify.min.css" />
   <link rel="stylesheet" href="/pim.css" />
   <script src="//cdn.jsdelivr.net/react/15.0.0-rc.2/react.js"></script>
   <script src="//cdn.jsdelivr.net/react/15.0.0-rc.2/react-dom.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/humane-js/3.2.2/humane.min.js"></script>
   <script type='text/javascript' src="/pim.js"></script>
   <script type='text/javascript' src="/<%= $tab %>.js"></script>
 </head>
