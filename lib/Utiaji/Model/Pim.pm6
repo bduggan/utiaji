@@ -31,6 +31,9 @@ role Serializable {
     method k { ... }
     method value { ... }
     multi method construct(Str :$k!,:$value) { ... }
+    multi method construct(@pairs) {
+        @pairs.map: { self.construct(k => .key, value => .value) };
+    }
 }
 
 class Day is Saveable does Serializable does Referencable {
@@ -108,7 +111,9 @@ class Cal {
     }
 
     method make-days(:$dates) {
-        return %$dates.kv.map(-> $k, $v { Day.construct(:$k, value => { txt => $v } ) } );
+        return Day.construct: %$dates.kv.map( -> $k, $v { $k => { txt => $v } })
+        #    Day.construct(:$k, value => { txt => $v } ) } );
+        #return %$dates.kv.map(-> $k, $v { Day.construct(:$k, value => { txt => $v } ) } );
      }
 }
 
