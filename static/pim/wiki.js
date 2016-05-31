@@ -81,15 +81,13 @@ var Wiki = React.createClass({
     },
     render: function () {
         return div(
-                row( ...div( { className: 'linklist' },
-                           this.state.dates.map( function(v) {
-                              return a({className:'small hollow button', href:'/cal/' + v},v)
-                            } )
-                        ),
-                      ...div( { className: 'linklist' },
-                           this.state.pages.map( function(v) {
-                              return a({className:'small hollow button secondary', href:'/wiki/' + v},v)
-                            } )
+                row( div( { className: 'linklist' },
+                           ...this.state.dates.map( function(v) {
+                                return a({className:'small hollow button', href:'/cal/' + v},v)
+                              } ),
+                           ...this.state.pages.map( function(v) {
+                                return a({className:'small hollow button secondary', href:'/wiki/' + v},v)
+                              } )
                         )
                     ),
                 div( { className: 'status-indicator ' + (this.is_modified() ? 'changed' : 'saved') }, ''),
