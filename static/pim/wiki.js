@@ -69,6 +69,7 @@ var Wiki = React.createClass({
     },
 
     editMode: function(e) {
+        if (e.target.getAttribute('href')) { return; }
         this.setState({ editing: true } );
         this.touch();
     },
