@@ -1,5 +1,5 @@
 
-create table kv(
+create table kv (
     k varchar not null primary key, /* key */
     v jsonb /* value */
 );
