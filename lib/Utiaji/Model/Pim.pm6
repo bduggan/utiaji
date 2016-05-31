@@ -5,15 +5,18 @@ class Page {...}
 class Day {...}
 class AddressBook {...}
 
+enum resource <page date person>;
+
 role Referencable {
     sub links($text) {
         return unless $text;
         return ( $text ~~ m:g/ <?after '@'> \w+ / )».Str;
     }
-
-    method refs-in {
-        $.db.query: "select f from kk where t=?", self.id;
-        return $.db.column;
+    method refs-in(resource $type, Bool :$ids) {
+        $.db.query: "select f from kk where t=? and f like ?", self.id, "$type:%";
+        my @results = $.db.column;
+        return @results unless $ids;
+        return @results».subst("$type:","")
     }
     method refs-out {
         $.db.query: "select t from kk where f=?", self.id;
@@ -129,7 +132,7 @@ class Wiki {
     has $.db = Utiaji::DB.new;
 
     method page($name is copy) {
-        $.db.query("select v::text from kv where k=?","wiki:$name");
+        $.db.query("select v::text from kv where k=?","page:$name");
         return Page.construct( id => ~$name, rep => $.db.json );
     }
 
@@ -140,22 +143,26 @@ class Page does Serializable does Saveable does Referencable {
     has Str $.text;
 
     multi method construct(Str :$id!,:$rep) {
-        my $name = $id.subst('wiki:','');
+        my $name = $id.subst('page:','');
         my $text = $rep<txt> // "";
         return Page.new(name => "$name", text => $text);
     }
 
     method id {
         die 'no name' unless $!name;
-        return 'wiki:' ~ $!name
+        return 'page:' ~ $!name
     }
     method rep {
         return { txt => $!text }
     }
     method rep-ext {
-        return { txt => self.text, dates => self.refs-in».subst('date:','') }
+        return { txt => self.text,
+            dates => self.refs-in(date, :ids),
+            pages => self.refs-in(page, :ids),
+        }
     }
     method initial-state {
+        say "returning : { self.rep-ext.perl } ";
         return self.rep-ext;
     }
 }

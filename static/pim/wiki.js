@@ -6,10 +6,12 @@ var Wiki = React.createClass({
     getInitialState: function() {
         var txt = this.props.initial_state.txt;
         var dates = this.props.initial_state.dates;
+        var pages = this.props.initial_state.pages;
         return {
             editing: (txt ? false : true),
             txt: txt,
             dates: dates,
+            pages: pages,
             version: 1,
             last_save: 1,
             last_touch: new Date().getTime()
@@ -79,9 +81,14 @@ var Wiki = React.createClass({
     },
     render: function () {
         return div(
-                row( ...div( { className: 'datelist' },
+                row( ...div( { className: 'linklist' },
                            this.state.dates.map( function(v) {
                               return a({className:'small hollow button', href:'/cal/' + v},v)
+                            } )
+                        ),
+                      ...div( { className: 'linklist' },
+                           this.state.pages.map( function(v) {
+                              return a({className:'small hollow button secondary', href:'/wiki/' + v},v)
                             } )
                         )
                     ),
