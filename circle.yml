@@ -6,7 +6,7 @@ machine:
 dependencies:
   pre:
     - createdb test
-    - psql test -c 'create table kv(k varchar not null primary key, v jsonb)'
+    - psql test -f schema.sql
   override:
     - ./install.sh
   cache_directories:
