@@ -119,6 +119,15 @@ span.saved::before {
     color:green;
     font-weight:bold;
 }
+span.pending::before {
+    content:'-';
+    color:#b3b300;
+    font-weight:bold;
+}
+table.cal tr td span.pending {
+    background-color:orange;
+    color:white;
+}
 
 .inlineblock {
     display:inline-block;

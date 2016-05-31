@@ -69,31 +69,38 @@ var Cal = React.createClass({
     },
     cell: function(i) {
        var dt = this.dt(i);
-       var cl = 'normal';
+       var td_class = 'normal';
        if (dt.mon() != this.state.month) {
-           cl = 'other';
+           td_class = 'other';
        }
-       return td( { className: cl, onClick: this.edit.bind(this,i) },
-                  span( { className:'dt ', id: i}, dt.d()),
+       var dt_class = this.is_modified() && this.state.changed[dt.ymd()] ? 'pending' : '';
+       return td( { className: td_class, onClick: this.edit.bind(this,i) },
+           span(
+               { className:dt_class + ' dt ',
+                 id: i
+           }, dt.d()),
                   span( { html: wikify( this.state.data[ dt.ymd() ] ) })
                 );
     },
     editcell: function(i) {
         var txt = this.state.data[this.dt(i).ymd()];
-        var dt_class = this.state.changed ? 'changed' : 'saved';
+        var dt_class = this.is_modified() ? 'changed' : 'saved';
         return td( { className:'edit'},
             span(
                 { className:'dt ' + dt_class,
                   id: i,
-                  onClick: this.saveAndStopEdit
+                  onClick: this.stopEdit,
                 }, ''),
             textarea({autoFocus: true,
                 id: i,
-                className: ( this.state.changed ? 'changed' : 'saved' ),
+                className: ( this.is_modified() ? 'changed' : 'saved' ),
                 onKeyDown: this.touch,
                 defaultValue: txt,
                 onChange: this.handleChange })
                );
+    },
+    stopEdit: function() {
+        this.setState({editing:undefined});
     },
     cells: function(from,to) {
         var x = [];
@@ -107,13 +114,8 @@ var Cal = React.createClass({
         }
         return x;
     },
-    saveAndStopEdit: function() {
-        if (this.state.changed) {
-            this.save(true);
-        }
-    },
     maybeSave: function() {
-        if (this.state.version > this.state.last_save) {
+        if (this.is_modified()) {
             this.save();
             return;
         }
@@ -183,8 +185,11 @@ var Cal = React.createClass({
         }
         this.load(first.addDays(-42), first.addDays(83));
     },
+    is_modified : function() {
+        return this.state.version > this.state.last_save
+    },
     render: function() {
-        var stat = this.state.changed ? 'changed' : 'saved';
+        var stat = this.is_modified() ? 'changed' : 'saved';
         return div(
 
             div( {className: 'status-indicator ' + stat }, '' ),
@@ -213,12 +218,7 @@ var Cal = React.createClass({
                       ])
                     )
                  )
-               ,pre(
-                     'version: ',
-                     this.state.version,
-                     '  last save: ',
-                     this.state.last_save
-                 )
+               //,pre( 'version: ', this.state.version, '  last save: ', this.state.last_save)
             )
     }
 });
