@@ -89,7 +89,7 @@ var Cal = React.createClass({
             span(
                 { className:'dt ' + dt_class,
                   id: i,
-                  onClick: this.stopEdit,
+                  onClick: this.sync,
                 }, ''),
             textarea({autoFocus: true,
                 id: i,
@@ -98,6 +98,13 @@ var Cal = React.createClass({
                 defaultValue: txt,
                 onChange: this.handleChange })
                );
+    },
+    sync: function() {
+        this.stopEdit();
+        if (this.is_modified()) {
+            this.save();
+        }
+        this.reload();
     },
     stopEdit: function() {
         this.setState({editing:undefined});
@@ -121,12 +128,13 @@ var Cal = React.createClass({
         }
         if (this.state.editing !== undefined) {
             var now = new Date().getTime();
-            var last = this.state.last_touch;
             if (now - this.state.last_touch > 2000) {
-                this.setState({editing: undefined, changed: false });
+                this.stopEdit();
+                this.reload();
             }
+            return;
         }
-        if (!this.state.changed && !this.state.editing && (now - this.state.last_touch) > 4000) {
+        if ((now - this.state.last_touch) > 2000) {
             this.reload();
         }
     },
@@ -137,7 +145,6 @@ var Cal = React.createClass({
         setInterval(this.maybeSave,1500)
     },
     handleChange: function(e) {
-        console.log('handling change', e.target.value);
         var i = e.target.id;
         var dt = this.dt(i);
         var d = this.state.data;
