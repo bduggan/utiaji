@@ -162,7 +162,6 @@ class Page does Serializable does Saveable does Referencable {
         }
     }
     method initial-state {
-        say "returning : { self.rep-ext.perl } ";
         return self.rep-ext;
     }
 }
