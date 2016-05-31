@@ -135,3 +135,7 @@ table.cal tr td span.pending {
 div.datelist a {
     margin-bottom:1px;
 }
+div.navvy {
+    margin-bottom:0px;
+    padding-left:0px;
+}
