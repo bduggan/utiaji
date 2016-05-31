@@ -26,7 +26,6 @@ var Wiki = React.createClass({
             return;
         }
         if (this.state.editing && this.state.txt && this.elapsed(3000)) {
-            console.log('stop editing');
             this.setState({editing: false});
         }
         return;
@@ -34,7 +33,6 @@ var Wiki = React.createClass({
 
     elapsed: function(t) {
         var e = new Date().getTime() - this.state.last_touch;
-        console.log('elapsed: ',e);
         return e > t;
     },
 

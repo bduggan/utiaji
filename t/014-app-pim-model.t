@@ -48,12 +48,30 @@ $page = Page.new(name => "foo", text => 'bar @baz');
 ok $pim.save($page), 'saved wiki page';
 
 my $empty = Page.new(name => "something");
-ok $pim.save($empty);
+ok $pim.save($empty), 'saved empty page';
 
 $day = Day.new(date => "2011-01-01", text => 'something @small');
 ok $pim.save($day), 'saved day';
 $page = $pim.page("big");
 is $page.refs-in.elems, 0, "no dates link to big anymore";
+
+my $picnic = Page.new(name => 'picnic', text => 'bring @beer and @wine and @chips');
+ok $pim.save($picnic), 'saved';
+
+for <beer wine chips> -> $p {
+    my $item = $pim.page($p);
+    is $item.refs-in.elems, 1, "1 ref to $p";
+    is $item.refs-in[0], 'wiki:picnic', "link from picnic to $p";
+}
+
+my $rain = Page.new(name => 'picnic', text => 'rained out');
+ok $pim.save($rain),' replaced page';
+for <beer wine chips> -> $p {
+    my $item = $pim.page($p);
+    is $item.refs-in.elems, 0, "0 refs to $p from picnic";
+}
+
+
 
 done-testing;
 

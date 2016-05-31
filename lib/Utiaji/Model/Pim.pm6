@@ -6,6 +6,11 @@ class Day {...}
 class AddressBook {...}
 
 role Referencable {
+    sub links($text) {
+        return unless $text;
+        return ( $text ~~ m:g/ <?after '@'> \w+ / )».Str;
+    }
+
     method refs-in {
         $.db.query: "select f from kk where t=?", self.id;
         return $.db.column;
@@ -14,8 +19,11 @@ role Referencable {
         $.db.query: "select t from kk where f=?", self.id;
         return $.db.column;
     }
+    method text { ... }
     method computed-refs-out {
-        ...
+        return () unless $.text;
+        my @links = links($.text) or return ();
+        return map { Page.new(name => $_).id }, @links;
     }
 }
 
@@ -41,6 +49,7 @@ class Day is Saveable does Serializable does Referencable {
     has Date $.date is required;
     has Str $.text;
 
+
     submethod BUILD(:$date,:$text) {
         $!text = $text if $text.defined;
         $!date = Date.new($date) if $date.isa('Str')
@@ -56,10 +65,6 @@ class Day is Saveable does Serializable does Referencable {
     }
     method rep-ext {
         return { txt => $.text }
-    }
-    method computed-refs-out {
-        my @names = ( $!text ~~ m:g/ <?after '@'> \w+ / )».Str;
-        return map { Page.new(name => $_).id }, @names;
     }
     method pair {
         return $.date.Str => $.text
@@ -131,17 +136,17 @@ class Wiki {
 }
 
 class Page does Serializable does Saveable does Referencable {
-    has Str $.name is required;
+    has Str:D $.name is required;
     has Str $.text;
 
     multi method construct(Str :$id!,:$rep) {
         my $name = $id.subst('wiki:','');
         my $text = $rep<txt> // "";
         return Page.new(name => "$name", text => $text);
-        self;
     }
 
     method id {
+        die 'no name' unless $!name;
         return 'wiki:' ~ $!name
     }
     method rep {
@@ -150,11 +155,6 @@ class Page does Serializable does Saveable does Referencable {
     method rep-ext {
         return { txt => self.text, dates => self.refs-in».subst('date:','') }
     }
-    method computed-refs-out {
-        # TODO: other pages etc
-        return ();
-    }
-
     method initial-state {
         return self.rep-ext;
     }
