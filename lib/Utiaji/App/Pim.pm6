@@ -60,8 +60,10 @@ method BUILD {
         };
 
     .post: '/wiki/:page',
-       -> $req, $res, $/ {
-          my $page = Page.new(name => ~$<page>, text => $req.json<txt>);
+       sub ($req, $res, $/) {
+          my $txt = $req.json<txt>
+              or return self.render: $res, json => { error => 'missing text' }, :400status;
+          my $page = Page.new: name => ~$<page>, text => $txt;
           if $.pim.save($page) {
             self.render: $res, json => { 'status' => 'ok' };
         } else {

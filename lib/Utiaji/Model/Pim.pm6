@@ -148,7 +148,7 @@ class Page does Serializable does Saveable does Referencable {
         return { txt => $!text }
     }
     method rep-ext {
-        return { text => self.text, dates => self.refs-in».subst('date:','') }
+        return { txt => self.text, dates => self.refs-in».subst('date:','') }
     }
     method computed-refs-out {
         # TODO: other pages etc

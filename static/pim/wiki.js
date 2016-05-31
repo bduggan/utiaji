@@ -4,17 +4,18 @@ use_tags(['div','row','textarea','a','pre'])
 var Wiki = React.createClass({
 
     getInitialState: function() {
-        var text = this.props.initial_state.text;
+        var txt = this.props.initial_state.txt;
         var dates = this.props.initial_state.dates;
+        console.log('txt is ',txt);
         return {
-            editing: (text ? false : true),
-            text: text,
+            editing: (txt ? false : true),
+            txt: txt,
             dates: dates
         }
     },
 
     save: function() {
-        var t = unescape(this.state.text);
+        var t = unescape(this.state.txt);
         var url = window.location.href;
         var that = this;
         fetch(url, {
@@ -24,7 +25,7 @@ var Wiki = React.createClass({
         })
         .then(function(data){
             console.log('got ', data);
-            that.setState({ text: t, editing: false })
+            that.setState({ txt: t, editing: false })
         })
         .catch(function(err) {
             console.log('error ' ,err);
@@ -32,11 +33,11 @@ var Wiki = React.createClass({
     },
 
     handleChange: function(e) {
-        this.setState({ text: e.target.value } );
+        this.setState({ txt: e.target.value } );
     },
 
     editMode: function(e) {
-        this.setState({ text: this.state.text, editing: true } );
+        this.setState({ txt: this.state.txt, editing: true } );
     },
     render: function () {
         return (
@@ -60,11 +61,11 @@ var Wiki = React.createClass({
                    this.state.editing ?
                    textarea( { id: 'note', onChange: this.handleChange,
                        placeholder: 'New Page (use @link to make links)',
-                       rows: 19, value: this.state.text })
+                       rows: 19, value: this.state.txt })
                    :
                    pre({
                        className: 'secondary callout',
-                       html: wikify(this.state.text)
+                       html: wikify(this.state.txt)
                    })
               )
         )
