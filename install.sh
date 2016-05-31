@@ -1,6 +1,6 @@
 #!/bin/bash -ex
 
-version=2016.04
+version=2016.05
 
 export PATH=$HOME/.rakudobrew/bin:$PATH
 if [ -x $HOME/.rakudobrew/bin/perl6 ]; then
