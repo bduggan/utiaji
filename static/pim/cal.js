@@ -15,32 +15,29 @@ var Cal = React.createClass({
         //  last_touch : timestamp of last keystroke
 
         props['last_touch'] = new Date().getTime();
+        props['version'] = 1;
+        props['last_save'] = 1;
         return props;
     },
-    save: function() {
+    save: function(stop_edit) {
         var url = '/cal';  // window.location.href;
         var that = this;
-        var data = this.state.changed;
+        var state = this.state;
         fetch(url, {
             method: 'POST',
             headers: { 'Content-Type' : 'application/json' },
-            body: JSON.stringify({data:data})
+            body: JSON.stringify({data:state.changed})
         })
         .then(function(response){
             if (response.ok) {
                 that.touch();
-                var changed = this.state.changed || {};
-                if (Object.getOwnPropertyNames(changed).length == 0) {
-                    that.setState({changed: false});
-                }  else {
-                    that.setState({changed: changed });
-                }
+                that.setState({last_save: state.version});
             } else {
                 console.log('response is not ok', response);
             }
         })
         .catch(function(err) {
-            console.log("network error");
+            console.log("network error", err);
         })
     },
     load: function(from,to) {
@@ -112,12 +109,11 @@ var Cal = React.createClass({
     },
     saveAndStopEdit: function() {
         if (this.state.changed) {
-            this.save();
+            this.save(true);
         }
-        this.setState({editing: undefined });
     },
     maybeSave: function() {
-        if (this.state.changed) {
+        if (this.state.version > this.state.last_save) {
             this.save();
             return;
         }
@@ -125,7 +121,7 @@ var Cal = React.createClass({
             var now = new Date().getTime();
             var last = this.state.last_touch;
             if (now - this.state.last_touch > 2000) {
-                this.setState({editing: undefined });
+                this.setState({editing: undefined, changed: false });
             }
         }
         if (!this.state.changed && !this.state.editing && (now - this.state.last_touch) > 4000) {
@@ -139,15 +135,21 @@ var Cal = React.createClass({
         setInterval(this.maybeSave,1500)
     },
     handleChange: function(e) {
+        console.log('handling change', e.target.value);
         var i = e.target.id;
         var dt = this.dt(i);
         var d = this.state.data;
         var changed = this.state.changed || {};
         d[dt.ymd()] = e.target.value;
         changed[dt.ymd()] = e.target.value;
-        this.touch();
-        this.setState({data: d});
-        this.setState({changed: changed});
+        this.setState(function(prev,curr) {
+            return {
+                data: d,
+                changed: changed,
+                version: prev.version + 1,
+                last_touch: new Date().getTime()
+                }
+            });
     },
     nextmonth: function(e) {
         this.setState({editing: undefined });
@@ -211,7 +213,12 @@ var Cal = React.createClass({
                       ])
                     )
                  )
-               //,pre(JSON.stringify(this.state.changed))
+               ,pre(
+                     'version: ',
+                     this.state.version,
+                     '  last save: ',
+                     this.state.last_save
+                 )
             )
     }
 });
