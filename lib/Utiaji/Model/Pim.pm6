@@ -31,21 +31,23 @@ role Referencable {
 }
 
 role Saveable {
+    #| Saveable things have ids, representations, and the ability to be saved and reconstructed.
     has $.db = Utiaji::DB.new;
 
+    method id { ... }
+    method rep { ... }
     method save {
         self.db.upsertjson( self.id, self.rep );
     }
-}
-
-role Serializable {
-    method id { ... }
-    method rep { ... }
-    method rep-ext { ... }
     multi method construct(Str :$id!,:$rep) { ... }
     multi method construct(@pairs) {
         @pairs.map: { self.construct(id => .key, rep => .value) };
     }
+}
+
+role Serializable {
+    #| Serializable things have external representations.
+    method rep-ext { ... }
 }
 
 class Day is Saveable does Serializable does Referencable {
