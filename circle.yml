@@ -8,7 +8,6 @@ dependencies:
     - sudo service postgresql stop 9.4
     - sudo sed -i "s/port = ..../port = 5432/g" /etc/postgresql/9.5/main/postgresql.conf
     - sudo cp -v /etc/postgresql/9.{4,5}/main/pg_hba.conf && sudo service postgresql restart 9.5
-    - sudo su - postgres -c "echo \"create user ubuntu with password '';\" | psql"
     - createdb test
     - psql test -f schema.sql
   override:
