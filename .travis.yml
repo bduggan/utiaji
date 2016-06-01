@@ -11,7 +11,6 @@ before_install:
   - sudo sed -i "s/port = ..../port = 5432/g" /etc/postgresql/9.5/main/postgresql.conf
   - sudo cp -v /etc/postgresql/9.{4,5}/main/pg_hba.conf && sudo service postgresql restart 9.5
   - psql -V
-  - psql --list
   - psql -c 'select version()'
   - createdb testing123
 install:
