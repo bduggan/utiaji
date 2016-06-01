@@ -2,9 +2,6 @@ machine:
   environment:
     PATH: $HOME/.rakudobrew/bin:$PATH
     PGDATABASE: test
-database:
-  override:
-    - true
 dependencies:
   pre:
     - sudo service postgresql stop 9.4
