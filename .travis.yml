@@ -1,6 +1,6 @@
 sudo: required
 env:
-  - PATH=$PATH:$HOME/.rakudobrew/bin PGDATABASE=test CACHED=$HOME/build_cache
+  - PATH=$PATH:$HOME/.rakudobrew/bin PGDATABASE=test CACHED=$HOME/build_cache PGUSER=postgres
 before_install:
   - sudo /etc/init.d/postgresql stop
   - wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
@@ -11,7 +11,7 @@ before_install:
   - sudo /etc/init.d/postgresql start
   - sudo ps aux|grep -i postg
   - psql -V
-  - sudo cat /etc/postgresql/9.5/main/postgresql.conf
+  - createdb testing123
 install:
   - ./install.sh
 before_script:
