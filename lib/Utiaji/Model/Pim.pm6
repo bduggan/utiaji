@@ -8,6 +8,8 @@ class AddressBook {...}
 enum resource <page date person>;
 
 role Referencable {
+    method id { ... }
+    method text { ... }
     sub links($text) {
         return unless $text;
         return ( $text ~~ m:g/ <?after '@'> \w+ / )».Str;
@@ -22,7 +24,6 @@ role Referencable {
         $.db.query: "select t from kk where f=?", self.id;
         return $.db.column;
     }
-    method text { ... }
     method computed-refs-out {
         return () unless $.text;
         my @links = links($.text) or return ();
@@ -50,10 +51,9 @@ role Serializable {
     method rep-ext { ... }
 }
 
-class Day is Saveable does Serializable does Referencable {
+class Day does Saveable does Serializable does Referencable {
     has Date $.date is required;
     has Str $.text;
-
 
     submethod BUILD(:$date,:$text) {
         $!text = $text if $text.defined;
