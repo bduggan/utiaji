@@ -1,4 +1,4 @@
-use_tags(['div','table','tbody','tr','th','td','span','textarea','a','pre']);
+use_tags(['div','table','tbody','tr','th','td','span','textarea','a','pre','i']);
 
 var cache = {};   // map from index to date
 
@@ -203,11 +203,17 @@ var Cal = React.createClass({
 
             div( {className: 'row text-center'},
                 div( {className: 'columns' },
-                    div( {className: 'tiny inlineblock secondary button-group'},
-                        a( {className: 'button', onClick: this.prevmonth }, '<-' ),
-                        div( {className: 'button month'},
-                            ( this.state.month + ' ' + this.state.year ) ),
-                        a( {className: 'button', onClick: this.nextmonth }, '->' )
+                    div( {className: 'small inlineblock secondary button-group'},
+                        a( {className: 'button', onClick: this.prevmonth },
+                            i( {className:"fi-arrow-left "}, "" )
+                        ),
+                        a( {className: 'button month'},
+                            this.state.month + ' ' + this.state.year + ' ',
+                                i({className: "fi-refresh"},"")
+                            ),
+                        a( {className: 'button', onClick: this.nextmonth },
+                            i( {className:"fi-arrow-right"}, "" )
+                        )
                     )
                 )
             ),
