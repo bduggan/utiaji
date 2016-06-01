@@ -26,7 +26,7 @@ $pim.cal.load(year => 2016, month => 1);
 my %init = $pim.cal.initial-state;
 my %expect =
   data => { "2016-01-02" => "jan 2 day" },
-  first => [2016, 0, 1],
+  first => [2015, 11, 27],
   month_index => 0,
   year => 2016;
 is-deeply %init, %expect, 'initial data';

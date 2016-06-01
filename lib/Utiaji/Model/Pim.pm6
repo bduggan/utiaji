@@ -75,6 +75,8 @@ class Day is Saveable does Serializable does Referencable {
 }
 
 class Cal {
+    enum days «:monday(1) tuesday wednesday thursday friday saturday sunday»;
+
     has $.db = Utiaji::DB.new;
     has Date $.from;  # start of range
     has Date $.to;    # end of range
@@ -83,7 +85,7 @@ class Cal {
 
     method align {
          $!from = $!focus.truncated-to("month");
-         $!from .= pred until $!from.day==1;
+         $!from .= pred until $!from.day-of-week==sunday;
          $!to = $!from.later(:6weeks).pred;
          self;
     }
