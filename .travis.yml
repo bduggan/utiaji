@@ -11,6 +11,7 @@ before_install:
   - sudo /etc/init.d/postgresql start
   - sudo ps aux|grep -i postg
   - psql -V
+  - sudo cat /etc/postgresql/9.5/main/postgresql.conf
 install:
   - ./install.sh
 before_script:
