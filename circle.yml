@@ -2,16 +2,15 @@ machine:
   environment:
     PATH: $HOME/.rakudobrew/bin:$PATH
     PGDATABASE: test
-    PGUSER: postgres
-    PGPORT: 5433
-    DATABASE_URL: postgres://postgres@127.0.0.1:5433/test
 database:
   override:
     - true
 dependencies:
   pre:
     - sudo service postgresql stop 9.4
+    - sudo sed -i "s/port = ..../port = 5432/g" /etc/postgresql/9.5/main/postgresql.conf
     - sudo cp -v /etc/postgresql/9.{4,5}/main/pg_hba.conf && sudo service postgresql restart 9.5
+    - sudo su - postgres -c "echo \"create user ubuntu with password '';\" | psql"
     - createdb test
     - psql test -f schema.sql
   override:
