@@ -10,8 +10,7 @@ loading...
 
 <script type='text/javascript'>
   var state = <%==  to-json($cal.initial-state) %>;
-  state.first = new Date(...state.first);
-  state.month = month_name(state['month_index']);
+  state.first = new Date(state.first[0],state.first[1] - 1, state.first[2]);
   var cal = React.createElement(Cal, { initial_state : state } );
   var ref = ReactDOM.render(cal, document.getElementById('content'))
 </script>

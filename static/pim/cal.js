@@ -6,10 +6,10 @@ var Cal = React.createClass({
 
     getInitialState: function() {
         var props = this.props.initial_state;
-        // initial_data:
+        // initial_state:
         // first : new Date( ...)  -- date of first sunday
-        // month : data['month'],  -- month name
-        //  year  : data['year'],
+        // month : data['month'],  -- month number (1-12)
+        //  year : data['year'],
         //  data : data['data']  -- map from yyyy-mm-dd to text for that day
         //  changed : { a subset of data: map from yyyy-mm-dd to text for that day (updated, not saved)}
         //  last_touch : timestamp of last keystroke
@@ -70,7 +70,7 @@ var Cal = React.createClass({
     cell: function(i) {
        var dt = this.dt(i);
        var td_class = 'normal';
-       if (dt.mon() != this.state.month) {
+       if (dt.month() != this.state.month) {
            td_class = 'other';
        }
        var dt_class = this.is_modified() && this.state.changed[dt.ymd()] ? 'pending' : '';
@@ -112,7 +112,7 @@ var Cal = React.createClass({
     cells: function(from,to) {
         var x = [];
         var e = this.state.editing;
-        for (i=from;i<to;i++) {
+        for (var i=from;i<to;i++) {
             if (e==i) {
               x.push( this.editcell(i) );
             } else {
@@ -163,37 +163,40 @@ var Cal = React.createClass({
     nextmonth: function(e) {
         this.setState({editing: undefined });
         cache = {};
-        var first = this.state.first.addDays(6);
-        var thismonth = first.getMonth();
-        while (first.getMonth() == thismonth) {
-            first = first.addDays(7);
-        }
-        first = first.addDays(-6);
-        this.setState({ first: first } );
-        this.setState({ month: next_month(this.state.month) });
-        if (this.state.month == 'Jan' ) {
-            this.setState({ year: this.state.year + 1 });
-        }
+        var next_month = this.state.month + 1;
+        var next_year  = this.state.year;
+        if (next_month==13) { next_month = 1; next_year += 1; };
+
+        var first = this.state.first;
+        while (first.month() != this.state.month) { first = first.addDays(7) }
+        while (first.month() == this.state.month) { first = first.addDays(7) }
+        if (first.getDate() > 1) { first = first.addDays(-7) }
+
+        this.setState({ first: first, month: next_month, year:next_year } );
         this.load(first.addDays(-42), first.addDays(83));
     },
     prevmonth: function(e) {
         this.setState({editing: undefined });
         cache = {};
-        var first = this.state.first.addDays(-1);
-        var lastmonth = first.getMonth();
-        while (first.getMonth() == lastmonth) {
-            first = first.addDays(-7);
-        }
-        first = first.addDays(1);
-        this.setState({ first: first } );
-        this.setState({ month: prev_month(this.state.month) });
-        if (this.state.month == 'Dec' ) {
-            this.setState({ year: this.state.year - 1 });
-        }
+        var prev_month = this.state.month - 1;
+        var prev_year  = this.state.year;
+        if (prev_month==0) { prev_month = 12; prev_year -= 1; };
+
+        var first = this.state.first;
+        while (first.month() == this.state.month) { first = first.addDays(-7) }
+        while (first.month() == prev_month)       { first = first.addDays(-7) }
+        if (first.addDays(7).getDate() == 1) { first = first.addDays(7) }
+
+        this.setState({ first: first, month: prev_month, year:prev_year } );
         this.load(first.addDays(-42), first.addDays(83));
     },
     is_modified : function() {
         return this.state.version > this.state.last_save
+    },
+    permalink : function() {
+        var m = this.state.month;
+        if (m<10) { m = '0' + m }
+        return '/cal/' + this.state.year + '-' + m + '-01';
     },
     render: function() {
         var stat = this.is_modified() ? 'changed' : 'saved';
@@ -207,8 +210,8 @@ var Cal = React.createClass({
                         a( {className: 'button', onClick: this.prevmonth },
                             i( {className:"fi-arrow-left "}, "" )
                         ),
-                        a( {className: 'button month'},
-                            this.state.month + ' ' + this.state.year + ' ',
+                        a( {className: 'button month', href: this.permalink()},
+                            month_name(this.state.month) + ' ' + this.state.year + ' ',
                                 i({className: "fi-refresh"},"")
                             ),
                         a( {className: 'button', onClick: this.nextmonth },

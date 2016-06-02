@@ -124,10 +124,10 @@ class Cal {
 
     method initial-state {
         return {
-            first => [ $!from.year, $!from.month - 1, $!from.day ],
-            year => $!focus.year,
-            month_index => $!focus.month - 1,
-            data => self.as-data
+            first => [ $!from.year, $!from.month, $!from.day ],
+            year  => $!focus.year,
+            month => $!focus.month,
+            data  => self.as-data
         }
     }
 }
