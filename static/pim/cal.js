@@ -201,9 +201,7 @@ var Cal = React.createClass({
     render: function() {
         var stat = this.is_modified() ? 'changed' : 'saved';
         return div(
-
             div( {className: 'status-indicator ' + stat }, '' ),
-
             div( {className: 'row text-center'},
                 div( {className: 'columns' },
                     div( {className: 'small inlineblock secondary button-group'},
