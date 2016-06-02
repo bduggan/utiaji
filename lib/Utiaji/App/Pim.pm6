@@ -12,7 +12,7 @@ method BUILD {
 
     .get: '/',
       -> $req, $res {
-          self.redirect_to: $res, '/cal';
+          self.redirect_to: $res, '/wiki';
      };
 
     .get: '/cal',

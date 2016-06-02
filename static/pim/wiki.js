@@ -1,21 +1,18 @@
-use_tags(['div','row','textarea','a','pre'])
+use_tags(['div','row','textarea','a','pre','h2','br'])
 
 /* Wiki */
 var Wiki = React.createClass({
 
     getInitialState: function() {
-        var txt = this.props.initial_state.txt;
-        var dates = this.props.initial_state.dates;
-        var pages = this.props.initial_state.pages;
-        return {
-            editing: (txt ? false : true),
-            txt: txt,
-            dates: dates,
-            pages: pages,
-            version: 1,
-            last_save: 1,
-            last_touch: new Date().getTime()
-        }
+        var state = this.props.initial_state;
+        // txt
+        // date
+        // pages
+        state['editing'] = state['txt'] ? false : true;
+        state['version'] = 1;
+        state['last_save'] = 1;
+        state['last_touch'] = new Date().getTime();
+        return state;
     },
 
     componentDidMount: function() {
@@ -75,24 +72,32 @@ var Wiki = React.createClass({
         this.setState({ editing: true } );
         this.touch();
     },
-
+    viewMode: function(e) {
+        this.setState({ editing: false } );
+    },
     is_modified: function() {
         return this.state.version > this.state.last_save;
     },
     render: function () {
+        var s = this.state;
         return div(
+                h2( { className: 'text-center' }, s.name ),
                 row( div( { className: 'linklist' },
-                           ...this.state.dates.map( function(v) {
+                           ...s.dates.map( function(v) {
                                 return a({className:'small hollow button', href:'/cal/' + v},v)
                               } ),
-                           ...this.state.pages.map( function(v) {
-                                return a({className:'small hollow button secondary', href:'/wiki/' + v},v)
+                           ...s.pages.map( function(v) {
+                                return a({className:'small hollow button', href:'/wiki/' + v},v)
                               } )
                         )
                     ),
-                div( { className: 'status-indicator ' + (this.is_modified() ? 'changed' : 'saved') }, ''),
+                    div( { className: 'status-indicator ' + (this.is_modified() ? 'changed' : 'saved') } ),
+                    div( { className: 'mode-switcher' },
+                        s.editing ? a({className:'tiny hollow secondary button',onClick:this.viewMode},'view' )
+                                  : a({className:'tiny hollow button',onClick:this.editMode},'edit')
+                    ),
                 row(
-                    this.state.editing ?
+                    s.editing ?
                     textarea(
                         {
                             autoFocus: true,
@@ -100,12 +105,12 @@ var Wiki = React.createClass({
                             onChange: this.handleChange,
                             onKeyDown: this.touch,
                             placeholder: 'New Page (use @link to make links)',
-                            rows: 19, value: this.state.txt
+                            rows: 19, value: s.txt
                         })
                     : pre({
                         className: 'secondary callout',
                         onClick: this.editMode,
-                        html: wikify(this.state.txt)
+                        html: wikify(s.txt)
                     })
                 )
                 );

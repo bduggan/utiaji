@@ -94,23 +94,35 @@ div.status-indicator {
     top: 40px;
     right: 10px;
 }
-
-div.changed::before {
+div.mode-switcher {
+    position:absolute;
+    top: 70px;
+    right: 10px;
+}
+div.changed::after {
     color:red;
     content:'×';
     font-weight:bold;
 }
-div.saved::before {
+div.saved::after {
     content:'✓';
     color:green;
-    font-weight:bold;
 }
-span.changed::before {
+div.changed::before  {
+    content:'modified ';
+    color:black;
+    font-size:0.8em;
+}
+div.saved::before  {
+    content:'saved ';
+    color:black;
+    font-size:0.8em;
+}
+span.changed::after {
     color:red;
     content:'×';
-    font-weight:bold;
 }
-span.saved::before {
+span.saved::after {
     content:'✓';
     color:green;
     font-weight:bold;

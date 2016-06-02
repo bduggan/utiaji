@@ -2,10 +2,6 @@
 
 ▶== include $app, 'header', |%args;
 
-<h2 class='text-center'>
-▶= $page.name
-</h2>
-
 <row>
     <div class='column' id='content' class='secondary callout'></div>
 </row>

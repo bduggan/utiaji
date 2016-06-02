@@ -160,7 +160,9 @@ class Page does Serializable does Saveable does Referencable {
         return { txt => $!text }
     }
     method rep-ext {
-        return { txt => self.text,
+        return {
+            name => self.name,
+            txt => self.text,
             dates => self.refs-in(date, :ids),
             pages => self.refs-in(page, :ids),
         }
