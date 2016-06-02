@@ -14,6 +14,7 @@ if [ -x $HOME/.rakudobrew/bin/perl6 ]; then
         echo "using $version"
         rakudobrew global $version
         rakudobrew rehash
+        rakudobrew build-panda
         deps
         exit
     fi
