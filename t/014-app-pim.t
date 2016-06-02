@@ -31,17 +31,17 @@ $t.get-ok("/wiki/testpage")
 
 $t.get-ok("/wiki/testpage.json")
    .status-is(200)
-   .json-is({txt => "abc", dates => [], pages => []});
+   .json-is({:name<testpage>, :txt<abc>, dates => [], pages => []});
 
 $t.post-ok('/cal', json => { data => { '2010-02-04' => 'a @link or @two' } })
   .status-is(200)
   .json-is({status => 'ok'});
 
 $t.get-ok("/wiki/link.json").status-is(200)
-   .json-is({ txt => "", dates => [ '2010-02-04' ], pages => [] });
+   .json-is({:name<link>, :txt(''), dates => [ '2010-02-04' ], pages => [] });
 
 $t.get-ok("/wiki/two.json").status-is(200)
-    .json-is({txt => "", dates => [ '2010-02-04' ], pages => [] });
+    .json-is({:name<two>, :txt(''), dates => [ '2010-02-04' ], pages => [] });
 
 $t.stop;
 
