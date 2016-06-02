@@ -62,8 +62,14 @@ var Cal = React.createClass({
         cache[i] = this.state.first.addDays(i);
         return cache[i];
     },
+    checkChanged: function() {
+        if (!this.is_modified()) {
+            this.setState({changed: false});
+        }
+    },
     edit: function(index, e) {
         if (e.target.getAttribute('href')) { return; }
+        this.checkChanged();
         this.setState({ editing:index });
         this.touch();
     },
@@ -139,6 +145,7 @@ var Cal = React.createClass({
         }
     },
     touch: function() {
+        this.checkChanged();
         this.setState({ last_touch: new Date().getTime() });
     },
     componentDidMount: function() {

@@ -38,6 +38,7 @@ method BUILD {
       sub ($req, $res) {
           my $json = $req.json or return
               self.render: $res, json => { status => 'error', message => 'no data' };
+          my $data = $json<data> or return self.render: $res, json => { error => 'missing data', :400status };
           $.pim.save: Day.construct: $json<data>.kv.map: { $^k => ( txt => $^v ) }
           self.render: $res, json => { status => 'ok' };
         };
