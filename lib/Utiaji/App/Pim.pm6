@@ -18,19 +18,19 @@ method BUILD {
     .get: '/cal',
       -> $req,$res {
          my $cal = $.pim.cal.load;
-         self.render: $res, 'cal' => { tab => "cal", cal => $cal }
+         self.render: $res, 'cal' => { :tab<cal>, :cal($cal)}
     };
 
     .get: '/cal/Δday',
        -> $req, $res, $/ {
          my $cal = $.pim.cal.load(focus => ~$<day>);
-         self.render: $res, 'cal' => { tab => "cal", cal => $cal }
+         self.render: $res, 'cal' => { :tab<cal>, :cal($cal)}
        };
 
     .get: '/cal/range/Δfrom/Δto',
        -> $req, $res, $/ {
          self.render: $res,
-            json => $.pim.cal.load(from => ~$<from>, to => ~$<to>, align => False, window => False)
+            json => $.pim.cal.load(from => ~$<from>, to => ~$<to>, :!align, :!window)
                      .as-data;
        };
 
@@ -51,7 +51,7 @@ method BUILD {
     .get: '/wiki/:page',
       -> $req, $res, $/ {
           my $page = $.pim.wiki.page(~$<page>);
-          self.render: $res, 'wiki' => { tab => "wiki", page => $page }
+          self.render: $res, 'wiki' => { :tab<wiki>, :page($page)}
         };
 
     .get: '/wiki/:page.json',
@@ -63,12 +63,12 @@ method BUILD {
     .post: '/wiki/:page',
        sub ($req, $res, $/) {
           my $txt = $req.json<txt>
-              or return self.render: $res, json => { error => 'missing text' }, :400status;
+              or return self.render: $res, json => { :error<missing text> }, :400status;
           my $page = Page.new: name => ~$<page>, text => $txt;
           if $.pim.save($page) {
             self.render: $res, json => { 'status' => 'ok' };
         } else {
-            self.render: $res, :400status, json => { error => 'cannot save' } ;
+            self.render: $res, :400status, json => { :error<cannot save> } ;
         };
        };
 
@@ -78,4 +78,13 @@ method BUILD {
              'people' => { tab => "people" }
         };
 
+    .post: '/search',
+       -> $req, $res {
+            my $query = $req.json<txt>
+              or return self.render: $res, json => { :error<missing text> }, :400status;
+            self.render: $res,
+             json => [
+                $.pim.search($query).map: -> $p { %{ label => $p.label, href => $p.href } }
+             ]
+       }
 }

@@ -35,11 +35,7 @@ my class actions {
 
 method parse {
     my $actions = actions.new(made => self);
-    my $match = parser.parse($!raw, :$actions);
-    unless $match {
-        error "did not parse request line { $!raw.perl }";
-        return;
-    }
+    parser.parse($!raw, :$actions) or return;
     self
 }
 

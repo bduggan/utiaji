@@ -17,6 +17,7 @@ use Utiaji::Body;
 
 class Utiaji::Request {
     has Str $.raw;
+    has Str $.unhandled-message;
     has Utiaji::RequestLine $.request-line;
     has Utiaji::Headers $.headers = Utiaji::Headers.new;
     has Utiaji::Body $.body = Utiaji::Body.new;
@@ -42,7 +43,7 @@ class Utiaji::Request {
         return unless $head;
         my ($request-line-raw, $headers-raw) = $head.split( / "\n" | "\r\n" /, 2, :skip-empty );
         $!request-line = Utiaji::RequestLine.new(raw => $request-line-raw).parse or do {
-            error "Could not parse request line: $request-line-raw";
+            debug "Did not parse request line: $request-line-raw";
             return;
         };
         if $headers-raw {

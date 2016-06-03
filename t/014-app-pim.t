@@ -43,6 +43,13 @@ $t.get-ok("/wiki/link.json").status-is(200)
 $t.get-ok("/wiki/two.json").status-is(200)
     .json-is({:name<two>, :txt(''), dates => [ '2010-02-04' ], pages => [] });
 
+$t.post-ok('/search', json => { txt => 'abc' }).status-is(200)
+    .json-is([ { label => "testpage", href => '/wiki/testpage' }, ]);
+
+$t.post-ok('/search', json => { txt => 'testpage' }).status-is(200)
+    .json-is([ { label => "testpage", href => '/wiki/testpage' }, ]);
+
+
 $t.stop;
 
 done-testing;

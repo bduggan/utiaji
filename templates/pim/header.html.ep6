@@ -1,4 +1,4 @@
-%| :$tab
+%| :$tab, :$all-pages
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +8,7 @@
   <script src="//cdn.jsdelivr.net/react/15.0.0-rc.2/react.js"></script>
   <script src="//cdn.jsdelivr.net/react/15.0.0-rc.2/react-dom.js"></script>
   <script type='text/javascript' src="/pim.js"></script>
+  <script type='text/javascript' src="/search.js"></script>
   <script type='text/javascript' src="/<%= $tab %>.js"></script>
 </head>
 <body>
@@ -23,10 +24,14 @@
     </ul>
   </div>
   <div class="top-bar-right">
-    <ul class="menu">
-      <li><input id="search" type="search" placeholder="search"></li>
+    <ul class="menu" id="search">
+      <input id="search" type="text" placeholder="search" autocomplete="off" list="search_pages"</li>
     </ul>
   </div>
 </div>
+<script type='text/javascript'>
+  var search = React.createElement(Search, { } );
+  var search_ref = ReactDOM.render(search, document.getElementById('search'))
+</script>
 
 <container>

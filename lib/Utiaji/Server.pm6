@@ -46,10 +46,11 @@ class Utiaji::Server {
     }
 
     method respond(Str $request) {
-        my $req = Utiaji::Request.new(raw => $request).parse or do {
-            warn "did not parse request [[$request]]";
-            return Utiaji::Response.new(status => 500);
-        }
+        my $req = Utiaji::Request.new(raw => $request);
+        $req.parse or do {
+            trace "Unhandled request [[$request]]";
+            return Utiaji::Response.new(:501status, body => "Not implemented, sorry!");
+        };
         return handle-request($req,$.app.router);
     }
 

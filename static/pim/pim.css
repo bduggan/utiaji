@@ -17,10 +17,14 @@
    font-weight:normal;
    font-variant:small-caps;
 }
-input#search {
+input.search {
    background-color:#21629e;
    border:0px;
    color:#acc9e3;
+}
+input.search:focus {
+    color:black;
+    background-color:white;
 }
 
 table.cal tr th {
@@ -152,4 +156,27 @@ a.month {
     font-weight:bold;
     font-size: 1.2rem;
 }
-
+div.searchbox {
+    position:relative;
+}
+div.searchresults {
+    position:absolute;
+    background-color:white;
+    width:100%;
+    z-index:100;
+    border-left:1px solid black;
+    border-right 1px solid black;
+    border-bottom: 1px solid black;
+}
+div.searchresults ul li a {
+    color:black;
+}
+div.searchresults ul li a:hover {
+   background-color:#41959e;
+   color:white;
+}
+.query {
+    background-color:grey;
+    color:yellow;
+    font-style:italic;
+}

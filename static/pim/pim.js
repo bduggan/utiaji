@@ -5,7 +5,7 @@ function gen(el) {
         var contents = [];
         if (typeof(args[0]) == 'object'
              && !Array.isArray(args[0])
-             && !args[0]['type']
+             && ( !args[0]['type'] || el=='input' )
         ) {
             attrs = args.shift()
         }
@@ -79,3 +79,4 @@ function month_name(i) {
 Date.prototype.month = function() {
     return this.getMonth() + 1;
 }
+

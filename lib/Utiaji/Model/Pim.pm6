@@ -5,11 +5,17 @@ class Page {...}
 class Day {...}
 class AddressBook {...}
 
+role Referencable { ... }
+role Serializable { ... }
+role Searchable { ... }
+
 enum resource <page date person>;
 
 role Referencable {
     method id { ... }
     method text { ... }
+    method label { ... }
+    method href { ... }
     sub links($text) {
         return unless $text;
         return ( $text ~~ m:g/ <?after '@'> \w+ / )».Str;
@@ -33,7 +39,10 @@ role Referencable {
 
 role Saveable {
     #| Saveable things have ids, representations, and the ability to be saved and reconstructed.
-    has $.db = Utiaji::DB.new;
+    method db {
+        state $db //= Utiaji::DB.new;
+        return $db;
+    }
 
     method id { ... }
     method rep { ... }
@@ -51,10 +60,20 @@ role Serializable {
     method rep-ext { ... }
 }
 
+role Searchable {
+    method search(Str $query) { ...  }
+}
+
 class Day does Saveable does Serializable does Referencable {
     has Date $.date is required;
     has Str $.text;
 
+    method label {
+        $.date;
+    }
+    method href {
+        "/cal/" ~ $.date.Str;
+    }
     submethod BUILD(:$date,:$text) {
         $!text = $text if $text.defined;
         $!date = Date.new($date) if $date.isa('Str')
@@ -132,7 +151,7 @@ class Cal {
     }
 }
 
-class Wiki {
+class Wiki does Searchable {
     has $.db = Utiaji::DB.new;
 
     method page($name is copy) {
@@ -140,12 +159,27 @@ class Wiki {
         return Page.construct( id => ~$name, rep => $.db.json );
     }
 
+    method search(Str $query) {
+        $.db.query(q:to/SQL/,"page:%", "page:%$query%", "%$query%");
+        select k,v::text from kv
+        where k like ?
+               and ( ( k like ? and v is not null )
+                     or (v->>'txt')::text like ?)
+        SQL
+        return $.db.jsonv.map: { Page.construct(id => .[0], rep => .[1]) };
+    }
 }
 
 class Page does Serializable does Saveable does Referencable {
     has Str:D $.name is required;
     has Str $.text;
 
+    method label {
+        $.name;
+    }
+    method href {
+        "/wiki/" ~ $.name;
+    }
     multi method construct(Str :$id!,:$rep) {
         my $name = $id.subst('page:','');
         my $text = $rep<txt> // "";
@@ -200,9 +234,17 @@ class Utiaji::Model::Pim {
         return True;
     }
 
+    method all-page-names() {
+        self.db.query: "select k from kv where k like 'page:%' order by k";
+        return self.db.results».subst('page:','');
+    }
+
     multi method save(@resources) {
         self.save($_) for @resources;
     }
 
+    method search(Str $query) {
+        return self.wiki.search($query).flat;
+    }
 }
 
