@@ -163,8 +163,8 @@ class Wiki does Searchable {
         $.db.query(q:to/SQL/,"page:%", "page:%$query%", "%$query%");
         select k,v::text from kv
         where k like ?
-               and ( ( k like ? and v is not null )
-                     or (v->>'txt')::text like ?)
+               and ( ( k ilike ? and v is not null )
+                     or (v->>'txt')::text ilike ?)
         SQL
         return $.db.jsonv.map: { Page.construct(id => .[0], rep => .[1]) };
     }
