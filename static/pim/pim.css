@@ -89,7 +89,7 @@ table.cal tr td.other span.dt {
     border-left:1px solid #ccc;
     border-bottom:1px solid #ccc;
 }
-textarea {
+textarea.cal {
    font-family:inherit;
    font-size:inherit;
 }
@@ -179,4 +179,19 @@ div.searchresults ul li a:hover {
     background-color:grey;
     color:yellow;
     font-style:italic;
+}
+div.wiki {
+    font-family:monospace;
+    font-size: 1.4em;
+    white-space:pre;
+    border: 1px solid rgba(10, 10, 10, 0.25);
+    background-color: #ebebeb;
+    padding:1rem;
+}
+textarea.wiki {
+    font-family:monospace;
+    font-size: 1.4em;
+    border: 1px solid rgba(10, 10, 10, 0.25);
+    background-color: #fbfbeb;
+    padding:1rem;
 }

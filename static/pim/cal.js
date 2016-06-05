@@ -99,7 +99,7 @@ var Cal = React.createClass({
                 }, ''),
             textarea({autoFocus: true,
                 id: i,
-                className: ( this.is_modified() ? 'changed' : 'saved' ),
+                className: 'cal ' + ( this.is_modified() ? 'changed' : 'saved' ),
                 onKeyDown: this.touch,
                 defaultValue: txt,
                 onChange: this.handleChange })

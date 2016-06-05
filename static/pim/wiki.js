@@ -1,4 +1,4 @@
-use_tags(['div','row','textarea','a','pre','h2','br'])
+use_tags(['div','row','textarea','a','h2','br'])
 
 /* Wiki */
 var Wiki = React.createClass({
@@ -100,6 +100,7 @@ var Wiki = React.createClass({
                     s.editing ?
                     textarea(
                         {
+                            className: 'wiki',
                             autoFocus: true,
                             id: 'note',
                             onChange: this.handleChange,
@@ -107,8 +108,8 @@ var Wiki = React.createClass({
                             placeholder: 'New Page (use @link to make links)',
                             rows: 19, value: s.txt
                         })
-                    : pre({
-                        className: 'secondary callout',
+                    : div({
+                        className: 'wiki',
                         onClick: this.editMode,
                         html: wikify(s.txt)
                     })
