@@ -1,4 +1,4 @@
-use_tags(['div','row','textarea','a','h2','br'])
+use_tags(['div','row','textarea','a','h4','br'])
 
 /* Wiki */
 var Wiki = React.createClass({
@@ -81,7 +81,7 @@ var Wiki = React.createClass({
     render: function () {
         var s = this.state;
         return div(
-                h2( { className: 'text-center' }, s.name ),
+                h4( { className: 'text-center' }, s.name ),
                 row( div( { className: 'linklist' },
                            ...s.dates.map( function(v) {
                                 return a({className:'small hollow button', href:'/cal/' + v},v)

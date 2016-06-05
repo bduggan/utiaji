@@ -28,7 +28,11 @@ input.search:focus {
 }
 
 table.cal tr th {
-    font-family:sans-serif;
+    font-family:monospace;
+    font-size:0.9em;
+    padding-top:0px;
+    padding-bottom:0px;
+    font-weight:normal;
 }
 table.cal tr td {
   width:14%;
@@ -80,14 +84,17 @@ table.cal tr td span.dt {
     background-color:inherit;
     border-left:1px solid #999;
     border-bottom:1px solid #999;
-    color:#333;
+    color:#111;
     width:14%;
     text-align:center;
 }
 table.cal tr td.other span.dt {
-    color:#aaa;
+    color:#ddd;
     border-left:1px solid #ccc;
     border-bottom:1px solid #ccc;
+}
+table tbody {
+    border:none;
 }
 textarea.cal {
    font-family:inherit;
@@ -100,8 +107,8 @@ div.status-indicator {
 }
 div.mode-switcher {
     position:absolute;
-    top: 70px;
-    right: 10px;
+    top: 40px;
+    right: 70px;
 }
 div.changed::after {
     color:red;
@@ -151,11 +158,6 @@ div.navvy {
     margin-bottom:0px;
     padding-left:0px;
 }
-a.month {
-    font-family:sans-serif;
-    font-weight:bold;
-    font-size: 1.2rem;
-}
 div.searchbox {
     position:relative;
 }
@@ -194,4 +196,12 @@ textarea.wiki {
     border: 1px solid rgba(10, 10, 10, 0.25);
     background-color: #fbfbeb;
     padding:1rem;
+}
+.button.black {
+    color:black;
+    background-color:white;
+}
+.trimv {
+    margin-bottom:0px;
+    margin-top:0px;
 }

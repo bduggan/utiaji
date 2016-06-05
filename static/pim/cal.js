@@ -211,15 +211,15 @@ var Cal = React.createClass({
             div( {className: 'status-indicator ' + stat }, '' ),
             div( {className: 'row text-center'},
                 div( {className: 'columns' },
-                    div( {className: 'small inlineblock secondary button-group'},
-                        a( {className: 'button', onClick: this.prevmonth },
+                    div( {className: 'medium inlineblock button-group trimv'},
+                        a( {className: 'black button', onClick: this.prevmonth },
                             i( {className:"fi-arrow-left "}, "" )
                         ),
-                        a( {className: 'button month', href: this.permalink()},
+                        a( {className: 'black button', href: this.permalink()},
                             month_name(this.state.month) + ' ' + this.state.year + ' ',
                                 i({className: "fi-refresh"},"")
                             ),
-                        a( {className: 'button', onClick: this.nextmonth },
+                        a( {className: 'black button', onClick: this.nextmonth },
                             i( {className:"fi-arrow-right"}, "" )
                         )
                     )
