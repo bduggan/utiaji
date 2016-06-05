@@ -205,3 +205,6 @@ textarea.wiki {
     margin-bottom:0px;
     margin-top:0px;
 }
+a {
+   outline: 0;
+}
