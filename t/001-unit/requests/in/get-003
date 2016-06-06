@@ -1,0 +1,12 @@
+GET / HTTP/1.1
+Connection: upgrade
+Host: utiaji.org
+X-Forwarded-For: 207.46.13.130
+X-Forwarded-Proto: https
+Cache-Control: no-cache
+Pragma: no-cache
+Accept: */*
+Accept-Encoding:
+From: bingbot(at)microsoft.com
+User-Agent: Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)
+
