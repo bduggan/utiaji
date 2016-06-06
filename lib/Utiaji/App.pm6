@@ -38,9 +38,7 @@ multi method render($res, :$text!, :$status=200) {
 }
 
 multi method render($res, :$json!, :$status=200) {
-    trace "encoding json";
     my $out = to-json($json);
-    trace "done";
     self.render($res, :type<json>, :body($out), :$status);
 }
 
@@ -53,12 +51,12 @@ multi method render($res, :$template!, :%template_params is copy, :$status=200) 
 multi method render($res, :$type='text', :$body='', :$status!) {
     debug "rendering $type";
     $res.headers<content-type> = %types{$type};
-    $res.body = $body;
+    $res.body = ~$body;
     $res.status = $status;
 }
 
 method render_not_found($res) {
-    self.render: $res, :body<not found>, :type<plain>, :404status;
+    self.render: $res, :body("not found"), :type<plain>, :404status;
 }
 
 multi method render($res, Pair $p) {

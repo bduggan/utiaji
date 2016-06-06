@@ -14,7 +14,7 @@ sub handle-request(Utiaji::Request $request,Utiaji::Router $router) is export {
 
     unless $route {
         trace "Not found";
-        my $response = Utiaji::Response.new(:404status, :body<not found>);
+        my $response = Utiaji::Response.new(:404status, :body("not found"));
         debug $response.status-line;
         return $response;
     }

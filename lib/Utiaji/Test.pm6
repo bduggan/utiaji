@@ -73,7 +73,6 @@ method json-is($json) {
         CATCH {
             diag "json-is did not get json: " ~ $content;
             diag "got " ~ .message;
-            .resume;
         }
     }
     is-deeply $json_res, $json, "JSON matches";

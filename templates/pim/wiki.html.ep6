@@ -7,7 +7,7 @@
 </row>
 
 <script type='text/javascript'>
-  var state = <%==  to-json($page.initial-state) %>;
+  var state = <%== to-json($page.initial-state) %>;
   var wiki = React.createElement(Wiki, {
     initial_state: state
   });

@@ -49,6 +49,17 @@ $t.post-ok('/search', json => { txt => 'abc' }).status-is(200)
 $t.post-ok('/search', json => { txt => 'testpage' }).status-is(200)
     .json-is([ { label => "testpage", href => '/wiki/testpage' }, ]);
 
+$t.post-ok('/wiki/beer', json => { txt => '🍺' }).status-is(200)
+     .json-is( { status => "ok" } );
+
+$t.get-ok('/wiki/beer.json').status-is(200)
+    .json-is( { name => "beer", :dates($[]), :pages($[]), txt => '🍺' } );
+
+$t.post-ok('/wiki/face', json => { txt => '😀' }).status-is(200)
+    .json-is( { status => "ok" } );
+
+$t.get-ok('/wiki/face.json').status-is(200)
+    .json-is( { name => "face", :dates($[]), :pages($[]), txt => '😀' } );
 
 $t.stop;
 

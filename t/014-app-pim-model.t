@@ -71,7 +71,11 @@ for <beer wine chips> -> $p {
     is $item.refs-in(page).elems, 0, "0 refs to $p from picnic";
 }
 
-
+my $face = Page.new(name => 'face', text => '😀');
+ok $pim.save($face),' unicode face';
+my $loaded = $pim.page('face');
+ok $loaded, 'loaded face';
+is $loaded.text, '😀', 'got unicode char';
 
 done-testing;
 

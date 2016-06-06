@@ -1,5 +1,6 @@
 unit class Utiaji::Template;
 use Utiaji::Log;
+use JSON::Fast;
 
 has $.raw;
 has $.parsed;
