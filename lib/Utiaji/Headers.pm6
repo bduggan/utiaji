@@ -12,7 +12,7 @@ my grammar parser {
      token ws { \h* }
      rule header { <field-name> ':' <field-value> }
      token field-name { <-[:]>+ }
-     token field-value { <-[\n\r]>+ }
+     token field-value { <-[\n\r]>* }
 }
 
 my class actions {
