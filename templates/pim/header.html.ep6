@@ -5,6 +5,7 @@
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundation/6.2.0/foundation.css" />
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css" />
   <link rel="stylesheet" href="/pim.css" />
+  <link rel="stylesheet" href='//fonts.googleapis.com/css?family=Inconsolata' />
   <script src="//cdn.jsdelivr.net/react/15.0.0-rc.2/react.js"></script>
   <script src="//cdn.jsdelivr.net/react/15.0.0-rc.2/react-dom.js"></script>
   <script type='text/javascript' src="/pim.js"></script>

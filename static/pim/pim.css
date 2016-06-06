@@ -31,7 +31,7 @@ input.search:focus {
 }
 
 table.cal tr th {
-    font-family:monospace;
+    font-family:Inconsolata, monospace;
     font-size:0.9em;
     padding-top:0px;
     padding-bottom:0px;
@@ -45,7 +45,7 @@ table.cal tr td {
   padding-right:0px;
   padding-top:0px;
   padding-bottom:0px;
-  font-family:monospace;
+  font-family:Inconsolata, monospace;
   vertical-align:top;
   color:black;
   white-space:pre-line;
@@ -58,7 +58,7 @@ table.cal tr td.edit {
   padding-right:0px;
   padding-top:0px;
   padding-bottom:0px;
-  font-family:monospace;
+  font-family:Inconsolata, monospace;
   vertical-align:top;
   color:black;
   position:relative;
@@ -187,7 +187,7 @@ div.searchresults ul li a:hover {
     font-style:italic;
 }
 div.wiki {
-    font-family:monospace;
+    font-family:Inconsolata, monospace;
     font-size: 1.4em;
     white-space:pre;
     border: 1px solid rgba(10, 10, 10, 0.25);
@@ -195,7 +195,7 @@ div.wiki {
     padding:1rem;
 }
 textarea.wiki {
-    font-family:monospace;
+    font-family:Inconsolata, monospace;
     font-size: 1.4em;
     border: 1px solid rgba(10, 10, 10, 0.25);
     background-color: #fbfbeb;
