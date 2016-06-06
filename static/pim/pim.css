@@ -48,6 +48,7 @@ table.cal tr td {
   font-family:monospace;
   vertical-align:top;
   color:black;
+  white-space:pre-line;
 }
 table.cal tr td.edit {
   width:14%;
