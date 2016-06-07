@@ -1,7 +1,8 @@
 unit class Utiaji::Headers does Associative;
 use Utiaji::Log;
 
-# See https://doc.perl6.org/language/subscripts#Custom_type_example
+# https://doc.perl6.org/language/subscripts#Custom_type_example
+# http://tools.ietf.org/html/rfc7230#section-3
 subset StrOrInt where Str | Int;
 
 has $.raw;
@@ -16,7 +17,6 @@ my grammar parser {
 }
 
 my class actions {
-    # see http://docs.perl6.org/language/grammars
     method TOP($/) {
         $/.make: $<header>».made
     }
