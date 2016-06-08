@@ -165,9 +165,8 @@ sub include($app, $template, *%args) {
     return $t.render(|%args);
 }
 
-sub html-escape {
-   my ($str) = @_;
-   $str = $str.gist unless $str.defined;
+sub html-escape($str is copy) {
+   $str = $str.gist without $str;
    $str = ~$str;
    $str.subst-mutate('&','&amp;',:g);
    $str.subst-mutate('<','&lt;',:g);
