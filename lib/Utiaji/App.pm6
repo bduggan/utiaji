@@ -28,41 +28,38 @@ method setup {
     # override in subclasses
 }
 
-# We handle these types:
-my %types = text => 'text/plain',
-            json => 'application/json',
-            html => 'text/html';
+my %mime-types = text => 'text/plain',
+                 json => 'application/json',
+                 html => 'text/html';
+
+method render_not_found($res) {
+    samewith $res, :body("not found"), :type<plain>, :404status
+}
+
+multi method render($res, Pair $p) {
+    samewith $res, template => $p.key, template_params => $p.value
+}
 
 multi method render($res, :$text!, :$status=200) {
-    self.render($res, :type<text>, :body($text), :$status);
+    samewith $res, :type<text>, :body($text), :$status
 }
 
 multi method render($res, :$json!, :$status=200) {
     my $out = to-json($json);
-    self.render($res, :type<json>, :body($out), :$status);
+    samewith $res, :type<json>, :body($out), :$status
 }
 
 multi method render($res, :$template!, :%template_params is copy, :$status=200) {
     my $t = self.load-template($template) or return self.render_not_found($res);
     %template_params<app> = self;
-    self.render($res, :type<html>, :body( $t.render(|%template_params) ), :$status);
+    samewith $res, :type<html>, :body( $t.render(|%template_params) ), :$status
 }
 
 multi method render($res, :$type='text', :$body='', :$status!) {
     debug "rendering $type";
-    $res.headers<content-type> = %types{$type};
+    $res.headers<content-type> = %mime-types{$type};
     $res.body = ~$body;
     $res.status = $status;
-}
-
-method render_not_found($res) {
-    self.render: $res, :body("not found"), :type<plain>, :404status;
-}
-
-multi method render($res, Pair $p) {
-    my $template = $p.key;
-    my $params = $p.value;
-    self.render: $res, template => $template, template_params => $params;
 }
 
 method load-template($template) {
