@@ -19,7 +19,7 @@ sub infix:<b4>(Buf[] $x, Buf[] $y) {
     return Any;
 }
 
-class Utiaji::Server {
+class Utiaji::Server does Utiaji::Handler {
 
     has Promise $.loop;
     has $.timeout = 10;
@@ -51,10 +51,10 @@ class Utiaji::Server {
             trace "Unhandled request [[$request]]";
             return Utiaji::Response.new(:501status, body => "Not implemented, sorry!");
         };
-        return handle-request($req,$.app.router);
+        return self.handle-request($req,$.app.router);
     }
 
-    method handle-request($bytes is rw,$buf) {
+    method generate-response($bytes is rw,$buf) {
         trace "got buf for request : " ~ $buf.perl;
         $bytes = $bytes ~ $buf;
         trace "all bytes : " ~ $bytes.perl;
@@ -97,7 +97,7 @@ class Utiaji::Server {
         my Buf[uint8] $bytes = Buf[uint8].new();
         whenever $conn.Supply(:bin) -> $buf {
             $responding = True;
-            my $response = self.handle-request($bytes,$buf);
+            my $response = self.generate-response($bytes,$buf);
             if $response ~~ Failure {
                 $conn.close;
                 $closed = True;

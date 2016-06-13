@@ -1,10 +1,10 @@
-#| Utiaji provides a webserver with documentation about itself.
+#| Utiaji::Doc provides a webserver with documentation about itself.
 use Utiaji::App;
 use Utiaji::Log;
 
-unit class Utiaji is Utiaji::App;
+unit class Utiaji::App::Doc is Utiaji::App;
 
-method setup {
+submethod BUILD {
     app.get: '/',
        -> $req,$res {
           my @files = |$?FILE.IO.dirname.IO.child('Utiaji').dir( test => /:i '.pm6' $/);

@@ -1,11 +1,11 @@
 #| Dispatch HTTP requests.
-unit module Utiaji::Dispatcher;
+unit role Utiaji::Dispatcher;
 
 use Utiaji::Request;
 use Utiaji::Log;
 use Utiaji::Response;
 
-sub dispatch-request($route,
+method dispatch-request($route,
     Match $captures,
     Utiaji::Request $req,
     Utiaji::Response $res is rw

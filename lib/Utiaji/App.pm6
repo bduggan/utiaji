@@ -13,20 +13,13 @@ has $.template-path = 'templates';
 has $.template-suffix = 'html.ep6';
 has $.router handles <get post put> = Utiaji::Router.new;
 
-# Utiaji::App is a singleton.  Override setup to customize routes.
-my $app;
 method new {
     my $self = callsame(|%_);
-    $app = $self;
     $self.setup();
     $self;
 }
 
-sub app is export { $app }
-
-method setup {
-    # override in subclasses
-}
+method setup {}
 
 my %mime-types = text => 'text/plain',
                  json => 'application/json',

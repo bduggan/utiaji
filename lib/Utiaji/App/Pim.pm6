@@ -7,84 +7,84 @@ unit class Utiaji::App::Pim is Utiaji::App;
 has $.template-path = 'templates/pim';
 has $.pim = Utiaji::Model::Pim.new;
 
-method BUILD {
-    $_ = self.router;
+method setup {
+    with (self.router) {
+        .get: '/',
+            -> $req, $res {
+                self.redirect_to: $res, '/wiki';
+            };
 
-    .get: '/',
-      -> $req, $res {
-          self.redirect_to: $res, '/wiki';
-     };
-
-    .get: '/cal',
-      -> $req,$res {
-         my $cal = $.pim.cal.load;
-         self.render: $res, 'cal' => { :tab<cal>, :cal($cal)}
-    };
-
-    .get: '/cal/Δday',
-       -> $req, $res, $/ {
-         my $cal = $.pim.cal.load(focus => ~$<day>);
-         self.render: $res, 'cal' => { :tab<cal>, :cal($cal)}
-       };
-
-    .get: '/cal/range/Δfrom/Δto',
-       -> $req, $res, $/ {
-         self.render: $res,
-            json => $.pim.cal.load(from => ~$<from>, to => ~$<to>, :!align, :!window)
-                     .as-data;
-       };
-
-    .post: '/cal',
-      sub ($req, $res) {
-          my $json = $req.json or return
-              self.render: $res, json => { status => 'error', message => 'no data' };
-          my $data = $json<data> or return self.render: $res, json => { error => 'missing data', :400status };
-          $.pim.save: Day.construct: $json<data>.kv.map: { $^k => ( txt => $^v ) }
-          self.render: $res, json => { status => 'ok' };
+        .get: '/cal',
+            -> $req,$res {
+                my $cal = self.pim.cal.load;
+                self.render: $res, 'cal' => { :tab<cal>, :cal($cal)}
         };
 
-    .get: '/wiki',
-      -> $req,$res {
-         self.redirect_to: $res, '/wiki/main';
-       };
+        .get: '/cal/Δday',
+            -> $req, $res, $/ {
+                my $cal = self.pim.cal.load(focus => ~$<day>);
+                self.render: $res, 'cal' => { :tab<cal>, :cal($cal)}
+            };
 
-    .get: '/wiki/:page',
-      -> $req, $res, $/ {
-          my $page = $.pim.wiki.page(~$<page>);
-          self.render: $res, 'wiki' => { :tab<wiki>, :page($page)}
-        };
+        .get: '/cal/range/Δfrom/Δto',
+            -> $req, $res, $/ {
+                self.render: $res,
+                json => self.pim.cal.load(from => ~$<from>, to => ~$<to>, :!align, :!window)
+                            .as-data;
+            };
 
-    .get: '/wiki/:page.json',
-      -> $req, $res, $/ {
-          my $page = $.pim.wiki.page($<page>);
-          self.render: $res, json => $page.rep-ext;
-        };
+        .post: '/cal',
+            -> $req, $res {
+                my $json = $req.json or return
+                    self.render: $res, json => { status => 'error', message => 'no data' };
+                my $data = $json<data> or return self.render: $res, json => { error => 'missing data', :400status };
+                self.pim.save: Day.construct: $json<data>.kv.map: { $^k => ( txt => $^v ) }
+                self.render: $res, json => { status => 'ok' };
+            };
 
-    .post: '/wiki/:page',
-       sub ($req, $res, $/) {
-          my $txt = $req.json<txt>
-              or return self.render: $res, json => { :error<missing text> }, :400status;
-          my $page = Page.new: name => ~$<page>, text => $txt;
-          if $.pim.save($page) {
-            self.render: $res, json => { 'status' => 'ok' };
-        } else {
-            self.render: $res, :400status, json => { :error<cannot save> } ;
-        };
-       };
+        .get: '/wiki',
+            -> $req,$res {
+                self.redirect_to: $res, '/wiki/main';
+            };
 
-    .get: '/people',
-      -> $req,$res {
-         self.render: $res,
-             'people' => { tab => "people" }
-        };
+        .get: '/wiki/:page',
+            -> $req, $res, $/ {
+                my $page = self.pim.wiki.page(~$<page>);
+                self.render: $res, 'wiki' => { :tab<wiki>, :page($page)}
+            };
 
-    .post: '/search',
-       -> $req, $res {
-            my $query = $req.json<txt>
-              or return self.render: $res, json => { :error<missing text> }, :400status;
-            self.render: $res,
-             json => [
-                $.pim.search($query).map: -> $p { %{ label => $p.label, href => $p.href } }
-             ]
-       }
+        .get: '/wiki/:page.json',
+            -> $req, $res, $/ {
+                my $page = self.pim.wiki.page($<page>);
+                self.render: $res, json => $page.rep-ext;
+            };
+
+        .post: '/wiki/:page',
+            sub ($req, $res, $/) {
+                my $txt = $req.json<txt>
+                    or return self.render: $res, json => { :error<missing text> }, :400status;
+                my $page = Page.new: name => ~$<page>, text => $txt;
+                if self.pim.save($page) {
+                self.render: $res, json => { 'status' => 'ok' };
+            } else {
+                self.render: $res, :400status, json => { :error<cannot save> } ;
+            };
+            };
+
+        .get: '/people',
+            -> $req,$res {
+                self.render: $res,
+                    'people' => { tab => "people" }
+            };
+
+        .post: '/search',
+            -> $req, $res {
+                my $query = $req.json<txt>
+                    or return self.render: $res, json => { :error<missing text> }, :400status;
+                self.render: $res,
+                    json => [
+                    self.pim.search($query).map: -> $p { %{ label => $p.label, href => $p.href } }
+                    ]
+            }
+    }
 }

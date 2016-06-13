@@ -8,9 +8,9 @@ use Utiaji::Log;
 
 unit class Utiaji::App::Getset is Utiaji::App;
 
-has $.db = Utiaji::DB.new;
+sub db { state $db //= Utiaji::DB.new; }
 
-method BUILD {
+submethod BUILD {
 
     given self.router {
         .get('/',
@@ -21,9 +21,9 @@ method BUILD {
 
         .get('/get/∙key',
             sub ($req,$res,$/) {
-                $.db.query: "select v::text from kv where k=?", $<key>
+                db.query: "select v::text from kv where k=?", $<key>
                     or return self.render: $res, :404status;
-                my $json = $.db.json or return self.render: $res, :404status;
+                my $json = db.json or return self.render: $res, :404status;
                 self.render: $res, :$json
             }
         );
@@ -38,9 +38,9 @@ method BUILD {
                         json => { status => "fail",
                                   reason => "missing or invalid json" }
                 }
-                $.db.query(q[insert into kv (k,v) values (?, ?)], $key, :$json)
+                db.query(q[insert into kv (k,v) values (?, ?)], $key, :$json)
                     or return self.render: $res,
-                        json => { status => "fail", reason => $.db.errors },
+                        json => { status => "fail", reason => db.errors },
                         status => 409;
                 trace "rendering ok";
                 self.render: $res, json => { status => 'ok' }
@@ -49,9 +49,9 @@ method BUILD {
 
         .post('/del/∙key',
             sub ($req,$res,$/) {
-                $.db.query: "delete from kv where k = ?", $<key>
+                db.query: "delete from kv where k = ?", $<key>
                     or return self.render: $res, :400status,
-                       json => { status => "fail", reason => $.db.errors };
+                       json => { status => "fail", reason => db.errors };
 
                 return self.render: $res, json => { status => 'ok' }
             }
