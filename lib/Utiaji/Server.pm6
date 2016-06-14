@@ -125,14 +125,10 @@ class Utiaji::Server does Utiaji::Handler {
         info "starting server on { self.url } ";
         $!loop = start {
             react {
-                whenever IO::Socket::Async.listen($.host,$.port) -> $conn {
-                    self.handle-connection($conn);
-                    QUIT {
-                        debug "socket quit";
-                    }
-                    LAST {
-                        debug "socket done";
-                    }
+                whenever IO::Socket::Async.listen($.host,$.port) {
+                    self.handle-connection($^connection);
+                    QUIT { debug "socket quit"; }
+                    LAST { debug "socket done"; }
                 }
             }
         }

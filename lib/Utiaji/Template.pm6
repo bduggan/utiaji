@@ -6,7 +6,7 @@ has $.raw;
 has $.parsed;
 has $.cache-key;
 
-grammar parser {
+my grammar parser {
     rule TOP {
      [ ^ '%|' [ $<signature>=[ \V+ ] ] \n ]?
      [    <line=statement>
