@@ -13,8 +13,8 @@ method lookup(:$verb!,:$path!) {
     for self.routes.flat -> $route {
         trace "Comparing with { $route.gist } ";
         next unless $verb eq $route.verb;
-        if ($route.matcher and $route.matcher.match($path)) {
-            $captures = $route.matcher.captures;
+        if ($route.pattern and $route.pattern.match($path)) {
+            $captures = $route.pattern.captures;
             push @matches, $route;
             next;
         }
@@ -36,7 +36,7 @@ multi method get(Str $pattern, $cb) {
     my $r = Utiaji::Route.new(
             verb => 'GET',
             path => rx{^$pattern$},
-            matcher => Utiaji::Pattern.new(pattern => $pattern),
+            pattern => Utiaji::Pattern.new(pattern => $pattern),
             code => $cb
     );
     self.routes.push($r);
@@ -55,7 +55,7 @@ multi method post(Str $pattern, $cb) {
     my $r = Utiaji::Route.new(
             verb => 'POST',
             path => rx{^$pattern$},
-            matcher => Utiaji::Pattern.new(pattern => $pattern),
+            pattern => Utiaji::Pattern.new(pattern => $pattern),
             code => $cb
     );
     self.routes.push($r);
