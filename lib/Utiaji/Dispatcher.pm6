@@ -16,9 +16,9 @@ method dispatch-request($route,
    my $cb = $route.code;
    if $captures && $captures.hash.elems {
        trace "Dispatching to callback with captures.";
-       $cb($req,$res, $captures);
+       $cb.signature.count == 2 ?? $cb($res, $captures) !! $cb($req, $res, $captures);
    } else {
        trace "Dispatching to callback without captures.";
-       $cb($req,$res);
+       $cb.signature.count == 1 ?? $cb($res) !! $cb($req,$res);
    }
 }

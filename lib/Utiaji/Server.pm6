@@ -86,12 +86,12 @@ class Utiaji::Server does Utiaji::Handler {
     method handle-connection($conn) {
         my $responding = False;
         my $closed = False;
-        my $timeout = Promise.in($.timeout).then({{
+        my $timeout = Promise.in($.timeout).then({
             return if $responding;
             debug "timeout, closing connection";
             $conn.close unless $closed;
             $closed = True;
-        } });
+        });
         trace "got a connection";
         my $started = now;
         my Buf[uint8] $bytes = Buf[uint8].new();

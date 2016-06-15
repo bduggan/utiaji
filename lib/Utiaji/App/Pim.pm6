@@ -9,16 +9,12 @@ has $.pim = Utiaji::Model::Pim.new;
 
 method setup {
     with (self.router) {
-        .get: '/',
-            -> $req, $res {
-                self.redirect_to: $res, '/wiki';
-            };
+        .get: '/', { self.redirect_to: $^res, '/wiki'; };
 
-        .get: '/cal',
-            -> $req,$res {
+        .get: '/cal', {
                 my $cal = self.pim.cal.load;
-                self.render: $res, 'cal' => { :tab<cal>, :cal($cal)}
-        };
+                self.render: $^res, 'cal' => { :tab<cal>, :cal($cal) }
+         };
 
         .get: '/cal/Δday',
             -> $req, $res, $/ {
@@ -26,20 +22,17 @@ method setup {
                 self.render: $res, 'cal' => { :tab<cal>, :cal($cal)}
             };
 
-        .get: '/cal/range/Δfrom/Δto',
-            -> $req, $res, $/ {
+        .get: '/cal/range/Δfrom/Δto', -> $res, $/ {
                 self.render: $res,
-                json => self.pim.cal.load(from => ~$<from>, to => ~$<to>, :!align, :!window)
-                            .as-data;
-            };
+                    json => self.pim.cal.load(from => ~$<from>, to => ~$<to>, :!align, :!window).as-data;
+         };
 
-        .post: '/cal',
-            -> $req, $res {
-                my $json = $req.json or return
-                    self.render: $res, json => { status => 'error', message => 'no data' };
-                my $data = $json<data> or return self.render: $res, json => { error => 'missing data', :400status };
+        .post: '/cal', {
+                my $json = $^req.json or return
+                    self.render: $^res, json => { status => 'error', message => 'no data' };
+                my $data = $json<data> or return self.render: $^res, json => { error => 'missing data', :400status };
                 self.pim.save: Day.construct: $json<data>.kv.map: { $^k => ( txt => $^v ) }
-                self.render: $res, json => { status => 'ok' };
+                self.render: $^res, json => { status => 'ok' };
             };
 
         .get: '/wiki',
