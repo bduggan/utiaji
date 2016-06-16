@@ -6,19 +6,6 @@ use Utiaji::App::Default;
 use NativeCall;
 sub fork returns int32 is native { * };
 
-# $x b4 $y -->
-#  if the elements of $x occur in $y in sequence
-#  return the subbuf before them
-sub infix:<b4>(Buf[] $x, Buf[] $y) {
-    my $e = $x.elems;
-    for $y.pairs -> $i {
-        next unless $y.elems - $i.key >= $x.elems;
-        my @check = $y[ $i.key .. $i.key + $e - 1 ];
-        return $y.subbuf(0,$i.key) if $x.Array eqv @check;
-    }
-    return Any;
-}
-
 class Utiaji::Server does Utiaji::Handler {
 
     has Promise $.loop;
@@ -32,15 +19,15 @@ class Utiaji::Server does Utiaji::Handler {
         "http://$.host" ~ ($.port == 80 ?? "" !! ":$.port")
     }
 
-    method _header_valid(Buf[] $header) {
+    method !header_valid(Blob[] $header) {
         return $header ⊂ (10,13,32..127);
     }
 
-    method _header_done(Buf[] $request) {
-        my $want = Buf[uint8].new(13,10,13,10);
-        my $head = $want b4 $request;
-        fail "bad request" if !$head && !self._header_valid($request);
-        fail "bad header" if $head && !self._header_valid($head);
+    method !header_done(Buf[] $request) {
+        $request.decode('ASCII') ~~ /^$<head>=(.*)\r\n\r\n/ or return;
+        my $head = ~$<head>;
+        my $bytes = $head.encode('ASCII');
+        fail "bad header" unless self!header_valid($bytes);
         fail "empty header" if $head.defined && !$head.elems;
         return $head;
     }
@@ -58,7 +45,7 @@ class Utiaji::Server does Utiaji::Handler {
         trace "got buf for request : " ~ $buf.perl;
         $bytes = $bytes ~ $buf;
         trace "all bytes : " ~ $bytes.perl;
-        my $done = self._header_done($bytes);
+        my $done = self!header_done($bytes);
         if !$done.defined and $done.isa(Failure) {
             info $done.exception.message;
             return $done;
@@ -93,6 +80,7 @@ class Utiaji::Server does Utiaji::Handler {
             $closed = True;
         });
         trace "got a connection";
+        debug "Received request";
         my $started = now;
         my Buf[uint8] $bytes = Buf[uint8].new();
         whenever $conn.Supply(:bin) -> $buf {

@@ -39,10 +39,7 @@ role Referencable {
 
 role Saveable {
     #| Saveable things have ids, representations, and the ability to be saved and reconstructed.
-    method db {
-        state $db //= Utiaji::DB.new;
-        return $db;
-    }
+    has $.db = Utiaji::DB.new;
 
     method id { ... }
     method rep { ... }
@@ -61,6 +58,7 @@ role Serializable {
 }
 
 role Searchable {
+    has $.db = Utiaji::DB.new;
     method search(Str $query) { ...  }
 }
 
@@ -95,10 +93,9 @@ class Day does Saveable does Serializable does Referencable {
     }
 }
 
-class Cal {
+class Cal does Searchable {
     enum days «:monday(1) tuesday wednesday thursday friday saturday sunday»;
 
-    has $.db = Utiaji::DB.new;
     has Date $.from;  # start of range
     has Date $.to;    # end of range
     has Day @.days;   # days in range, possibly plus a window before + after
@@ -149,10 +146,11 @@ class Cal {
             data  => self.as-data
         }
     }
+
+    method search { ... }
 }
 
 class Wiki does Searchable {
-    has $.db = Utiaji::DB.new;
 
     method page($name is copy) {
         $.db.query("select v::text from kv where k=?","page:$name");
