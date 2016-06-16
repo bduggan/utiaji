@@ -26,8 +26,10 @@ class Utiaji::Server does Utiaji::Handler {
     method !header_done(Buf[] $request) {
         my $found;
         for 0..$request.end - 3 {
-            my @these = $request[$_..$_+3];
-            next unless @these eqv [13,10,13,10];
+            next unless $request[$_] == 13;
+            next unless $request[$_+1] == 10;
+            next unless $request[$_+2] == 13;
+            next unless $request[$_+3] == 10;
             $found = $_;
         }
         return without $found;
