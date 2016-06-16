@@ -24,11 +24,16 @@ class Utiaji::Server does Utiaji::Handler {
     }
 
     method !header_done(Buf[] $request) {
-        $request.decode('ASCII') ~~ /^$<head>=(.*)\r\n\r\n/ or return;
-        my $head = ~$<head>;
-        my $bytes = $head.encode('ASCII');
-        fail "bad header" unless self!header_valid($bytes);
-        fail "empty header" if $head.defined && !$head.elems;
+        my $found;
+        for 0..$request.end - 3 {
+            my @these = $request[$_..$_+3];
+            next unless @these eqv [13,10,13,10];
+            $found = $_;
+        }
+        return without $found;
+        fail "empty header" if $found==0;
+        my $head = $request.subbuf(0,$found);
+        fail "bad header" unless self!header_valid($head);
         return $head;
     }
 
