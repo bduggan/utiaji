@@ -18,3 +18,8 @@ Run
 ===
 PGDATABASE=utiaji ./bin/utiaji
 
+Discuss
+===
+A live installation is at <http://utiaji.org>.
+There's a mailing list at <http://groups.google.com/group/utiaji>.
+
