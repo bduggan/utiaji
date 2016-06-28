@@ -18,9 +18,9 @@
       <li>
       <a class='menu-text brand' href='/'>utiaji</a>
       </li>
-      <li<%= $tab eq 'cal'    ?? q[ class="active"] !! "" %>><a href="/cal">Calendar</a></li>
-      <li<%= $tab eq 'wiki'   ?? q[ class="active"] !! "" %>><a href="/wiki">Wiki</a></li>
-      <li<%= $tab eq 'people' ?? q[ class="active"] !! "" %>><a href="/people">People</a></li>
+      <li<%= $tab eq 'cal'     ?? q[ class="active"] !! "" %>><a href="/cal">Calendar</a></li>
+      <li<%= $tab eq 'wiki'    ?? q[ class="active"] !! "" %>><a href="/wiki">Wiki</a></li>
+      <li<%= $tab eq 'rolodex' ?? q[ class="active"] !! "" %>><a href="/rolodex">Rolodex</a></li>
     </ul>
   </div>
   <div class="top-bar-right">

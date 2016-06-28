@@ -99,9 +99,10 @@ class Cal does Searchable {
     has Date $.from;  # start of range
     has Date $.to;    # end of range
     has Day @.days;   # days in range, possibly plus a window before + after
-    has Date $!focus = Date.today; # has the year + month of interest
+    has Date $!focus; # has the year + month of interest
 
-    method align {
+    method align(::?CLASS:D:) {
+         $!focus //= Date.today;
          $!from = $!focus.truncated-to("month");
          $!from .= pred until $!from.day-of-week==sunday;
          $!to = $!from.later(:6weeks).pred;
@@ -122,7 +123,7 @@ class Cal does Searchable {
         self.load(:$window,from => Date.new($from), to => Date.new($to), :$align);
     }
 
-    multi method load(Bool :$window = False, :$!from = $!focus, :$!to = $!from, Bool :$align = True) {
+    multi method load(Bool :$window = False, :$!from = $!focus // Date.today, :$!to = $!from, Bool :$align = True) {
         self.align if $align;
         my ($from,$to) = ($!from,$!to);
         if ($window) {
@@ -192,6 +193,7 @@ class Page does Serializable does Saveable does Referencable {
         return { txt => $!text }
     }
     method rep-ext {
+        return {} unless defined self;
         return {
             name => self.name,
             txt => self.text,

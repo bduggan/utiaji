@@ -1,0 +1,16 @@
+%| Page :$page, *%args
+
+▶== include $app, 'header', |%args;
+
+<div id='content'></div>
+
+<script type='text/javascript'>
+  var state = <%== to-json($page.initial-state) %>;
+  var rolodex = React.createElement(Rolodex, { initial_state: state });
+  var ref = ReactDOM.render(rolodex, document.getElementById('content'))
+</script>
+
+▶== include $app, 'footer', |%args;
+
+</pre>
+

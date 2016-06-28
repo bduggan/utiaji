@@ -8,7 +8,7 @@ has $.code;
 has Utiaji::Pattern $.pattern is rw;
 
 method gist {
-    return  ( self.verb // "<no verb>" )
-        ~ ": " ~ ( self.path.gist // "<no path>");
+    return  ( $.verb // "<no verb>" )
+        ~ ": " ~ ( $.pattern // $.path.gist // "<no path>");
 }
 

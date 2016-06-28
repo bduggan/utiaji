@@ -61,7 +61,7 @@ method setup {
             }
         }
 
-    .get: '/people', { self.render: $^res, 'people' => { tab => "people" } }
+    .get: '/rolodex', { self.render: $^res, 'rolodex' => { tab => "rolodex" } }
 
     .post: '/search',
         -> $req, $res {

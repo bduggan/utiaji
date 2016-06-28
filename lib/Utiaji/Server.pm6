@@ -50,7 +50,7 @@ class Utiaji::Server does Utiaji::Handler {
 
     method generate-response($bytes is rw,$buf) {
         trace "got buf for request : " ~ $buf.perl;
-        $bytes = $bytes ~ $buf;
+        $bytes ~= $buf;
         trace "all bytes : " ~ $bytes.perl;
         my $done = self!header_done($bytes);
         if !$done.defined and $done.isa(Failure) {
