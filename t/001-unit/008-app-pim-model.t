@@ -82,8 +82,16 @@ my $card = Card.new(text => "Joe Schmoe\n10 Main st\nTownsville, CA 94530");
 is $card.handle, 'joe-schmoe', 'made a handle automagically';
 ok $pim.save($card), 'saved card';
 my $h = $card.handle;
-my $loaded = $pim.card($h);
-is $loaded.text, "Joe Schmoe\n10 Main st\nTownsville, CA 94530", "loaded text";
+my $again = $pim.card($h);
+is $again.text, "Joe Schmoe\n10 Main st\nTownsville, CA 94530", "loaded text";
+
+my @cards = Rolodex.new.search("j");
+ok @cards==1, 'One card searching for j';
+is @cards[0].handle, 'joe-schmoe', 'got the right card';
+
+my @none = Rolodex.new.search("nobody");
+ok @none==0, 'No matches';
+
 
 done-testing;
 

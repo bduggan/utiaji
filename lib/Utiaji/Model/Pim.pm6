@@ -211,8 +211,14 @@ class Rolodex does Searchable {
         $.db.query("select v::text from kv where k=?","card:$handle");
         return Card.construct( id => $handle, rep => $.db.json );
     }
-    method search {
-        ...
+    method search(Str $query) {
+        $.db.query(q:to/SQL/,"card%", "card%$query%", "%$query%");
+        select k,v::text from kv
+        where k like ?
+               and ( ( k ilike ? and v is not null )
+                     or (v->>'txt')::text ilike ?)
+        SQL
+        return $.db.jsonv.map: { Card.construct(id => .[0], rep => .[1]) };
     }
 }
 

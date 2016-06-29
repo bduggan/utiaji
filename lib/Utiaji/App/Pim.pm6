@@ -66,18 +66,19 @@ method setup {
     .post: '/search',
         -> $req, $res {
             my $query = $req.json<txt>
-                or return self.render: $res, json => { :error<missing text> }, :400status;
+                or return self.render: $res, :400status, json => { :error<missing text> };
             self.render: $res,
-                json => [ self.pim.search($query).map: -> $p { %{ label => $p.label, href => $p.href } } ]
+                json => [ self.pim.search($query).map:
+                          -> $p { %{ label => $p.label, href => $p.href } } ]
         }
 
     .post: '/rolodex', {
-                        my $json = $^req.json;
-                        my $id = $json<id>;
-                        my $card = $id ?? Card.load($id) : Card.new(txt => $json<txt>);
-                        $.pim.save($^req.json)
-                            or self.render: $^res, :400status, json => { :error<cannot save> };
-                         self.render: $^res, json => { status => 'ok' }
-                       }
+         my $json = $^req.json;
+         my $id = $json<handle>;
+         my $card = $id ?? Card.load($id) !! Card.new(text => $json<txt>);
+         $.pim.save($card)
+             or self.render: $^res, :400status, json => { :error<cannot save> };
+          self.render: $^res, json => { status => 'ok' }
+        }
 
 }
