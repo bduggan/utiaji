@@ -3,13 +3,13 @@ use Utiaji::Log;
 
 class Page {...}
 class Day {...}
-class AddressBook {...}
+class Card { ... }
 
 role Referencable { ... }
 role Serializable { ... }
 role Searchable { ... }
 
-enum resource <page date person>;
+enum resource <page date card>;
 
 role Referencable {
     method id { ... }
@@ -206,41 +206,75 @@ class Page does Serializable does Saveable does Referencable {
     }
 }
 
-class AddressBook {
-    has @.people;
+class Rolodex does Searchable {
+    method card($handle) {
+        $.db.query("select v::text from kv where k=?","card:$handle");
+        return Card.construct( id => $handle, rep => $.db.json );
+    }
+    method search {
+        ...
+    }
+}
+
+class Card does Saveable {
+    has Str:D $.text is required;
+    has Str:D $.handle is required;
+    method !generate-handle($s) {
+        my $str = $s.split("\n")[0]
+            .subst(rx{' '+},'-',:g)
+            .lc
+            .trans( ['a'..'z','-'] => '', :complement, :delete);
+        return $str || floor now % 100000;
+    }
+    submethod BUILD(:$handle,:$!text) {
+        $!handle = $handle // self!generate-handle($!text);
+    }
+    method id {
+        return "card:$!handle";
+    }
+    method rep {
+        return { txt => $!text }
+    }
+    multi method construct(Str :$id!, :$rep) {
+       my $handle = $id.subst('card:','');
+       my $text = $rep<txt> // '';
+       return Card.new(handle => $handle, text => $text);
+    }
 }
 
 class Utiaji::Model::Pim {
     has $.db = Utiaji::DB.new;
     has $.cal = Cal.new;
     has $.wiki handles 'page' = Wiki.new;
-    has $.addressbook = AddressBook.new;
+    has $.rolodex handles 'card' = Rolodex.new;
 
     multi method save($resource) {
         debug "saving $resource";
         $resource.save or return False;
-        my @computed = $resource.computed-refs-out;
-        my @existing = $resource.refs-out;
-        for ( @computed (-) @existing ).keys -> $to {
-            debug "saving ref $to";
-            $.db.query: "insert into kv (k) values (?) on conflict (k) do nothing", $to;
-            $.db.query: 'insert into kk (f,t) values (?,?)', $resource.id, $to or return False;
-        }
-        for ( @existing (-) @computed ).keys -> $to {
-            debug "removing ref $to";
-            $.db.query: 'delete from kk where f=? and t=?',
-                $resource.id, $to or return False;
+        if ($resource.^does(Referencable)) {
+            my @computed = $resource.computed-refs-out;
+            my @existing = $resource.refs-out;
+            for ( @computed (-) @existing ).keys -> $to {
+                debug "saving ref $to";
+                $.db.query: "insert into kv (k) values (?) on conflict (k) do nothing", $to;
+                $.db.query: 'insert into kk (f,t) values (?,?)', $resource.id, $to or return False;
+            }
+            for ( @existing (-) @computed ).keys -> $to {
+                debug "removing ref $to";
+                $.db.query: 'delete from kk where f=? and t=?',
+                    $resource.id, $to or return False;
+            }
         }
         return True;
+    }
+
+    multi method save(@resources) {
+        self.save($_) for @resources;
     }
 
     method all-page-names() {
         self.db.query: "select k from kv where k like 'page:%' order by k";
         return self.db.results».subst('page:','');
-    }
-
-    multi method save(@resources) {
-        self.save($_) for @resources;
     }
 
     method search(Str $query) {

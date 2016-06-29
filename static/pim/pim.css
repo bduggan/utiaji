@@ -201,6 +201,13 @@ textarea.wiki {
     background-color: #fbfbeb;
     padding:1rem;
 }
+textarea.rolodex {
+    font-family:monospace;
+    font-size: 1.4em;
+    border: 1px solid rgba(10, 10, 10, 0.25);
+    background-color: #fbfbeb;
+    padding:1rem;
+}
 .button.black {
     color:black;
     background-color:white;

@@ -12,6 +12,7 @@ my $pim = Utiaji::Model::Pim.new;
 
 ok so $pim.cal, "pim has a calendar";
 ok so $pim.wiki, "pim has a wiki";
+ok so $pim.rolodex, "pim has a rolodex";
 
 ok $pim.save(Day.new(date => '2016-01-02', text => "jan 2 day")), 'saved';
 $pim.cal.load(:from<2016-01-02>,:to<2016-01-02>);
@@ -76,6 +77,13 @@ ok $pim.save($face),' unicode face';
 my $loaded = $pim.page('face');
 ok $loaded, 'loaded face';
 is $loaded.text, '😀', 'got unicode char';
+
+my $card = Card.new(text => "Joe Schmoe\n10 Main st\nTownsville, CA 94530");
+is $card.handle, 'joe-schmoe', 'made a handle automagically';
+ok $pim.save($card), 'saved card';
+my $h = $card.handle;
+my $loaded = $pim.card($h);
+is $loaded.text, "Joe Schmoe\n10 Main st\nTownsville, CA 94530", "loaded text";
 
 done-testing;
 
