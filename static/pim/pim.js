@@ -80,11 +80,21 @@ Date.prototype.month = function() {
     return this.getMonth() + 1;
 }
 
-function post_json(j) {
-   var url = window.location.href;
+function post_json() {
+   var args = Array.from(arguments);
+   var url;
+   if (typeof(args[0])=='string') {
+       url = args.shift();
+   } else {
+       url = window.location.href;
+   }
+   var j = args[0];
    return fetch(url,{
        method: 'POST',
        headers: { 'Content-Type':'application/json'},
        body: JSON.stringify(j)
    })
+}
+function logerr(err) {
+    console.log(err);
 }

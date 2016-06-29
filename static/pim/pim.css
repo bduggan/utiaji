@@ -219,3 +219,11 @@ textarea.rolodex {
 a {
    outline: 0;
 }
+div.card {
+  font-family:monospace;
+  font-size: 1.4em;
+  height: 10em;
+  white-space:pre-line;
+  padding-left:2px;
+  padding-right:2px;
+}

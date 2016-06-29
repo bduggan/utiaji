@@ -222,7 +222,7 @@ class Rolodex does Searchable {
     }
 }
 
-class Card does Saveable {
+class Card does Saveable does Serializable {
     has Str:D $.text is required;
     has Str:D $.handle is required;
     method !generate-handle($s) {
@@ -245,6 +245,13 @@ class Card does Saveable {
        my $handle = $id.subst('card:','');
        my $text = $rep<txt> // '';
        return Card.new(handle => $handle, text => $text);
+    }
+
+    method rep-ext {
+        return {
+            handle => self.handle,
+            text => self.text,
+        }
     }
 }
 
