@@ -203,15 +203,14 @@ textarea.wiki {
 }
 textarea.rolodex {
     font-family:monospace;
-    font-size: 1.4em;
-    border: 1px solid rgba(10, 10, 10, 0.25);
+    font-size: 0.9em;
     background-color: #fbfbeb;
-    padding:0.2em;
-    height: 5.5em;
+    height: 83%;
+    width:100%;
 }
 div.card {
   font-family:monospace;
-  font-size: 1.4em;
+  font-size: 0.9em;
   height: 8em;
   white-space:pre-line;
   padding:0.2em;
@@ -228,3 +227,8 @@ div.card {
 a {
    outline: 0;
 }
+.squishv {
+    padding-bottom:3px;
+    padding-top:3px;
+}
+a

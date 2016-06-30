@@ -39,7 +39,6 @@ var Rolodex = React.createClass({
     },
     render: function() {
         var s = this.state;
-        console.log('cards',s.cards);
         return div(
             h4( { className: 'text-center' }, 'Rolodex'),
             row(
@@ -50,20 +49,21 @@ var Rolodex = React.createClass({
                     }) )
             ),
             hr(),
-            row( div( {className: 'small-3 columns'},
+            row( div( {className: 'small-2 columns callout card'},
                     textarea( {
                         className: 'rolodex trimv',
                         value: s.new_txt,
-                        rows: 4,
                         placeholder: 'New Person',
                         onChange: this.handleNew } ),
                     a( {
-                        className: 'small expanded success button',
+                        className: 'small expanded success button squishv',
                         onClick: this.savenew,
                         }, 'save')
                ),
                s.cards.map(function(d){
-                   return row( div( { className: 'small-3 columns callout secondary card' }, d.text ) )
+                   return row( div(
+                       { className: 'small-2 columns callout secondary card' },
+                       d.text ) )
                })
             )
         )

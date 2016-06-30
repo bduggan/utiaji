@@ -220,6 +220,7 @@ class Rolodex does Searchable does Embeddable {
         $.db.query(q:to/SQL/,"card%", "\\m$query");
         select k,v::text from kv
         where k like ? and v->'lines'->>0 ~* ?
+        limit 20
         SQL
         return $.db.jsonv.map: { Card.construct(id => .[0], rep => .[1]) };
     }
