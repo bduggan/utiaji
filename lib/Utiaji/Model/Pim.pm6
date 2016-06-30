@@ -212,19 +212,18 @@ class Rolodex does Searchable {
         return Card.construct( id => $handle, rep => $.db.json );
     }
     method search(Str $query) {
-        $.db.query(q:to/SQL/,"card%", "card%$query%", "%$query%");
+        $.db.query(q:to/SQL/,"card%", "\\m$query");
         select k,v::text from kv
-        where k like ?
-               and ( ( k ilike ? and v is not null )
-                     or (v->>'txt')::text ilike ?)
+        where k like ? and v->'lines'->>0 ~* ?
         SQL
         return $.db.jsonv.map: { Card.construct(id => .[0], rep => .[1]) };
     }
 }
 
 class Card does Saveable does Serializable {
-    has Str:D $.text is required;
+    has Str:D @.lines;
     has Str:D $.handle is required;
+
     method !generate-handle($s) {
         my $str = $s.split("\n")[0]
             .subst(rx{' '+},'-',:g)
@@ -232,25 +231,35 @@ class Card does Saveable does Serializable {
             .trans( ['a'..'z','-'] => '', :complement, :delete);
         return $str || floor now % 100000;
     }
-    submethod BUILD(:$handle,:$!text) {
-        $!handle = $handle // self!generate-handle($!text);
+
+    submethod BUILD(:$handle,:$text is copy,:@lines) {
+        $text //= @lines.join("\n");
+        $!handle = $handle // self!generate-handle($text);
+        @!lines = @lines.elems ?? @lines !! $text.split(rx{\r?\n});
     }
+
     method id {
         return "card:$!handle";
     }
+
     method rep {
-        return { txt => $!text }
+        return { lines => @!lines }
     }
+
     multi method construct(Str :$id!, :$rep) {
        my $handle = $id.subst('card:','');
-       my $text = $rep<txt> // '';
-       return Card.new(handle => $handle, text => $text);
+       return Card.new(handle => $handle, lines => $rep<lines>);
+    }
+
+    method text {
+        @!lines.join("\n");
     }
 
     method rep-ext {
         return {
-            handle => self.handle,
-            text => self.text,
+            handle => $.handle,
+            lines => @!lines,
+            text => $.text,
         }
     }
 }

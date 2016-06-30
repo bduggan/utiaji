@@ -85,13 +85,19 @@ my $h = $card.handle;
 my $again = $pim.card($h);
 is $again.text, "Joe Schmoe\n10 Main st\nTownsville, CA 94530", "loaded text";
 
-my @cards = Rolodex.new.search("j");
+my $r = Rolodex.new;
+
+my @cards = $r.search("j");
 ok @cards==1, 'One card searching for j';
 is @cards[0].handle, 'joe-schmoe', 'got the right card';
 is @cards[0].rep-ext{'handle'}, 'joe-schmoe', 'got rep-ext';
 
-my @none = Rolodex.new.search("nobody");
-ok @none==0, 'No matches';
+my @none = $r.search("ville");
+ok @none==0, 'Only match name line';
+
+ok $r.search("moe").elems==0, "only match start of words";
+ok $r.search("Sc").elems==1, "only match start of words";
+ok $r.search("J").elems==1, "only match start of words";
 
 done-testing;
 

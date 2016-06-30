@@ -68,6 +68,7 @@ method json {
 }
 
 method jsonv {
+    return [] unless @.results and so @.results[0];
     for @.results -> $r {
         $r[1] = decode-json($r[1]);
     }

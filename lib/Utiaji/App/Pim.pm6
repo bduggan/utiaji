@@ -88,9 +88,11 @@ method setup {
     }
 
     .post: '/rolodex/search', sub {
-        my $q = $^req.json<q> or return self.render: $^res, :400status,
-                    json => { :error<bad request> }
+        $^req.json<q>:exists or return self.render: $^res, :400status,
+                    json => { :error<bad request> };
+        my $q = $^req.json<q>
         my @matches = $.pim.rolodex.search($q);
+        say  [ @matches>>.rep-ext ].perl;
         self.render: $^res, json => { results => @matches».rep-ext };
     }
 
