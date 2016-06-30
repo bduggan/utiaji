@@ -1,11 +1,11 @@
-%| Page :$page, *%args
+%| Rolodex :$rolodex, *%args
 
 ▶== include $app, 'header', |%args;
 
 <div id='content'></div>
 
 <script type='text/javascript'>
-  var state = <%== to-json($page.initial-state) %>;
+  var state = <%== to-json($rolodex.initial-state) %>;
   var rolodex = React.createElement(Rolodex, { initial_state: state });
   var ref = ReactDOM.render(rolodex, document.getElementById('content'))
 </script>

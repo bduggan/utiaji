@@ -8,6 +8,7 @@ class Card { ... }
 role Referencable { ... }
 role Serializable { ... }
 role Searchable { ... }
+role Embeddable { ... }
 
 enum resource <page date card>;
 
@@ -62,6 +63,10 @@ role Searchable {
     method search(Str $query) { ...  }
 }
 
+role Embeddable {
+    method initial-state { ... }
+}
+
 class Day does Saveable does Serializable does Referencable {
     has Date $.date is required;
     has Str $.text;
@@ -93,7 +98,7 @@ class Day does Saveable does Serializable does Referencable {
     }
 }
 
-class Cal does Searchable {
+class Cal does Searchable does Embeddable {
     enum days «:monday(1) tuesday wednesday thursday friday saturday sunday»;
 
     has Date $.from;  # start of range
@@ -169,7 +174,7 @@ class Wiki does Searchable {
     }
 }
 
-class Page does Serializable does Saveable does Referencable {
+class Page does Serializable does Saveable does Referencable does Embeddable {
     has Str:D $.name is required;
     has Str $.text;
 
@@ -206,7 +211,7 @@ class Page does Serializable does Saveable does Referencable {
     }
 }
 
-class Rolodex does Searchable {
+class Rolodex does Searchable does Embeddable {
     method card($handle) {
         $.db.query("select v::text from kv where k=?","card:$handle");
         return Card.construct( id => $handle, rep => $.db.json );
@@ -218,6 +223,10 @@ class Rolodex does Searchable {
         SQL
         return $.db.jsonv.map: { Card.construct(id => .[0], rep => .[1]) };
     }
+    method initial-state {
+        my @cards = self.search("");
+        return { cards => @cards».rep-ext };
+    }
 }
 
 class Card does Saveable does Serializable {
@@ -228,7 +237,7 @@ class Card does Saveable does Serializable {
         my $str = $s.split("\n")[0]
             .subst(rx{' '+},'-',:g)
             .lc
-            .trans( ['a'..'z','-'] => '', :complement, :delete);
+            .trans( ['a'..'z','0'..'9','-'] => '', :complement, :delete);
         return $str || floor now % 100000;
     }
 

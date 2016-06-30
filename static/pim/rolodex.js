@@ -2,9 +2,7 @@ use_tags(['div','row','textarea','input','a','h4','br','hr','button'])
 
 var Rolodex = React.createClass({
     getInitialState: function() {
-        var state = this.props.initial_state;
-        state.cards = [];
-        return state;
+        return this.props.initial_state;
     },
     handleNew: function(e) {
         var value = e.target.value;
@@ -41,22 +39,22 @@ var Rolodex = React.createClass({
     },
     render: function() {
         var s = this.state;
+        console.log('cards',s.cards);
         return div(
             h4( { className: 'text-center' }, 'Rolodex'),
             row(
-                div( {className: 'small-4 columns' },
+                div( {className: 'small-3 columns' },
                     input({type:'text', placeholder:'filter',
                         autoFocus: true,
                         onChange: this.handleFilter,
                     }) )
             ),
             hr(),
-            row(
-                div( {className: 'small-3 columns'},
+            row( div( {className: 'small-3 columns'},
                     textarea( {
-                        className: 'rolodex',
+                        className: 'rolodex trimv',
                         value: s.new_txt,
-                        rows: 6,
+                        rows: 4,
                         placeholder: 'New Person',
                         onChange: this.handleNew } ),
                     a( {

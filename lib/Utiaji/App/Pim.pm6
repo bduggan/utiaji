@@ -66,7 +66,10 @@ method setup {
             }
     }
 
-    .get: '/rolodex', { self.render: $^res, 'rolodex' => { tab => "rolodex" } }
+    .get: '/rolodex', {
+        my $rolodex = $.pim.rolodex;
+        self.render: $^res, 'rolodex' => { :tab<rolodex>, :$rolodex }
+    }
 
     .post: '/search',
         -> $req, $res {
@@ -90,9 +93,8 @@ method setup {
     .post: '/rolodex/search', sub {
         $^req.json<q>:exists or return self.render: $^res, :400status,
                     json => { :error<bad request> };
-        my $q = $^req.json<q>
+        my $q = $^req.json<q>;
         my @matches = $.pim.rolodex.search($q);
-        say  [ @matches>>.rep-ext ].perl;
         self.render: $^res, json => { results => @matches».rep-ext };
     }
 

@@ -206,7 +206,16 @@ textarea.rolodex {
     font-size: 1.4em;
     border: 1px solid rgba(10, 10, 10, 0.25);
     background-color: #fbfbeb;
-    padding:1rem;
+    padding:0.2em;
+    height: 5.5em;
+}
+div.card {
+  font-family:monospace;
+  font-size: 1.4em;
+  height: 8em;
+  white-space:pre-line;
+  padding:0.2em;
+  margin:0.5rem;
 }
 .button.black {
     color:black;
@@ -218,12 +227,4 @@ textarea.rolodex {
 }
 a {
    outline: 0;
-}
-div.card {
-  font-family:monospace;
-  font-size: 1.4em;
-  height: 10em;
-  white-space:pre-line;
-  padding-left:2px;
-  padding-right:2px;
 }
