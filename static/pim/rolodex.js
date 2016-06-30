@@ -15,9 +15,15 @@ var Rolodex = React.createClass({
         .then(function(res) {
             if (res.ok) {
                 console.log('saved');
+                that.setState({new_txt: ""});
+                return res.json();
             } else {
                 console.log('error',res.status,res.statusText,res);
             }
+        }).then(function(j) {
+            var cards = that.state.cards;
+            cards.unshift(j['card']);
+            that.setState({cards: cards});
         }).catch(logerr)
     },
     handleFilter: function(e) {
