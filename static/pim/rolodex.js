@@ -5,6 +5,7 @@ var _rolodex =  {
         var s = this.props.initial_state;
         // state:
         //   editing: handle of contact being edited
+        //   editing_index: index of contact being edited
         //   new_txt: new text to save
         //   cards : array of cards being displayed
         //   filter: current filter
@@ -18,7 +19,23 @@ var _rolodex =  {
         this.setState({ new_txt : value } )
     },
     maybeSave: function() {
-        console.log('maybe save');
+        if (!this.is_modified()) {
+            return;
+        }
+        this.save()
+    },
+    save: function() {
+        var that = this;
+        var s = this.state;
+        post_json({ txt: s.cards[s.editing_index].text, handle: s.editing })
+        .then(function(res) {
+            if (res.ok) {
+                that.touch();
+                that.setState({ last_save: s.version })
+            } else {
+                console.log('error ', res);
+            }
+        }).catch(logerr)
     },
     savenew: function(e) {
         var value = this.state.new_txt;
@@ -53,21 +70,35 @@ var _rolodex =  {
         }).catch(logerr);
 
     },
-    editCard: function(handle) {
+    editCard: function(handle,index) {
         var that = this;
         return function(e) {
-            that.setState({ editing: handle });
+            that.setState({ editing: handle, editing_index: index });
+        }
+    },
+    handleUpdate: function(card,card_index) {
+        var that = this;
+        return function(e) {
+            var cards = that.state.cards;
+            cards[card_index]['text'] = e.target.value;
+            that.setState(function(prev,curr) {
+                return {
+                    version: prev.version + 1,
+                    last_touch: new Date().getTime(),
+                    cards: cards }
+            })
         }
     },
     render: function() {
         var s = this.state;
         var that = this;
         return div(
+            this.status_indicator(),
             h4( { className: 'text-center' }, 'Rolodex'),
             row(
                 div( {className: 'small-3 columns' },
                     input({type:'text', placeholder:'filter',
-                        autoFocus: true,
+                        autoFocus: (s.editing ? false : true ),
                         value: s.filter,
                         onChange: this.handleFilter,
                     }) )
@@ -84,13 +115,18 @@ var _rolodex =  {
                         onClick: this.savenew,
                         }, 'save')
                ),
-               s.cards.map(function(d){
+               s.cards.map(function(d,i){
                    return row(
                        s.editing == d.handle
                        ? div( { className: 'small-2 columns callout secondary card' },
-                           textarea({className: 'rolodexedit trimv', value: d.text } ) )
+                           textarea({
+                               autoFocus: true,
+                               className: 'rolodexedit trimv',
+                               value: d.text,
+                               onChange: that.handleUpdate(d,i)
+                           } ) )
                        : div( { className: 'small-2 columns callout secondary card',
-                           onClick: that.editCard(d.handle) }, d.text )
+                           onClick: that.editCard(d.handle,i) }, d.text )
                    )
                })
             )

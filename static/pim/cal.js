@@ -17,14 +17,9 @@ var _cal = {
         return this.init(s);
     },
     save: function(stop_edit) {
-        var url = '/cal';  // window.location.href;
         var that = this;
         var state = this.state;
-        fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type' : 'application/json' },
-            body: JSON.stringify({data:state.changed})
-        })
+        post_json({data:state.changed})
         .then(function(response){
             if (response.ok) {
                 that.touch();
@@ -33,9 +28,7 @@ var _cal = {
                 console.log('response is not ok', response);
             }
         })
-        .catch(function(err) {
-            console.log("network error", err);
-        })
+        .catch(logerr)
     },
     load: function(from,to) {
         var url = '/cal/range/' + from.ymd() + '/' + to.ymd();
@@ -189,9 +182,8 @@ var _cal = {
         return '/cal/' + this.state.year + '-' + m + '-01';
     },
     render: function() {
-        var stat = this.is_modified() ? 'changed' : 'saved';
         return div(
-            div( {className: 'status-indicator ' + stat }, '' ),
+            this.status_indicator(),
             div( {className: 'row text-center'},
                 div( {className: 'columns' },
                     div( {className: 'medium inlineblock button-group trimv'},

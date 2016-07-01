@@ -266,6 +266,10 @@ class Card does Saveable does Serializable {
         @!lines.join("\n");
     }
 
+    method set-text($text) {
+        @!lines = $text.split(rx{\r?\n});
+    }
+
     method rep-ext {
         return {
             handle => $.handle,

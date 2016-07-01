@@ -23,20 +23,13 @@ var _wiki = {
     },
 
     save: function() {
-        var url = window.location.href;
         var that = this;
         var state = this.state;
-        fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type':'application/json'},
-            body: JSON.stringify({txt:unescape(this.state.txt)})
-        })
+        post_json({ txt: unescape(this.state.txt)})
         .then(function(data){
             that.setState({ last_save: state.version })
         })
-        .catch(function(err) {
-            console.log('error ' ,err);
-        })
+        .catch(logerr)
     },
 
     handleChange: function(e) {
@@ -70,6 +63,7 @@ var _wiki = {
     render: function () {
         var s = this.state;
         return div(
+                this.status_indicator(),
                 h4( { className: 'text-center' }, s.name ),
                 row( div( { className: 'linklist' },
                            ...s.dates.map( function(v) {
@@ -80,7 +74,6 @@ var _wiki = {
                               } )
                         )
                     ),
-                    this.status_indicator(),
                     div( { className: 'mode-switcher' },
                         s.editing ? (
                                     div( this.autoviewbutton(),

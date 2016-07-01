@@ -84,7 +84,13 @@ method setup {
     .post: '/rolodex', sub {
          my $json = $^req.json;
          my $id = $json<handle>;
-         my $card = $id ?? Card.load($id) !! Card.new(text => $json<txt>);
+         my $card;
+         if ($id) {
+            $card = $.pim.card($id);
+            $card.set-text( $json<txt> );
+         } else {
+            $card = Card.new(text => $json<txt>);
+         }
          $.pim.save($card)
              or return self.render: $^res, :400status, json => { :error<cannot save> };
           self.render: $^res, json => { :status<ok>, card => $card.rep-ext }
