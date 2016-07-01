@@ -1,19 +1,14 @@
 use_tags(['div','row','textarea','a','h4','br','checkbox'])
 
-/* Wiki */
-var Wiki = React.createClass({
-
+var _wiki = {
     getInitialState: function() {
-        var state = this.props.initial_state;
+        var s = this.props.initial_state;
         // txt
         // date
         // pages
-        state['editing'] = state['txt'] ? false : true;
-        state['autoview'] = true;
-        state['version'] = 1;
-        state['last_save'] = 1;
-        state['last_touch'] = new Date().getTime();
-        return state;
+        s['editing'] = state['txt'] ? false : true;
+        s['autoview'] = true;
+        return this.init(s);
     },
 
     componentDidMount: function() {
@@ -29,11 +24,6 @@ var Wiki = React.createClass({
             this.setState({editing: false});
         }
         return;
-    },
-
-    elapsed: function(t) {
-        var e = new Date().getTime() - this.state.last_touch;
-        return e > t;
     },
 
     save: function() {
@@ -64,10 +54,6 @@ var Wiki = React.createClass({
         })
     },
 
-    touch: function() {
-        this.setState({ last_touch: new Date().getTime() });
-    },
-
     editMode: function(e) {
         if (e.target.getAttribute('href')) { return; }
         this.setState({ editing: true } );
@@ -75,9 +61,6 @@ var Wiki = React.createClass({
     },
     viewMode: function(e) {
         this.setState({ editing: false } );
-    },
-    is_modified: function() {
-        return this.state.version > this.state.last_save;
     },
     autoviewon: function() { this.setState({ autoview: true } ) },
     autoviewoff: function() { this.setState({ autoview: false } ) },
@@ -104,11 +87,9 @@ var Wiki = React.createClass({
                     div( { className: 'status-indicator ' + (this.is_modified() ? 'changed' : 'saved') } ),
                     div( { className: 'mode-switcher' },
                         s.editing ? (
-                            div(
-                                this.autoviewbutton(),
-                                a({className:'tiny hollow secondary button',onClick:this.viewMode},'view' )
-                            )
-                                 )
+                                    div( this.autoviewbutton(),
+                                    a({className:'tiny hollow secondary button',onClick:this.viewMode},'view' ))
+                                    )
                                   : a({className:'tiny hollow button',onClick:this.editMode},'edit')
                     ),
                 row(
@@ -131,5 +112,7 @@ var Wiki = React.createClass({
                 )
                 );
     }
-});
+};
+
+var Wiki = React.createClass(Autosaver(_wiki));
 

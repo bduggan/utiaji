@@ -2,10 +2,10 @@ use_tags(['div','table','tbody','tr','th','td','span','textarea','a','pre','i'])
 
 var cache = {};   // map from index to date
 
-var Cal = React.createClass({
+var _cal = {
 
     getInitialState: function() {
-        var props = this.props.initial_state;
+        var s = this.props.initial_state;
         // initial_state:
         // first : new Date( ...)  -- date of first sunday
         // month : data['month'],  -- month number (1-12)
@@ -14,10 +14,7 @@ var Cal = React.createClass({
         //  changed : { a subset of data: map from yyyy-mm-dd to text for that day (updated, not saved)}
         //  last_touch : timestamp of last keystroke
 
-        props['last_touch'] = new Date().getTime();
-        props['version'] = 1;
-        props['last_save'] = 1;
-        return props;
+        return this.init(s);
     },
     save: function(stop_edit) {
         var url = '/cal';  // window.location.href;
@@ -133,20 +130,12 @@ var Cal = React.createClass({
             return;
         }
         if (this.state.editing !== undefined) {
-            var now = new Date().getTime();
-            if (now - this.state.last_touch > 2000) {
+            if (this.elapsed(2000)) {
                 this.stopEdit();
                 this.reload();
             }
             return;
         }
-        if ((now - this.state.last_touch) > 2000) {
-            this.reload();
-        }
-    },
-    touch: function() {
-        this.checkChanged();
-        this.setState({ last_touch: new Date().getTime() });
     },
     componentDidMount: function() {
         setInterval(this.maybeSave,1500)
@@ -197,9 +186,6 @@ var Cal = React.createClass({
         this.setState({ first: first, month: prev_month, year:prev_year } );
         this.load(first.addDays(-42), first.addDays(83));
     },
-    is_modified : function() {
-        return this.state.version > this.state.last_save
-    },
     permalink : function() {
         var m = this.state.month;
         if (m<10) { m = '0' + m }
@@ -242,6 +228,6 @@ var Cal = React.createClass({
                //,pre( 'version: ', this.state.version, '  last save: ', this.state.last_save)
             )
     }
-});
+};
 
-
+var Cal = React.createClass(Autosaver(_cal));

@@ -2,7 +2,16 @@ use_tags(['div','row','textarea','input','a','h4','br','hr','button'])
 
 var Rolodex = React.createClass({
     getInitialState: function() {
-        return this.props.initial_state;
+        var s = this.props.initial_state;
+        // state:
+        //   editing: handle of contact being edited
+        //   new_txt: new text to save
+        //   cards : array of cards being displayed
+        //   filter: current filter
+        s.editing = '';
+        s.new_txt = '';
+        s.filter = '';
+        return s;
     },
     handleNew: function(e) {
         var value = e.target.value;
@@ -29,7 +38,6 @@ var Rolodex = React.createClass({
     handleFilter: function(e) {
         var str = e.target.value;
         var that = this;
-        console.log('searching for ' + str );
         post_json('/rolodex/search',{ q : str})
         .then(function(res) {
             if (res.ok) {
@@ -38,19 +46,26 @@ var Rolodex = React.createClass({
                 console.log('error searching',res.status);
             }
         }).then(function(j) {
-            console.log('got json ',j);
-            that.setState({ cards: j.results });
+            that.setState({ cards: j.results, filter: str });
         }).catch(logerr);
 
     },
+    editCard: function(handle) {
+        var that = this;
+        return function(e) {
+            that.setState({ editing: handle });
+        }
+    },
     render: function() {
         var s = this.state;
+        var that = this;
         return div(
             h4( { className: 'text-center' }, 'Rolodex'),
             row(
                 div( {className: 'small-3 columns' },
                     input({type:'text', placeholder:'filter',
                         autoFocus: true,
+                        value: s.filter,
                         onChange: this.handleFilter,
                     }) )
             ),
@@ -62,14 +77,19 @@ var Rolodex = React.createClass({
                         placeholder: 'New Person',
                         onChange: this.handleNew } ),
                     a( {
-                        className: 'small expanded success button squishv',
+                        className: 'small expanded button squishv',
                         onClick: this.savenew,
                         }, 'save')
                ),
                s.cards.map(function(d){
-                   return row( div(
-                       { className: 'small-2 columns callout secondary card' },
-                       d.text ) )
+                   return row(
+                       s.editing == d.handle
+                       ? div( { className: 'small-2 columns callout secondary card' },
+                           textarea({className: 'rolodexedit trimv', value: d.text } ) )
+                       : div( { className: 'small-2 columns callout secondary card',
+                           onClick: that.editCard(d.handle) }, d.text )
+
+                   )
                })
             )
         )
