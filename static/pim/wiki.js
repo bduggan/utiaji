@@ -1,4 +1,4 @@
-use_tags(['div','row','textarea','a','h4','br'])
+use_tags(['div','row','textarea','a','h4','br','checkbox'])
 
 /* Wiki */
 var Wiki = React.createClass({
@@ -9,6 +9,7 @@ var Wiki = React.createClass({
         // date
         // pages
         state['editing'] = state['txt'] ? false : true;
+        state['autoview'] = true;
         state['version'] = 1;
         state['last_save'] = 1;
         state['last_touch'] = new Date().getTime();
@@ -24,7 +25,7 @@ var Wiki = React.createClass({
             this.save();
             return;
         }
-        if (this.state.editing && this.state.txt && this.elapsed(3000)) {
+        if (this.state.editing && this.state.txt && this.elapsed(3000) && this.state.autoview) {
             this.setState({editing: false});
         }
         return;
@@ -78,6 +79,15 @@ var Wiki = React.createClass({
     is_modified: function() {
         return this.state.version > this.state.last_save;
     },
+    autoviewon: function() { this.setState({ autoview: true } ) },
+    autoviewoff: function() { this.setState({ autoview: false } ) },
+    autoviewbutton: function()  {
+        var s = this.state;
+        if (s.autoview) {
+            return a({className:'tiny hollow secondary button',onClick:this.autoviewoff},'autoview: on')
+        }
+        return a({className:'tiny hollow secondary button',onClick:this.autoviewon},'autoview: off')
+    },
     render: function () {
         var s = this.state;
         return div(
@@ -93,7 +103,12 @@ var Wiki = React.createClass({
                     ),
                     div( { className: 'status-indicator ' + (this.is_modified() ? 'changed' : 'saved') } ),
                     div( { className: 'mode-switcher' },
-                        s.editing ? a({className:'tiny hollow secondary button',onClick:this.viewMode},'view' )
+                        s.editing ? (
+                            div(
+                                this.autoviewbutton(),
+                                a({className:'tiny hollow secondary button',onClick:this.viewMode},'view' )
+                            )
+                                 )
                                   : a({className:'tiny hollow button',onClick:this.editMode},'edit')
                     ),
                 row(
