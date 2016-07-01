@@ -16,7 +16,7 @@ var _rolodex =  {
     },
     handleNew: function(e) {
         var value = e.target.value;
-        this.setState({ new_txt : value } )
+        this.setState({ new_txt : value, editing: false } )
     },
     maybeSave: function() {
         if (!this.is_modified()) {
@@ -58,6 +58,7 @@ var _rolodex =  {
     handleFilter: function(e) {
         var str = e.target.value;
         var that = this;
+        this.setState({editing: false});
         post_json('/rolodex/search',{ q : str})
         .then(function(res) {
             if (res.ok) {
