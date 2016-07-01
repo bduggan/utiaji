@@ -1,6 +1,6 @@
 use_tags(['div','row','textarea','input','a','h4','br','hr','button'])
 
-var Rolodex = React.createClass({
+var _rolodex =  {
     getInitialState: function() {
         var s = this.props.initial_state;
         // state:
@@ -11,11 +11,14 @@ var Rolodex = React.createClass({
         s.editing = '';
         s.new_txt = '';
         s.filter = '';
-        return s;
+        return this.init(s);
     },
     handleNew: function(e) {
         var value = e.target.value;
         this.setState({ new_txt : value } )
+    },
+    maybeSave: function() {
+        console.log('maybe save');
     },
     savenew: function(e) {
         var value = this.state.new_txt;
@@ -88,11 +91,11 @@ var Rolodex = React.createClass({
                            textarea({className: 'rolodexedit trimv', value: d.text } ) )
                        : div( { className: 'small-2 columns callout secondary card',
                            onClick: that.editCard(d.handle) }, d.text )
-
                    )
                })
             )
         )
     }
-});
+};
 
+var Rolodex = React.createClass(Autosaver(_rolodex));

@@ -137,9 +137,6 @@ var _cal = {
             return;
         }
     },
-    componentDidMount: function() {
-        setInterval(this.maybeSave,1500)
-    },
     handleChange: function(e) {
         var i = e.target.id;
         var dt = this.dt(i);

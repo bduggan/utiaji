@@ -11,10 +11,6 @@ var _wiki = {
         return this.init(s);
     },
 
-    componentDidMount: function() {
-        setInterval(this.maybeSave,1000)
-    },
-
     maybeSave: function() {
         if (this.is_modified()) {
             this.save();

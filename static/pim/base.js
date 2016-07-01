@@ -30,5 +30,10 @@ function Autosaver(d) {
   }
   d.status_indicator = status_indicator;
 
+  function componentDidMount() {
+        setInterval(this.maybeSave,1000)
+  }
+  d.componentDidMount = componentDidMount;
+
   return d;
 }
