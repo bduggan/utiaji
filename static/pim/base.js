@@ -1,3 +1,5 @@
+use_tags(['div'])
+
 function Autosaver(d) {
   function is_modified() {
       return this.state.version > this.state.last_save
@@ -22,6 +24,11 @@ function Autosaver(d) {
     return s;
   }
   d.init = init;
+
+  function status_indicator() {
+    return div( { className: 'status-indicator ' + (this.is_modified() ? 'changed' : 'saved') } );
+  }
+  d.status_indicator = status_indicator;
 
   return d;
 }

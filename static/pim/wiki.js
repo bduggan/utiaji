@@ -84,7 +84,7 @@ var _wiki = {
                               } )
                         )
                     ),
-                    div( { className: 'status-indicator ' + (this.is_modified() ? 'changed' : 'saved') } ),
+                    this.status_indicator(),
                     div( { className: 'mode-switcher' },
                         s.editing ? (
                                     div( this.autoviewbutton(),
