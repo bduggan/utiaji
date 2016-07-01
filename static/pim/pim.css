@@ -205,7 +205,15 @@ textarea.rolodex {
     font-family:monospace;
     font-size: 0.9em;
     background-color: #fbfbeb;
-    height: 83%;
+    height: 75%;
+    width:100%;
+}
+textarea.rolodexedit {
+    font-family:monospace;
+    font-size: 0.9em;
+    padding:0px;
+    background-color: #fbfbeb;
+    height: 100%;
     width:100%;
 }
 div.card {
