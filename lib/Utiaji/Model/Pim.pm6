@@ -240,7 +240,7 @@ class Card does Saveable does Serializable {
             .subst(rx{' '+},'-',:g)
             .lc
             .trans( ['a'..'z','0'..'9','-'] => '', :complement, :delete);
-        return $str || floor now % 100000;
+        return $str || "id-" ~ floor now % 100000;
     }
 
     submethod BUILD(:$handle,:$text is copy,:@lines) {
