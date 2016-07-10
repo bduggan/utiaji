@@ -19,7 +19,7 @@ var _cal = {
     save: function(stop_edit) {
         var that = this;
         var state = this.state;
-        post_json({data:state.changed})
+        post_json('/cal', {data:state.changed})
         .then(function(response){
             if (response.ok) {
                 that.touch();
