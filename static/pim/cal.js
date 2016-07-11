@@ -11,6 +11,7 @@ var _cal = {
         // month : data['month'],  -- month number (1-12)
         //  year : data['year'],
         //  data : data['data']  -- map from yyyy-mm-dd to text for that day
+        //  focus : focused date (default today or from URL)
         //  changed : { a subset of data: map from yyyy-mm-dd to text for that day (updated, not saved)}
         //  last_touch : timestamp of last keystroke
 
@@ -70,6 +71,9 @@ var _cal = {
            td_class = 'other';
        }
        var dt_class = this.is_modified() && this.state.changed[dt.ymd()] ? 'pending' : '';
+       if (dt.ymd() == this.state.focus) {
+           td_class += ' focused';
+       }
        return td( { className: td_class, onClick: this.edit.bind(this,i) },
            span(
                { className:dt_class + ' dt ',

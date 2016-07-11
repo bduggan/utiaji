@@ -119,7 +119,7 @@ class Cal does Searchable does Embeddable {
         self.load( month => $!focus.month, year => $!focus.year );
     }
     multi method load( Int :$month!, Int :$year!) {
-        $!focus = Date.new(sprintf("%04d-%02d-01",$year,$month));
+        $!focus //= Date.new(sprintf("%04d-%02d-01",$year,$month));
         self.load(:window, :align, from => $!focus, :to($!focus.later(:1month)));
     }
 
@@ -147,6 +147,7 @@ class Cal does Searchable does Embeddable {
     method initial-state {
         return {
             first => [ $!from.year, $!from.month, $!from.day ],
+            focus => $!focus.yyyy-mm-dd,
             year  => $!focus.year,
             month => $!focus.month,
             data  => self.as-data

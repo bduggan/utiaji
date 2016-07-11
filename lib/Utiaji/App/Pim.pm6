@@ -12,7 +12,7 @@ method setup {
     .get: '/', { self.redirect_to: $^res, '/wiki' }
 
     .get: '/cal', {
-            my $cal = self.pim.cal.load(focus => Date.today.yyyy-mm-dd);
+            my $cal = self.pim.cal.load(focus => Date.today);
             self.render: $^res, 'cal' => { :tab<cal>, :cal($cal) }
     }
 

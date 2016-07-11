@@ -239,4 +239,6 @@ a {
     padding-bottom:3px;
     padding-top:3px;
 }
-a
+td.focused {
+    background-color:#cfddd5;
+}
