@@ -22,13 +22,14 @@ ok $pim.cal.align, 'align';
 is $pim.cal.from.day-of-week, 7, 'align to sunday';
 is $pim.cal.to.day-of-week, 6, 'last is saturday';
 
-$pim.cal.load(year => 2016, month => 1);
+$pim.cal.load(focus => '2016-01-01');
 
 my %init = $pim.cal.initial-state;
 my %expect =
   data  => { "2016-01-02" => "jan 2 day" },
   first => [2015, 12, 27],
   month => 1,
+  focus => '2016-01-01',
   year  => 2016;
 is-deeply %init, %expect, 'initial data';
 
