@@ -3,6 +3,6 @@
 NGINX=/usr/local/openresty/nginx/sbin/nginx
 
 cd `dirname $0`
-cd ..
-$NGINX -p static/ -c ../etc/nginx.conf 2>&1 | egrep -v 'alert.*/var/log/nginx/error.log'
+$NGINX -p ../etc/nginx/ -c nginx.conf \
+    2>&1 | egrep -v 'alert.*/var/log/nginx/error.log'
 

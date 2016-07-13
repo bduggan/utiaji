@@ -5,3 +5,5 @@ static/pim/up/*
 !static/pim/up/.gitkeep
 static/pim/cache/*
 !static/pim/cache/.gitkeep
+etc/nginx/*.log
+
