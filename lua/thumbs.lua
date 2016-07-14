@@ -1,11 +1,9 @@
-
-local path = ngx.var.path
 local root = os.getenv('UTIAJI_HOME') .. '/static/pim'
+local path = ngx.var.path
 local src = root .. '/up/' .. path
 local dst = root .. '/cache/' .. path .. '.png'
 
 local file = io.open(src)
-
 if not file then
   ngx.log(ngx.STDERR, "source not found: " .. src)
   ngx.status = ngx.HTTP_NOT_FOUND
