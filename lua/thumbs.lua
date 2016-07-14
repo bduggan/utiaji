@@ -2,6 +2,7 @@
 -- http://leafo.net/posts/creating_an_image_server.html
 
 ngx.log(ngx.STDERR, "in thumbs.lua")
+ngx.log(ngx.STDERR, "root is " .. ngx.root);
 
 local sig, size, path, ext =
   ngx.var.sig, ngx.var.size, ngx.var.path, ngx.var.ext
