@@ -201,7 +201,7 @@ class Page does Serializable does Saveable does Referencable does Embeddable {
         return { txt => $!text }
     }
     method files {
-        $.db.query("select k,v::text from kv inner join kk on kv.k = kk.f where k like 'file:%'");
+        $.db.query("select k,v::text from kv inner join kk on kv.k = kk.f where k like 'file:%' and kk.t=?", self.id);
         return $.db.jsonv.map: { File.construct(id => .[0], rep => .[1] ) }
     }
     method rep-ext {
