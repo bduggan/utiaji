@@ -2,21 +2,11 @@ use_tags(['div','row','textarea','a','h4','br','checkbox','img'])
 
 var _wiki = {
     getInitialState: function() {
-        var s = this.props.initial_state;
+        var s = this.init(this.props.initial_state);
         // txt, date, pages
         s['editing'] = state['txt'] ? false : true;
-        s['autoview'] = true;
-        return this.init(s);
-    },
-    maybeSave: function() {
-        if (this.is_modified()) {
-            this.save();
-            return;
-        }
-        if (this.state.editing && this.state.txt && this.elapsed(3000) && this.state.autoview) {
-            this.setState({editing: false});
-        }
-        return;
+        s['autoview'] = state['txt'] ? true : false;
+        return s;
     },
     save: function() {
         var that = this;

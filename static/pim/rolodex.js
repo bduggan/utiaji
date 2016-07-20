@@ -18,12 +18,6 @@ var _rolodex =  {
         var value = e.target.value;
         this.setState({ new_txt : value, editing: false } )
     },
-    maybeSave: function() {
-        if (!this.is_modified()) {
-            return;
-        }
-        this.save()
-    },
     save: function() {
         var that = this;
         var s = this.state;
@@ -74,7 +68,7 @@ var _rolodex =  {
     editCard: function(handle,index) {
         var that = this;
         return function(e) {
-            that.setState({ editing: handle, editing_index: index });
+            that.setState({ editing: handle, editing_index: index, last_touch: new Date().getTime() });
         }
     },
     handleUpdate: function(card,card_index) {

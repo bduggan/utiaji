@@ -121,19 +121,6 @@ var _cal = {
         }
         return x;
     },
-    maybeSave: function() {
-        if (this.is_modified()) {
-            this.save();
-            return;
-        }
-        if (this.state.editing !== undefined) {
-            if (this.elapsed(2000)) {
-                this.stopEdit();
-                this.reload();
-            }
-            return;
-        }
-    },
     handleChange: function(e) {
         var i = e.target.id;
         var dt = this.dt(i);
