@@ -104,4 +104,12 @@ method setup {
         self.render: $^res, json => { results => @matches».rep-ext };
     }
 
+    .get: '/feed.json', sub {
+        self.render: $^res, json => { latest => $.pim.latest }
+    }
+
+    .get: '/feed', sub {
+        self.render: $^res, 'feed' => { latest => $.pim.latest }
+    }
+
 }

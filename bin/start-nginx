@@ -1,10 +1,8 @@
 #!/bin/bash
 
 NGINX=/usr/local/openresty/nginx/sbin/nginx
+cd `dirname $0`
 cd ..
 export UTIAJI_HOME=`pwd`
-
-cd `dirname $0`
-$NGINX -p etc/nginx/ -c nginx.conf \
-    2>&1 | egrep -v 'alert.*/var/log/nginx/error.log'
+$NGINX -p etc/nginx/ -c nginx.conf
 

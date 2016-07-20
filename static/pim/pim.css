@@ -242,3 +242,7 @@ a {
 td.focused {
     background-color:#cfddd5;
 }
+img.up {
+    border:1px solid black;
+    margin:1px;
+}

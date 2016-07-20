@@ -29,6 +29,11 @@
       <input id="search" type="text" placeholder="search" autocomplete="off" list="search_pages"</li>
     </ul>
   </div>
+  <div class="top-bar-right">
+      <ul class="menu">
+      <li><a href="/feed">feed</a></li>
+      </ul>
+  </div>
 </div>
 <script type='text/javascript'>
   var search = React.createElement(Search, { } );

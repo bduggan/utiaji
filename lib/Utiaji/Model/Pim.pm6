@@ -318,5 +318,9 @@ class Utiaji::Model::Pim {
     method search(Str $query) {
         return self.wiki.search($query).flat;
     }
+
+    method latest(Int $count where * > 0 = 10) {
+        return 'test'
+    }
 }
 
