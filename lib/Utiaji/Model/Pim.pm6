@@ -180,7 +180,6 @@ class Wiki does Searchable {
 class Page does Serializable does Saveable does Referencable does Embeddable {
     has Str:D $.name is required;
     has Str $.text;
-    has File @.files;
 
     method label {
         $.name;
@@ -201,6 +200,10 @@ class Page does Serializable does Saveable does Referencable does Embeddable {
     method rep {
         return { txt => $!text }
     }
+    method files {
+        $.db.query("select k,v::text from kv inner join kk on kv.k = kk.f where k like 'file:%'");
+        return $.db.jsonv.map: { File.construct(id => .[0], rep => .[1] ) }
+    }
     method rep-ext {
         return {} unless defined self;
         return {
@@ -208,7 +211,7 @@ class Page does Serializable does Saveable does Referencable does Embeddable {
             txt => self.text,
             dates => self.refs-in(date, :ids),
             pages => self.refs-in(page, :ids),
-            files => [ { name => "florida-flight.pdf" }, { name => "florida-flight.pdf" } ],
+            files => self.files.map({ name => .path })
         }
     }
     method initial-state {
