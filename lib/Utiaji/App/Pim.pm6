@@ -66,6 +66,21 @@ method setup {
             }
     }
 
+    .post: '/w/:page',
+        sub ($req, $res, $match) {
+            my $page = self.pim.wiki.page($match<page>) or return self.render: :400status ;
+            my $file = $req.json<file> or return self.render: $res, json => { :error<missing file> }, :400status;
+            if $file ~~ rx{ ^ .+ "/" $<name>=(<-[/]>+) $ } {
+                $file = ~$<name>;
+            }
+
+            if $page.add-file($file) {
+                return self.render: $res, json => { status => "ok" };
+            } else {
+                return self.render: :504status, json => "error";
+            }
+        }
+
     .get: '/rolodex', {
         my $rolodex = $.pim.rolodex;
         self.render: $^res, 'rolodex' => { :tab<rolodex>, :$rolodex }

@@ -1,9 +1,9 @@
-use_tags(['div','row','textarea','a','h4','br','checkbox','img'])
+use_tags(['div','row','textarea','a','h4','br','checkbox','img','span'])
 
 var _wiki = {
     getInitialState: function() {
         var s = this.init(this.props.initial_state);
-        // txt, date, pages
+        // txt, date, pages, files
         s['editing'] = state['txt'] ? false : true;
         s['autoview'] = state['txt'] ? true : false;
         return s;
@@ -46,14 +46,15 @@ var _wiki = {
         return a({className:'tiny hollow secondary button',onClick:this.autoviewon},'autoview: off')
     },
     files:  function() {
+        f = this.state.files;
         return row(
-            a( { href: "/up/florida-flight.pdf" },
-                img({className:'up', src:"/thumb/florida-flight.pdf.png"})
-            ),
-            a( { href: "/up/florida-flight.pdf" },
-                img({className:'up', src:"/thumb/florida-flight.pdf.png"})
-            )
-        )
+             ...f.map( function(_) { return a( { href: "/up/" + _.name },
+                 img({className:'up', src:"/thumb/" + _.name + ".png"}))}),
+             div({className:"upload secondary button round"},
+                 span("upload"),
+                 input({name:"upload", type:"file", className:"upload", id:"upload", onChange: this.do_upload })
+             )
+        );
     },
     edit_button: function() {
         var s = this.state;
@@ -64,6 +65,16 @@ var _wiki = {
                                     )
                                   : a({className:'tiny hollow button',onClick:this.editMode},'edit')
                               )
+    },
+    do_upload: function() {
+        console.log('doing upload');
+        put_file('upload').then(
+            function(res) {
+                console.log('saved',res.url);
+                post_json('/w/' + self.state.name, {file:res.url});
+            }
+        );
+
     },
     render: function () {
         var s = this.state;

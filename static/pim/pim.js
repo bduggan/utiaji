@@ -95,6 +95,16 @@ function post_json() {
        body: JSON.stringify(j)
    })
 }
+
+function put_file(id) {
+   var file = document.getElementById(id).files[0];
+   return fetch('/up/' + file.name, {
+       method: 'PUT',
+       headers: { 'Content-Type': file.type },
+       body: file
+   });
+}
+
 function logerr(err) {
     console.log(err);
 }

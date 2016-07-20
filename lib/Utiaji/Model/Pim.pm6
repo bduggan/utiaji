@@ -4,6 +4,7 @@ use Utiaji::Log;
 class Page {...}
 class Day {...}
 class Card { ... }
+class File { ... }
 
 role Referencable { ... }
 role Serializable { ... }
@@ -45,7 +46,8 @@ role Saveable {
     method id { ... }
     method rep { ... }
     method save {
-        self.db.upsertjson( self.id, self.rep );
+        self.db.upsertjson( self.id, self.rep ) or return Nil;
+        self;
     }
     multi method construct(Str :$id!,:$rep) { ... }
     multi method construct(@pairs) {
@@ -178,6 +180,7 @@ class Wiki does Searchable {
 class Page does Serializable does Saveable does Referencable does Embeddable {
     has Str:D $.name is required;
     has Str $.text;
+    has File @.files;
 
     method label {
         $.name;
@@ -205,10 +208,18 @@ class Page does Serializable does Saveable does Referencable does Embeddable {
             txt => self.text,
             dates => self.refs-in(date, :ids),
             pages => self.refs-in(page, :ids),
+            files => [ { name => "florida-flight.pdf" }, { name => "florida-flight.pdf" } ],
         }
     }
     method initial-state {
         return self.rep-ext;
+    }
+
+    method add-file($name) {
+        debug "adding $name";
+        my $file = File.new(:path($name)).save;
+        $.db.query("insert into kk(f,t) values (?,?)",$file.id,self.id) or return False;
+        return $file;
     }
 }
 
@@ -277,6 +288,17 @@ class Card does Saveable does Serializable {
             lines => @!lines,
             text => $.text,
         }
+    }
+}
+
+class File does Saveable {
+    has $.id = "file:" ~ now.fmt('%f').subst('.','-');
+    has Str $.path is required;
+    method rep {
+        return { path => $.path }
+    }
+    multi method construct(Str :$id!, :$rep) {
+        return File.new(:$id, :path($rep<path>));
     }
 }
 
