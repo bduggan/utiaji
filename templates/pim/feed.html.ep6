@@ -1,0 +1,7 @@
+%| :$latest, *%args
+
+%== include $app, 'header', |%args;
+
+%= $latest
+
+%== include $app, 'footer', |%args;
