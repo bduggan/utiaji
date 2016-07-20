@@ -108,3 +108,13 @@ function put_file(id) {
 function logerr(err) {
     console.log(err);
 }
+
+function get_json() {
+  var url = window.location.href;
+  url += '.json';
+  return fetch(url, {
+     headers: { 'Content-Type' : 'application/json' },
+  }).then(function(res){
+     return res.json();
+  })
+}

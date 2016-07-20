@@ -68,10 +68,17 @@ var _wiki = {
     },
     do_upload: function() {
         console.log('doing upload');
+        var that = this;
         put_file('upload').then(
             function(res) {
                 console.log('saved',res.url);
-                post_json('/w/' + self.state.name, {file:res.url});
+                post_json('/w/' + self.state.name, {file:res.url}).then(
+                    function(r) {
+                        get_json().then(function(json) {
+                            that.setState(json);
+                        });
+                    }
+                );
             }
         );
 
