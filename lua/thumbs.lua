@@ -1,3 +1,4 @@
+
 local root = os.getenv('UTIAJI_HOME') .. '/static/pim'
 local path = ngx.var.path
 local src = root .. '/up/' .. path
@@ -14,5 +15,13 @@ file:close()
 
 ngx.log(ngx.STDERR, "generating thumbnail: " .. dst)
 local magick = require("magick")
-magick.thumb(src, '150x150', dst)
-ngx.exec(ngx.var.request_uri)
+
+local status, err = pcall(function() magick.thumb(src, '150x150', dst) end)
+
+if not status then
+    ngx.log(ngx.STDERR, "error generating thumbnail: " .. err)
+    ngx.exec('/blank.png')
+else
+    ngx.exec(ngx.var.request_uri)
+end
+
