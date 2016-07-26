@@ -1,6 +1,9 @@
 use Utiaji::App;
 use Utiaji::Log;
 use Utiaji::Model::Pim;
+use JSON::Fast;
+
+use OAuth2::Client::Google;
 
 unit class Utiaji::App::Pim is Utiaji::App;
 
@@ -8,7 +11,22 @@ has $.template-path = 'templates/pim';
 has $.pim = Utiaji::Model::Pim.new;
 
 method setup {
-    $_ = self;
+     my $oauth = OAuth2::Client::Google.new(
+        config => from-json('./client_id.json'.IO.slurp),
+        redirect-uri => 'http://localhost:3334/oauth',
+     );
+     $_ = self;
+
+    .get: '/login', {
+        self.redirect_to: $^res, $oauth.auth-uri
+     }
+
+    .get: '/oauth', {
+        my $code = $^req.query-params<code>;
+        my $token = $oauth.code-to-token(:$code);
+        self.render: $^res, text => "code { $code }, res: { $token } ";
+     }
+
     .get: '/', { self.redirect_to: $^res, '/wiki' }
 
     .get: '/cal', {

@@ -6,4 +6,4 @@ static/pim/up/*
 static/pim/cache/*
 !static/pim/cache/.gitkeep
 etc/nginx/*.log
-
+client_id.json

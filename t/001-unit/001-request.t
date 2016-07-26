@@ -49,4 +49,20 @@ use Utiaji::Request;
     is $req.headers<content-length>, 10, 'parsed length';
 }
 
+{
+    my $str = q:to/DONE/;
+        GET /foo?bar=baz&buz=123&flubber=99&flubber=123 HTTP/1.1
+        Host: localhost
+
+        DONE
+    my $req = Utiaji::Request.new(raw => $str);
+    ok $req.parse, "parsed request";
+    is $req.path, '/foo', 'path';
+    is $req.query, 'bar=baz&buz=123&flubber=99&flubber=123', 'query';
+    is $req.query-params<bar>, 'baz', 'query param';
+    is $req.query-params<buz>, 123, 'query param';
+    is-deeply $req.query-params<flubber>, [ '99', '123'], 'multi query param';
+}
+
+
 done-testing;

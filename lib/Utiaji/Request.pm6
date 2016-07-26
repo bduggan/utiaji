@@ -18,24 +18,12 @@ use Utiaji::Body;
 class Utiaji::Request {
     has Str $.raw;
     has Str $.unhandled-message;
-    has Utiaji::RequestLine $.request-line;
+    has Utiaji::RequestLine $.request-line handles <verb path query query-params>;
     has Utiaji::Headers $.headers = Utiaji::Headers.new;
-    has Utiaji::Body $.body = Utiaji::Body.new;
-
-    method verb {
-        $.request-line.verb;
-    }
-
-    method path {
-        $.request-line.path;
-    }
+    has Utiaji::Body $.body handles <json> = Utiaji::Body.new;
 
     method gist {
         return "{ $.verb // '?' } { $.path // '?' }";
-    }
-
-    method json {
-        return $.body.json;
     }
 
     method parse {

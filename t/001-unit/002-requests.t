@@ -3,7 +3,7 @@ use lib 'lib';
 use Test;
 use Utiaji::Request;
 
-for dir 't/001-unit/requests/in' -> $file {
+for sort dir 't/001-unit/requests/in' -> $file {
     my $in = $file.slurp;
     my $req = Utiaji::Request.new(raw => $in);
     ok $req.parse, "parsed $file";
