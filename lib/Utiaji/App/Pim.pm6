@@ -23,8 +23,8 @@ method setup {
 
     .get: '/oauth', {
         my $code = $^req.query-params<code>;
-        my $token = $oauth.code-to-token(:$code);
-        self.render: $^res, text => "code { $code }, res: { $token } ";
+        my $got = $oauth.code-to-token(:$code);
+        self.render: $^res, text => "code { $code }, res: { $got.perl } ";
      }
 
     .get: '/', { self.redirect_to: $^res, '/wiki' }
