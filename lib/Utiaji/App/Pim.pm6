@@ -14,6 +14,7 @@ method setup {
      my $oauth = OAuth2::Client::Google.new(
         config => from-json('./client_id.json'.IO.slurp),
         redirect-uri => 'http://localhost:3334/oauth',
+        scope => "https://www.googleapis.com/auth/calendar.readonly email"
      );
      $_ = self;
 
@@ -21,10 +22,15 @@ method setup {
         self.redirect_to: $^res, $oauth.auth-uri
      }
 
-    .get: '/oauth', {
-        my $code = $^req.query-params<code>;
+    .get: '/oauth', sub ($req,$res) {
+        my $code = $req.query-params<code>;
         my $got = $oauth.code-to-token(:$code);
-        self.render: $^res, text => "code { $code }, res: { $got.perl } ";
+        if (my $token = $got<access_token>) {
+            my $identity = $oauth.verify-id(:id-token($got<id_token>));
+            self.render: $res, text => "$identity<email>\n\ncode { $code }, res: { $token }\n{$got.gist}\n{$identity.gist}";
+        } else {
+            self.render: $res, text => $got.gist;
+        }
      }
 
     .get: '/', { self.redirect_to: $^res, '/wiki' }
