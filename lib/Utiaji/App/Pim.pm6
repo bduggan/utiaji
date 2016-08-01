@@ -11,9 +11,10 @@ has $.template-path = 'templates/pim';
 has $.pim = Utiaji::Model::Pim.new;
 
 method setup {
+     my $config = from-json('./client_id.json'.IO.slurp);
      my $oauth = OAuth2::Client::Google.new(
-        config => from-json('./client_id.json'.IO.slurp),
-        redirect-uri => 'http://localhost:3334/oauth',
+        config => $config,
+        redirect-uri => $config<web><redirect_uris>[0],
         scope => "https://www.googleapis.com/auth/calendar.readonly email"
      );
      $_ = self;
@@ -24,12 +25,18 @@ method setup {
 
     .get: '/oauth', sub ($req,$res) {
         my $code = $req.query-params<code>;
-        my $got = $oauth.code-to-token(:$code);
-        if (my $token = $got<access_token>) {
-            my $identity = $oauth.verify-id(:id-token($got<id_token>));
-            self.render: $res, text => "$identity<email>\n\ncode { $code }, res: { $token }\n{$got.gist}\n{$identity.gist}";
+        my $tokens = $oauth.code-to-token(:$code);
+        if (my $token = $tokens<access_token>) {
+            my $identity = $oauth.verify-id(:id-token($tokens<id_token>));
+            self.render: $res, text => qq:to/HERE/;
+                $identity<email>
+                {$tokens.gist}
+                {$identity.gist}
+                {$req.headers}
+                ";
+                HERE
         } else {
-            self.render: $res, text => $got.gist;
+            self.render: $res, text => $tokens.gist;
         }
      }
 

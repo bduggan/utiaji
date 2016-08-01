@@ -31,7 +31,7 @@
   </div>
   <div class="top-bar-right">
       <ul class="menu">
-      <li><a class='warning button' href="/login">login</a></li>
+      <li><a class='warning button' href="/login">log in</a></li>
       <li></li>
       </ul>
   </div>
