@@ -1,8 +1,10 @@
 unit class Utiaji::Cookie;
 use Utiaji::DateTime;
 
-has Str $.name is required;
-has Str $.value = "";
+subset GlutenFree of Str where * ~~ /^ <[\c[33] .. \c[127]] - [,"';\\]>+ $/;
+
+has GlutenFree $.name is required;
+has GlutenFree $.value = "";
 has Str $.domain is required;
 has Str $.path = '/';
 has Utiaji::DateTime $.expires;

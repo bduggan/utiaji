@@ -24,8 +24,7 @@ $cookie = Utiaji::Cookie.new:
     :name<monster>, :value<mash>,
     :domain<example.com>
     :!secure, :!http-only;
-
-is ~$cookie, "monster=mash; Domain=example.com; Path=/;", 'encoded';
+is ~$cookie, "monster=mash; Domain=example.com; Path=/", 'encoded';
 
 
 done-testing;
