@@ -12,12 +12,12 @@ has Bool $.secure = True;
 
 method Str {
     return join '; ', (
-        $.name ~ '=' ~ $.value,
-        "Domain=" ~ $.domain,
-        "Path=" ~ $.path,
-        "Expires=" ~ $.expires,
-        "Max-Age=" ~ $.max-age,
-        "Secure" x $.secure,
-        "HttpOnly" x $.http-only,
+           "{$.name}={$.value}",
+           "Domain={$.domain}",
+           "Path={$.path}",
+        |( "Expires={$.expires}" xx $.expires.Bool ),
+        |( "Max-Age={$.max-age}" xx $.max-age.Bool ),
+        |( "Secure"              xx $.secure ),
+        |( "HttpOnly"            xx $.http-only ),
     );
 }
