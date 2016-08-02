@@ -45,6 +45,7 @@ class Utiaji::Server does Utiaji::Handler {
             trace "Unhandled request [[$request]]";
             return Utiaji::Response.new(:501status, body => "Not implemented, sorry!");
         };
+        debug $request;
         return self.handle-request($req,$.app.router);
     }
 

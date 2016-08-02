@@ -23,6 +23,7 @@ method handle-request(Utiaji::Request $request, Utiaji::Router $router) {
     my $response = Utiaji::Response.new;
     self.dispatch-request($route, $captures, $request, $response);
     debug $response.status-line;
+    debug $response.headers;
     return $response;
 }
 

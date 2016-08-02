@@ -4,6 +4,7 @@ use Utiaji::Model::Pim;
 use JSON::Fast;
 
 use OAuth2::Client::Google;
+use Utiaji::Cookie;
 
 unit class Utiaji::App::Pim is Utiaji::App;
 
@@ -28,6 +29,12 @@ method setup {
         my $tokens = $oauth.code-to-token(:$code);
         if (my $token = $tokens<access_token>) {
             my $identity = $oauth.verify-id(:id-token($tokens<id_token>));
+            $res.headers<set-cookie> =
+                ~ Utiaji::Cookie.new:
+                    name => "utiaji",
+                    value => "test123",
+                    domain => 'localhost',
+                    :!secure;
             self.render: $res, text => qq:to/HERE/;
                 $identity<email>
                 {$tokens.gist}
