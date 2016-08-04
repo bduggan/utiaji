@@ -33,15 +33,9 @@ method setup {
             $res.session<user> = $identity<email>;
             debug "session is now : " ~ $res.session.perl;
             debug "session is now : " ~ $res.session.gist;
-            self.render: $res, text => qq:to/HERE/;
-                $identity<email>
-                {$tokens.gist}
-                {$identity.gist}
-                {$req.headers}
-                ";
-                HERE
+            return self.redirect_to: $res, '/';
         } else {
-            self.render: $res, text => $tokens.gist;
+            self.render: $res, text => "auth failed";
         }
      }
 
