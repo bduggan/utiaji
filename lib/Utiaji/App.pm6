@@ -45,6 +45,8 @@ multi method render($res, :$json!, :$status=200) {
 multi method render($res, :$template!, :%template_params is copy, :$status=200) {
     my $t = self.load-template($template) or return self.render_not_found($res);
     %template_params<app> = self;
+    debug "sending session : " ~ $res.session.gist;
+    %template_params<session> = $res.session;
     samewith $res, :type<html>, :body( $t.render(|%template_params) ), :$status
 }
 

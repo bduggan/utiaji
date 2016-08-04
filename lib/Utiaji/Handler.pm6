@@ -20,7 +20,7 @@ method handle-request(Utiaji::Request $request, Utiaji::Router $router) {
         return $response;
     }
     trace "Matched { $route.gist } ";
-    my $response = Utiaji::Response.new;
+    my $response = Utiaji::Response.new(session => $request.session);
     self.dispatch-request($route, $captures, $request, $response);
     debug $response.status-line;
     debug $response.headers;

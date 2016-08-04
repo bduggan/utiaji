@@ -1,4 +1,4 @@
-%| :$tab, :$all-pages
+%| :$tab
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,7 +31,13 @@
   </div>
   <div class="top-bar-right">
       <ul class="menu">
-      <li><a class='warning button' href="/login">log in</a></li>
+      <li>
+      % if $session<user> {
+        <a class="small default blackbg button"><%= $session<user> %></a>
+      % } else {
+        <a class='warning button' href="/login">log in</a>
+      % }
+      </li>
       <li></li>
       </ul>
   </div>
@@ -42,3 +48,5 @@
 </script>
 
 <container>
+
+

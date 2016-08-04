@@ -7,6 +7,8 @@ export PATH=$HOME/.rakudobrew/bin:$PATH
 deps() {
     panda --installed list | grep -q DBIish || panda --notests install DBIish
     panda --installed list | grep -q 'HTTP::Tinyish' || panda install HTTP::Tinyish
+    panda --installed list | grep -q 'Digest' || panda install Digest
+    panda --installed list | grep -q 'Digest::HMAC' || panda install Digiest:HMAC
 }
 
 if [ -x $HOME/.rakudobrew/bin/perl6 ]; then

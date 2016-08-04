@@ -260,3 +260,9 @@ div.upload input.upload {
     opacity:0;
     filter: alpha(opacity=0);
 }
+.blackbg {
+    background-color:black;
+}
+.blackbg:hover {
+    background-color:black;
+}

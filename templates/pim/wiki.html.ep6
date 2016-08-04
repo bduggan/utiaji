@@ -1,6 +1,6 @@
 %| Page :$page, *%args
 
-▶== include $app, 'header', |%args;
+▶== include $app, 'header', :$session, |%args;
 
 <row>
     <div class='column' id='content' class='secondary callout'></div>

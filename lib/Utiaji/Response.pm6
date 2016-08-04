@@ -1,5 +1,7 @@
 unit class Utiaji::Response;
 use Utiaji::Headers;
+use Utiaji::Session;
+use Utiaji::Cookie;
 use Utiaji::Log;
 
 has %.codes =
@@ -21,11 +23,17 @@ has %.codes =
 
 has Int $.status is rw;
 has Str $.body is rw = "";
+has Utiaji::Session $.session is rw;
 has Utiaji::Headers $.headers is rw = Utiaji::Headers.new;
 
 method prepare-response {
     unless $.headers<content-type> {
         $.headers<content-type> = 'text/plain';
+    }
+    if $.session {
+        debug "setting session cookie:" ~ $.session.perl;
+        debug "setting session cookie:" ~ $.session.gist;
+        $.headers<set-cookie> = ~ Utiaji::Cookie.new(:name<utiaji>, :value(~$.session), :!secure);
     }
     $.headers<content-length> = $.body.encode('UTF-8').elems;
 }

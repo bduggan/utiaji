@@ -29,12 +29,10 @@ method setup {
         my $tokens = $oauth.code-to-token(:$code);
         if (my $token = $tokens<access_token>) {
             my $identity = $oauth.verify-id(:id-token($tokens<id_token>));
-            $res.headers<set-cookie> =
-                ~ Utiaji::Cookie.new:
-                    name => "utiaji",
-                    value => "test123",
-                    domain => 'localhost',
-                    :!secure;
+            debug "setting value of user in session";
+            $res.session<user> = $identity<email>;
+            debug "session is now : " ~ $res.session.perl;
+            debug "session is now : " ~ $res.session.gist;
             self.render: $res, text => qq:to/HERE/;
                 $identity<email>
                 {$tokens.gist}

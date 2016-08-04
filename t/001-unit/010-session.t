@@ -2,6 +2,7 @@ use v6;
 use lib 'lib';
 use Test;
 
+BEGIN { %*ENV<UTIAJI_SECRET> = '123'; }
 use Utiaji::Session;
 
 my $s = Utiaji::Session.new(key => '123');

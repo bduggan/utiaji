@@ -64,5 +64,18 @@ use Utiaji::Request;
     is-deeply $req.query-params<flubber>, [ '99', '123'], 'multi query param';
 }
 
+{
+    my $str = q:to/DONE/;
+        GET /foo HTTP/1.1
+        Host: localhost
+        Cookie: theme=light; sessionToken=abc123
+
+        DONE
+    my $req = Utiaji::Request.new(raw => $str);
+    ok $req.parse, "parsed request";
+    is $req.path, '/foo', 'path';
+    is $req.headers.cookies<theme>.value, 'light', 'set cookie';
+    is $req.headers.cookies<sessionToken>.value, 'abc123', 'set another cookie';
+}
 
 done-testing;
