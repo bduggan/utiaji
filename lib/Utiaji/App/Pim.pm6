@@ -24,10 +24,8 @@ method setup {
        self.redirect_to: $^res, $oauth.auth-uri
     }
 
-    .get: '/logout', $req, $res -> {
-       $res.session = Nil;
-       $res.headers.cookies<utiaji>.max-age = 0;
-       $res.headers.cookies<utiaji>.expires = 1;
+    .get: '/logout', sub ($req, $res) {
+       $res.session.expiration = -1;
        self.redirect_to: $res, '/';
     }
 

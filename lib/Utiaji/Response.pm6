@@ -31,9 +31,7 @@ method prepare-response {
         $.headers<content-type> = 'text/plain';
     }
     if $.session {
-        debug "setting session cookie:" ~ $.session.perl;
-        debug "setting session cookie:" ~ $.session.gist;
-        $.headers<set-cookie> = ~ Utiaji::Cookie.new(:name<utiaji>, :value(~$.session), :!secure);
+        $.headers<set-cookie> = ~ $.session.to-cookie;
     }
     $.headers<content-length> = $.body.encode('UTF-8').elems;
 }

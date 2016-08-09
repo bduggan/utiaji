@@ -5,12 +5,15 @@ use Digest::SHA;
 use JSON::Fast;
 use Base64;
 use Utiaji::Log;
+use Utiaji::DateTime;
+use Utiaji::Cookie;
 
 warn "please set UTIAJI_SECRET" unless %*ENV<UTIAJI_SECRET>;
+%*ENV<UTIAJI_SECRET> //= 'not so secret';
 
 has %!fields handles <list kv keys values AT-KEY EXISTS-KEY DELETE-KEY gist>;
-has Str:D $.key = %*ENV<UTIAJI_SECRET> // "not very secret";
-has $.expiration = 60 * 30;
+has Str:D $.key = %*ENV<UTIAJI_SECRET>;
+has $.expiration is rw = 60 * 30;
 
 sub hmac-sha1($str,$key) {
     return hmac-hex($key,$str,&sha1);
@@ -26,13 +29,10 @@ method Str {
 method parse(Str:D $str) {
    my $both = decode-base64($str, :bin).decode;
    my ($sig,$json) = split ":", $both, 2;
-   say "no sig" unless $sig;
-   say "no json" unless $json;
    return unless $sig and $json;
    my $check = hmac-sha1($json, self.key);
    $json = from-json($json);
    return unless $check eq $sig;
-   debug $json.perl;
    return unless %$json<_ts> ~~ Int;
    my Int $ts = %$json<_ts>:delete;
    return if now.Int - $ts > $.expiration;
@@ -40,3 +40,11 @@ method parse(Str:D $str) {
    return self;
 }
 
+method to-cookie {
+    my $expires = Utiaji::DateTime.now.later(seconds => $.expiration);
+    Utiaji::Cookie.new(:name<utiaji>,
+        :value(self.Str),
+        :!secure, # TODO
+        :max-age($.expiration),
+        :expires($expires));
+}
