@@ -10,7 +10,7 @@ has Str $.path = '/';
 has Utiaji::DateTime $.expires;
 has Int $.max-age;
 has Bool $.http-only = True;
-has Bool $.secure = False;  # TODO change
+has Bool $.secure = False;
 
 method Str {
     return join '; ', (

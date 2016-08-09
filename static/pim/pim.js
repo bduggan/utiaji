@@ -90,6 +90,7 @@ function post_json() {
    }
    var j = args[0];
    return fetch(url,{
+       credentials: 'same-origin',
        method: 'POST',
        headers: { 'Content-Type':'application/json'},
        body: JSON.stringify(j)
@@ -99,6 +100,7 @@ function post_json() {
 function put_file(id) {
    var file = document.getElementById(id).files[0];
    return fetch('/up/' + file.name, {
+       credentials: 'same-origin',
        method: 'PUT',
        headers: { 'Content-Type': file.type },
        body: file
@@ -113,6 +115,7 @@ function get_json() {
   var url = window.location.href;
   url += '.json';
   return fetch(url, {
+     credentials: 'same-origin',
      headers: { 'Content-Type' : 'application/json' },
   }).then(function(res){
      return res.json();
