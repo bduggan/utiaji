@@ -12,17 +12,24 @@ has $.template-path = 'templates/pim';
 has $.pim = Utiaji::Model::Pim.new;
 
 method setup {
-     my $config = from-json('./client_id.json'.IO.slurp);
-     my $oauth = OAuth2::Client::Google.new(
-        config => $config,
-        redirect-uri => $config<web><redirect_uris>[0],
-        scope => "https://www.googleapis.com/auth/calendar.readonly email"
-     );
-     $_ = self;
+    my $config = from-json('./client_id.json'.IO.slurp);
+    my $oauth = OAuth2::Client::Google.new(
+       config => $config,
+       redirect-uri => $config<web><redirect_uris>[0],
+       scope => "https://www.googleapis.com/auth/calendar.readonly email"
+    );
+    $_ = self;
 
     .get: '/login', {
-        self.redirect_to: $^res, $oauth.auth-uri
-     }
+       self.redirect_to: $^res, $oauth.auth-uri
+    }
+
+    .get: '/logout', $req, $res -> {
+       $res.session = Nil;
+       $res.headers.cookies<utiaji>.max-age = 0;
+       $res.headers.cookies<utiaji>.expires = 1;
+       self.redirect_to: $res, '/';
+    }
 
     .get: '/oauth', sub ($req,$res) {
         my $code = $req.query-params<code>;
