@@ -227,6 +227,7 @@ div.card {
 .button.black {
     color:black;
     background-color:white;
+    border:1px solid #ddd;
 }
 .trimv {
     margin-bottom:0px;
