@@ -16,7 +16,8 @@ method setup {
     my $oauth = OAuth2::Client::Google.new(
        config => $config,
        redirect-uri => $config<web><redirect_uris>[0],
-       scope => "https://www.googleapis.com/auth/calendar.readonly email"
+       scope => "https://www.googleapis.com/auth/calendar.readonly email",
+       prompt => "none",
     );
     $_ = self;
 
@@ -34,10 +35,7 @@ method setup {
         my $tokens = $oauth.code-to-token(:$code);
         if (my $token = $tokens<access_token>) {
             my $identity = $oauth.verify-id(:id-token($tokens<id_token>));
-            debug "setting value of user in session";
             $res.session<user> = $identity<email>;
-            debug "session is now : " ~ $res.session.perl;
-            debug "session is now : " ~ $res.session.gist;
             return self.redirect_to: $res, '/';
         } else {
             self.render: $res, text => "auth failed";

@@ -33,7 +33,7 @@
       <ul class="menu">
       <li>
       % if $session<user> {
-        <a class="small default blackbg button"><%= $session<user> %></a>
+        <a class="small default blackbg button" alt="logout" title="logout" href="/logout"><%= $session<user> %></a>
       % } else {
         <a class='warning button' href="/login">log in</a>
       % }
