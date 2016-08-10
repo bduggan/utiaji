@@ -7,11 +7,14 @@
 </row>
 
 <script type='text/javascript'>
+% if $session<user> {
+  links.allow();
+% }
   var state = <%== to-json($page.initial-state) %>;
   var wiki = React.createElement(Wiki, {
     initial_state: state
   });
   var ref = ReactDOM.render(wiki, document.getElementById('content'))
-</script>
 
+</script>
 ▶== include $app, 'footer', |%args;

@@ -1,4 +1,4 @@
-%| :$tab
+%| :$tab = 'none';
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,7 +10,9 @@
   <script type='text/javascript' src="/pim.js"></script>
   <script type='text/javascript' src="/base.js"></script>
   <script type='text/javascript' src="/search.js"></script>
+% if $tab ne 'none' {
   <script type='text/javascript' src="/<%= $tab %>.js"></script>
+% }
 </head>
 <body>
 <div class="title-bar">
@@ -31,6 +33,9 @@
   </div>
   <div class="top-bar-right">
       <ul class="menu">
+      <li>
+        <a class="small default blackbg button" href="/desks">desk: <b><%= $session<desk> // 'demo' %></b></a>
+      </li>
       <li>
       % if $session<user> {
         <a class="small default blackbg button" alt="logout" title="logout" href="/logout"><%= $session<user> %></a>

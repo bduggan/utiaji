@@ -156,8 +156,14 @@ method setup {
         self.render: $^res, json => { latest => $.pim.latest }
     }
 
-    .get: '/feed', sub {
-        self.render: $^res, 'feed' => { latest => $.pim.latest }
+    .get: '/desks', sub {
+        self.render: $^res, 'desks';
+    }
+
+    .get: "/register", sub {
+        debug $^req.query-params<via>;
+        my $via = $^req.query-params<via>;
+        self.render: $^res, 'register' => { 'via' => $via };
     }
 
 }
