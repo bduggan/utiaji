@@ -50,10 +50,12 @@ var _wiki = {
         return row(
              ...f.map( function(_) { return a( { href: "/up/" + _.name },
                  img({className:'up', src:"/thumb/" + _.name + ".png"}))}),
-             div({className:"upload secondary button round"},
-                 span("upload"),
-                 input({name:"upload", type:"file", className:"upload", id:"upload", onChange: this.do_upload })
-             )
+            ( links.allowed() ?
+                 div({className:"upload secondary button round"},
+                    span("upload"),
+                    input({name:"upload", type:"file", className:"upload", id:"upload", onChange: this.do_upload }) )
+                      : a({name:"upload", className:"secondary button round upload", href: '/register?via=upload' },'upload')
+            )
         );
     },
     edit_button: function() {
