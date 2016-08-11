@@ -156,8 +156,8 @@ method setup {
         self.render: $^res, json => { latest => $.pim.latest }
     }
 
-    .get: '/desks', sub {
-        self.render: $^res, 'desks';
+    .get: '/planets', sub {
+        self.render: $^res, template => 'planets';
     }
 
     .get: "/register", sub {

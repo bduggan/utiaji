@@ -34,7 +34,7 @@
   <div class="top-bar-right">
       <ul class="menu">
       <li>
-        <a class="small default blackbg button" href="/desks">desk: <b><%= $session<desk> // 'demo' %></b></a>
+        <a class="small default blackbg button" href="/planets">planet <b><%= $session<planet> // 'demo' %></b></a>
       </li>
       <li>
       % if $session<user> {
