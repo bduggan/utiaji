@@ -1,0 +1,29 @@
+%| :$via, *%args
+
+%== include $app, 'header', |%args;
+
+<h2><center>demo desk</center></h2>
+
+<row>
+<div class="small-12 columns">
+<p>
+You are currently browsing the <i>demo</i> desk.<br>
+% if $via eq 'links' {
+On the demo desk, URLs are not links.
+<br>
+If you <a href="/login">authenticate</a>, these URLs will be links.
+% } else {
+On the demo desk, it is not possible to upload attachments.
+<br>
+If you <a href="/login">authenticate</a>, you will be able to upload attachments.
+% }
+<br>
+Also, once you authenticate, you'll be able to create more
+desks for storing your own information.
+</p>
+<br>
+<center><a href="/login" class="button">Authenticate with Google</a></center>
+</div>
+</row>
+
+%== include $app, 'footer', |%args;
