@@ -26,7 +26,7 @@ my %mime-types = text => 'text/plain',
                  html => 'text/html';
 
 method render_not_found($res) {
-    samewith $res, :body("not found"), :type<plain>, :404status
+    self.render: $res, :body("not found"), :type<text>, :404status
 }
 
 multi method render($res, Pair $p) {
@@ -42,7 +42,7 @@ multi method render($res, :$json!, :$status=200) {
     samewith $res, :type<json>, :body($out), :$status
 }
 
-multi method render($res, :$template!, :%template_params is copy, :$status=200) {
+multi method render($res!, :$template!, :%template_params is copy, :$status=200) {
     my $t = self.load-template($template) or return self.render_not_found($res);
     %template_params<app> = self;
     debug "sending session : " ~ $res.session.gist;

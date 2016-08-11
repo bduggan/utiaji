@@ -157,7 +157,7 @@ method setup {
     }
 
     .get: '/planets', sub {
-        self.render: $^res, template => 'planets';
+        self.render: $^res, :template<planets>;
     }
 
     .get: "/register", sub {

@@ -1,0 +1,7 @@
+%| *%args
+
+▶== include $app, 'header', :$session, |%args;
+
+planets
+
+▶== include $app, 'footer', |%args;
