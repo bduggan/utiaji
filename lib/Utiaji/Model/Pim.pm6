@@ -344,8 +344,5 @@ class Utiaji::Model::Pim {
         return self.wiki.search($query).flat;
     }
 
-    method latest(Int $count where * > 0 = 10) {
-        return 'test'
-    }
 }
 
