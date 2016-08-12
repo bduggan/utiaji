@@ -8,8 +8,7 @@ use Utiaji::Log;
 use Utiaji::DateTime;
 use Utiaji::Cookie;
 
-warn "please set UTIAJI_SECRET" unless %*ENV<UTIAJI_SECRET>;
-%*ENV<UTIAJI_SECRET> //= 'not so secret';
+%*ENV<UTIAJI_SECRET> //= (^10¹⁰⁰⁰).pick;
 
 has %!fields handles <list kv keys values AT-KEY EXISTS-KEY DELETE-KEY gist>;
 has Str:D $.key = %*ENV<UTIAJI_SECRET>;
