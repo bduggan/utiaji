@@ -5,6 +5,7 @@ version=2016.05
 export PATH=$HOME/.rakudobrew/bin:$PATH
 
 deps() {
+    panda --installed list | grep -q Base64 || panda --notests install Base64
     panda --installed list | grep -q DBIish || panda --notests install DBIish
     panda --installed list | grep -q 'HTTP::Tinyish' || panda install HTTP::Tinyish
     panda --installed list | grep -q 'Digest' || panda install Digest
