@@ -1,12 +1,13 @@
 use JSON::Fast;
 use DBIish;
 
+use Utiaji::Handler;
 use Utiaji::Router;
 use Utiaji::Log;
 use Utiaji::Template;
 
 #| Utiaji::App is the base class for apps.
-unit class Utiaji::App;
+unit class Utiaji::App does Utiaji::Handler;
 
 has $.root is rw = $?FILE.IO.parent.parent.dirname;
 has $.template-path = 'templates';

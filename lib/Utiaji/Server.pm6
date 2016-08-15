@@ -6,7 +6,7 @@ use Utiaji::App::Default;
 use NativeCall;
 sub fork returns int32 is native { * };
 
-class Utiaji::Server does Utiaji::Handler {
+class Utiaji::Server {
 
     has Promise $.loop;
     has $.timeout = 10;
@@ -46,7 +46,7 @@ class Utiaji::Server does Utiaji::Handler {
             return Utiaji::Response.new(:501status, body => "Not implemented, sorry!");
         };
         debug $request;
-        return self.handle-request($req,$.app.router);
+        return self.app.handle-request($req,$.app.router);
     }
 
     method generate-response($bytes is rw,$buf) {

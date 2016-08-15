@@ -1,5 +1,7 @@
 use Utiaji::App;
 use Utiaji::Log;
+use Utiaji::Request;
+use Utiaji::Router;
 use Utiaji::Model::Pim;
 use JSON::Fast;
 
@@ -11,6 +13,10 @@ unit class Utiaji::App::Pim is Utiaji::App;
 has $.template-path = 'templates/pim';
 has $.pim = Utiaji::Model::Pim.new;
 
+method handle-request(Utiaji::Request $request, Utiaji::Router $router) {
+    $request.session<planet> //= 'demo';
+    nextsame;
+}
 method setup {
     my $config = from-json('./client_id.json'.IO.slurp);
     my $oauth = OAuth2::Client::Google.new(
