@@ -8,7 +8,7 @@ use Utiaji::Log;
 use Utiaji::DateTime;
 use Utiaji::Cookie;
 
-%*ENV<UTIAJI_SECRET> //= (^10¹⁰⁰⁰).pick;
+%*ENV<UTIAJI_SECRET> //= (|('a'..'z') xx 100).pick(100).join;
 
 has %!fields handles <list kv keys values AT-KEY EXISTS-KEY DELETE-KEY gist>;
 has Str:D $.key = %*ENV<UTIAJI_SECRET>;
