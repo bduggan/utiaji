@@ -1,6 +1,7 @@
 use Utiaji::App;
 use Utiaji::Log;
 use Utiaji::Request;
+use Utiaji::Response;
 use Utiaji::Router;
 use Utiaji::Model::Pim;
 use JSON::Fast;
@@ -17,6 +18,7 @@ method handle-request(Utiaji::Request $request, Utiaji::Router $router) {
     $request.session<planet> //= 'demo';
     nextsame;
 }
+
 method setup {
     my $config = from-json('./client_id.json'.IO.slurp);
     my $oauth = OAuth2::Client::Google.new(
@@ -28,12 +30,12 @@ method setup {
     $_ = self;
 
     .get: '/login', {
-       self.redirect_to: $^res, $oauth.auth-uri
+       redirect: $oauth.auth-uri
     }
 
-    .get: '/logout', sub ($req, $res) {
-       $res.session.expiration = -1;
-       self.redirect_to: $res, '/';
+    .get: '/logout', {
+       $^req.session.expiration = -1;
+       redirect: '/'
     }
 
     .get: '/oauth', sub ($req,$res) {
@@ -48,7 +50,7 @@ method setup {
         }
      }
 
-    .get: '/', { self.redirect_to: $^res, '/wiki' }
+    .get: '/', { redirect('/wiki') }
 
     .get: '/cal', {
             my $cal = self.pim.cal.load(focus => Date.today);
@@ -58,7 +60,7 @@ method setup {
     .get: '/cal/Δday',
         -> $req, $res, $/ {
             my $cal = self.pim.cal.load(focus => ~$<day>);
-            self.render: $res, 'cal' => { :tab<cal>, :cal($cal)}
+            self.render: $res, 'cal' => { :tab<cal>, :cal($cal) }
     }
 
     .get: '/cal/range/Δfrom/Δto', -> $res, $/ {
@@ -158,12 +160,12 @@ method setup {
         self.render: $^res, json => { results => @matches».rep-ext };
     }
 
-    .get: '/feed.json', sub {
-        self.render: $^res, json => { latest => $.pim.latest }
-    }
-
     .get: '/planets', sub {
         self.render: $^res, :template<planets>;
+    }
+
+    .post: '/planet/add', sub {
+        self.render: $^res, json => { test => 'todo' };
     }
 
     .get: "/register", sub {

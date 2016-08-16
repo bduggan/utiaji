@@ -1,0 +1,18 @@
+#!/usr/bin/env perl6
+
+use lib 'lib';
+
+use Utiaji::Server;
+use Utiaji::Log;
+use Utiaji::App::Default;
+
+logger.level = %*ENV<UTIAJI_LOG_LEVEL> // 'debug';
+
+my $server = Utiaji::Server.new(
+    host => 'localhost',
+    port => 3333,
+    app => Utiaji::App::Default.new,
+);
+$server.start;
+$server.await;
+

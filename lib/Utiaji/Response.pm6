@@ -4,7 +4,7 @@ use Utiaji::Session;
 use Utiaji::Cookie;
 use Utiaji::Log;
 
-has %.codes =
+my %codes =
     200 => "OK",
     201 => "Created",
     301 => "Moved Permanently",
@@ -37,7 +37,7 @@ method prepare-response {
 }
 
 method status-line {
-    return join ' ', 'HTTP/1.1', $.status, %.codes{$.status} // '';
+    return join ' ', 'HTTP/1.1', $.status, %codes{$.status} // '';
 }
 
 method to-string {
@@ -51,3 +51,10 @@ method to-string {
         $.body
     ).join("\r\n");
 }
+
+sub redirect($where) is export {
+    my $response = Utiaji::Response.new(:302status);
+    $response.headers<location> = $where;
+    return $response;
+}
+

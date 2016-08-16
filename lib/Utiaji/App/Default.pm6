@@ -1,23 +1,33 @@
+
 use Utiaji::App;
-use Utiaji::Log;
+use Utiaji::Response;
+use Utiaji::Error;
 
-class Utiaji::App::Default is Utiaji::App {
-    method BUILD {
+unit class Utiaji::App::Default is Utiaji::App;
 
-        self.router.get('/', sub ($req,$res) {
-            self.render: $res, text => "Welcome to Utiaji."
-        });
+method setup {
 
-        self.router.get('/test', sub ($req,$res) {
-            self.render: $res, text => "This is a test of the emergency broadcast system."
-        });
+  self.get: '/hello', -> { :text<is it me> }
 
-        self.router.post: '/echo', sub {
-            self.render: $^res, json => $^req.json
-        };
+  self.get: "/you-are", -> { self.render: :text<looking for> }
 
-        self.router.get('/placeholder/:here', sub ($req,$res, $/) {
-            self.render: $res, text => $<here>
-        });
-    }
+  self.get: "/greet/:name", -> $/ { :text«hi, $<name>»}
+
+  self.get: "/hola/:name", -> $/, $req
+    { text => ( "Hi, $<name> from " ~ $req.param('from') ) }
+
+  self.get: "/fail", { fail bad-request; }
+
+  self.get: "/look", { redirect('/here') }
+
+  self.get: "/count", -> $req {
+    $req.session<sheep>+=1;
+    self.render( template => "count", sheep => $req.session<sheep> );
+  }
+
+  self.get: "/here", -> { json => { answer => 42 } }
+
+  #        self.router.post: '/echo', sub {
+  #            self.render: $^res, json => $^req.json
+
 }

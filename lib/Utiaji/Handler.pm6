@@ -19,9 +19,9 @@ method handle-request(Utiaji::Request $request, Utiaji::Router $router) {
         debug $response.status-line;
         return $response;
     }
-    trace "Matched { $route.gist } ";
-    my $response = Utiaji::Response.new(session => $request.session);
-    self.dispatch-request($route, $captures, $request, $response);
+    trace "Handler is dispatching to route { $route.gist } ";
+    my $response = self.dispatch-request($route, $captures, $request);
+    $response.session = $request.session;
     debug $response.status-line;
     debug $response.headers;
     return $response;

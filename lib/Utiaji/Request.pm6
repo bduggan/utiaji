@@ -16,6 +16,10 @@ class Utiaji::Request {
         return "{ $.verb // '?' } { $.path // '?' }";
     }
 
+    method param($name) {
+        self.query-params{$name}
+    }
+
     method parse {
         my ($head,$body-raw) = $.raw.split( / "\n\n" | "\r\n\r\n" /, 2, :skip-empty );
         return unless $head;

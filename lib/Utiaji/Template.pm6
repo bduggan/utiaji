@@ -53,7 +53,7 @@ my grammar parser {
 }
 
 sub common-args {
-    ':$app, :$session, '
+    ':$app,'
 }
 
 class actions {
