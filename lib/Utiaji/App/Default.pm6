@@ -40,7 +40,6 @@ method setup {
     self.render( template => "count", sheep => $req.session<sheep> );
   }
 
-  # TODO
   self.get: "/here", -> {
       json => { answer => 42 }
   }

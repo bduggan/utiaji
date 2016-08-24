@@ -40,6 +40,14 @@ $t.get-ok('/look')
   .status-is(200)
   .json-is({answer => 42});
 
+$t.post-ok('/echo', json => { 'hi' => 'there' })
+   .status-is(200)
+   .json-is({'hi' => 'there'});
+
+$t.get-ok('/count')
+  .status-is(200)
+  .content-like(rx{1});
+
 $t.server.stop-fork;
 
 done-testing;
