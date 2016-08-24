@@ -29,6 +29,16 @@ $t.get-ok('/greet/björk')
   .content-type-is('text/plain')
   .content-is('hi, björk');
 
+$t.get-ok('/hola/reindeer?from=nørsk')
+  .status-is(200)
+  .content-type-is('text/plain')
+  .content-is('Hi, reindeer from nørsk');
+
+$t.get-ok('/fail').status-is(400);
+
+$t.get-ok('/look')
+  .status-is(200)
+  .json-is({answer => 42});
 
 $t.server.stop-fork;
 

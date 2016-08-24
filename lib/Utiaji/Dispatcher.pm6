@@ -10,7 +10,7 @@ method dispatch-request($route,
     Match $captures,
     Utiaji::Request $req,
 ) is export {
-   my $cb = $route.code;
+   my Code $cb = $route.code;
 
    my @args;
    if $captures && $captures.hash.elems {

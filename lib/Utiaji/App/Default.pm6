@@ -31,7 +31,7 @@ method setup {
       fail bad-request;
   }
 
-  self.get: "/look", {
+  self.get: "/look", -> {
       redirect('/here')
   }
 
@@ -41,12 +41,12 @@ method setup {
   }
 
   # TODO
-  self.get: "/here", {
+  self.get: "/here", -> {
       json => { answer => 42 }
   }
 
-  self.post: '/echo', {
-     json => $^req.json
+  self.post: '/echo', -> $req {
+     json => $req.json
   }
 
 }
