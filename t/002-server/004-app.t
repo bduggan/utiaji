@@ -7,7 +7,7 @@ class Hello is Utiaji::App { }
 
 my $app = Hello.new;
 
-$app.router.get('/', sub ($req,$res) { $app.render: $res, text => "hello" } );
+$app.router.get('/', sub ($req) { text => "hello" } );
 
 my $t = Utiaji::Test.new.start($app);
 
