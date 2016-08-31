@@ -32,7 +32,7 @@ method lookup(:$verb!,:$path!) {
     return;
 }
 
-multi method get(Str $pattern, $cb) {
+multi method get(Str $pattern, Code $cb) {
     my $r = Utiaji::Route.new(
             verb => 'GET',
             path => rx{^$pattern$},
@@ -42,7 +42,7 @@ multi method get(Str $pattern, $cb) {
     self.routes.push($r);
 }
 
-multi method get(Regex $path, $cb) {
+multi method get(Regex $path, Code $cb) {
     my $r = Utiaji::Route.new(
             verb => 'GET',
             path => $path,
@@ -51,7 +51,7 @@ multi method get(Regex $path, $cb) {
     self.routes.push($r);
 }
 
-multi method post(Str $pattern, $cb) {
+multi method post(Str $pattern, Code $cb) {
     my $r = Utiaji::Route.new(
             verb => 'POST',
             path => rx{^$pattern$},
@@ -62,7 +62,7 @@ multi method post(Str $pattern, $cb) {
 }
 
 
-multi method post(Regex $path, $cb) {
+multi method post(Regex $path, Code $cb) {
     my $r = Utiaji::Route.new(
             verb => 'POST',
             path => $path,
