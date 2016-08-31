@@ -1,6 +1,6 @@
 #!/bin/bash -ex
 
-version=2016.05
+version=2016.08
 
 export PATH=$HOME/.rakudobrew/bin:$PATH
 
