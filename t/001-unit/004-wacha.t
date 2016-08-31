@@ -30,4 +30,8 @@ is $router.routes[2].code.signature.arity, 1, 'code takes 1 arg';
 
 is $router.routes[3].pattern, '/wewe', 'route with no verb';
 
+my $code = $router.routes[3].code;
+
+is $code(), "no verb", "route with no block returns string";
+
 done-testing;

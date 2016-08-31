@@ -14,6 +14,10 @@ role Utiaji::Renderer {
         self.render: :body("not found"), :type<text>, :404status
     }
 
+    multi method render(Str $text, :$status=200) {
+        samewith :type<text>, :body($text), :$status
+    }
+
     multi method render(Pair $p) {
         samewith template => $p.key, template_params => $p.value
     }
