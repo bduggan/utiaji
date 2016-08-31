@@ -1,6 +1,6 @@
 #!/usr/bin/env perl6
 use lib 'lib';
-use Utiaji::Wacha;
+use Wacha;
 
 / 'hello world';
 

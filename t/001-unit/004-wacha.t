@@ -2,7 +2,7 @@ use lib 'lib';
 use Test;
 
 use Utiaji::Router;
-use Utiaji::Wacha;
+use Wacha;
 
 my $router = Utiaji::Router.new;
 

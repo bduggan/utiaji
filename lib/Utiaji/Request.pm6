@@ -32,7 +32,7 @@ class Utiaji::Request {
             $!headers.parse($headers-raw);
             if my $session-cookie = $!headers.cookies<utiaji> {
                 debug "parsing $session-cookie";
-                $!session.parse($session-cookie.value) or error "could not make session";
+                $!session.parse($session-cookie.value) or debug "invalid session cookie";
                 debug "session values: " ~ $!session.gist;
             }
         }

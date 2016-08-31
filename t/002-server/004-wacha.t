@@ -6,7 +6,7 @@ use Utiaji::Test;
 class Hello is Utiaji::App { }
 my $app = Hello.new;
 {
-  use Utiaji::Wacha;
+  use Wacha;
   set-router($app.router);
 
   /yo { text => "oy" }
