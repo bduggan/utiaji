@@ -4,5 +4,7 @@ use Wacha;
 
 / 'hello world';
 
+/hello/:name -> $/ { "hello, $<name>" }
+
 go;
 
