@@ -1,7 +1,9 @@
 use nqp;
 use QAST:from<NQP>;
 
+use Utiaji::App;
 use Utiaji::Router;
+use Utiaji::Server;
 
 my $router;
 
@@ -51,8 +53,19 @@ role Wacha::Actions {
     }
 }
 
+class AutoApp is Utiaji::App { }
+my $app = AutoApp.new();
+
+sub go is export {
+    Utiaji::Server.new(app => $app).start-fork;
+    loop {}
+}
+
 sub EXPORT {
+    set-router($app.router);
     nqp::bindkey(%*LANG, 'MAIN',         %*LANG<MAIN>.HOW.mixin(%*LANG<MAIN>,                 Wacha::Grammar));
     nqp::bindkey(%*LANG, 'MAIN-actions', %*LANG<MAIN-actions>.HOW.mixin(%*LANG<MAIN-actions>, Wacha::Actions));
     {}
 }
+
+
