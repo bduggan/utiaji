@@ -28,7 +28,7 @@ multi sub add_route($pattern, Code $block) is export {
 role Wacha::Grammar {
     token route-pattern { '/' \S* }
 
-    token route-verb { [ get | post | put | del ] }
+    token route-verb { [ get | post | put | del | '' ] }
 
     rule statement_control:sym<route> {
         <route-verb> <route-pattern> [ <block(1)> | <term> ]

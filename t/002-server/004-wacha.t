@@ -9,13 +9,19 @@ my $app = Hello.new;
   use Utiaji::Wacha;
   set-router($app.router);
 
+  /yo { text => "oy" }
+
   get / { text => "hello, world" };
+
   get /greet { :text<hola> };
+
   get /ciao/:name -> $/ { text => "hi, $<name>" }
 
 };
 
 my $t = Utiaji::Test.new.start($app);
+
+$t.get-ok('/yo').status-is(200).content-is('oy');
 
 $t.get-ok('/').status-is(200).content-is('hello, world');
 
