@@ -46,16 +46,9 @@ role Wacha::Actions {
 
     method statement_control:sym<route>(Mu $/) {
         my $pattern = atkeyish($/, 'route-pattern').Str;
-        my $term = atkeyish($/, 'term');
-        if ($term) {
-            $/.make: QAST::Op.new(
-                :name<&add_route>, :op<call>, sval($pattern), sval($term.Str));
-            return;
-        }
-        my $block = atkeyish($/, 'block');
-        $/.make: QAST::Op.new( :name<&add_route>, :op<call>, sval($pattern), $block.ast);
+        my $target = atkeyish($/, 'term') || atkeyish($/, 'block');
+        $/.make: QAST::Op.new( :name<&add_route>, :op<call>, sval($pattern), $target.ast);
     }
-
 }
 
 sub EXPORT {
