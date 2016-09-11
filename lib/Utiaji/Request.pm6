@@ -30,11 +30,11 @@ class Utiaji::Request {
         };
         if $headers-raw {
             $!headers.parse($headers-raw);
-            if my $session-cookie = $!headers.cookies<utiaji> {
-                debug "parsing $session-cookie";
-                $!session.parse($session-cookie.value) or debug "invalid session cookie";
-                debug "session values: " ~ $!session.gist;
-            }
+            #if my $session-cookie = $!headers.cookies<utiaji> {
+                #    debug "parsing $session-cookie";
+                #$!session.parse($session-cookie.value) or debug "invalid session cookie";
+                #debug "session values: " ~ $!session.gist;
+            #}
         }
         if $body-raw {
             $!body.parse($body-raw);

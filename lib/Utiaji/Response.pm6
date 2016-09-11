@@ -30,9 +30,9 @@ method prepare-response {
     unless $.headers<content-type> {
         $.headers<content-type> = 'text/plain';
     }
-    if $.session {
-        $.headers<set-cookie> = ~ $.session.to-cookie;
-    }
+#    if $.session {
+#        $.headers<set-cookie> = ~ $.session.to-cookie;
+#    }
     $.headers<content-length> = $.body.encode('UTF-8').elems;
 }
 

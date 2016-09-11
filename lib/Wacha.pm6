@@ -28,13 +28,13 @@ multi sub add_route($pattern, Code $block) is export {
 }
 
 role Wacha::Grammar {
-    token route-pattern { '/' \S* }
-
-    token route-verb { [ get | post | put | del | '' ] }
-
     rule statement_control:sym<route> {
         <route-verb> <route-pattern> [ <block(1)> | <term> ]
     }
+
+    token route-verb { [ get | post | put | del | '' ] }
+
+    token route-pattern { '/' \S* }
 }
 
 role Wacha::Actions {
@@ -63,8 +63,8 @@ sub go is export {
 
 sub EXPORT {
     set-router($app.router);
-    nqp::bindkey(%*LANG, 'MAIN',         %*LANG<MAIN>.HOW.mixin(%*LANG<MAIN>,                 Wacha::Grammar));
-    nqp::bindkey(%*LANG, 'MAIN-actions', %*LANG<MAIN-actions>.HOW.mixin(%*LANG<MAIN-actions>, Wacha::Actions));
+    %*LANG<MAIN> := %*LANG<MAIN>.^mixin(Wacha::Grammar);
+    %*LANG<MAIN-actions> := %*LANG<MAIN-actions>.^mixin(Wacha::Actions);
     {}
 }
 

@@ -1,8 +1,0 @@
-#!/bin/bash
-
-NGINX=/usr/local/openresty/nginx/sbin/nginx
-cd `dirname $0`
-cd ..
-export UTIAJI_HOME=`pwd`
-$NGINX -p etc/nginx/ -c nginx.conf
-
