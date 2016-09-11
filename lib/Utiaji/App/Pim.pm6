@@ -70,10 +70,10 @@ method setup {
 
     .post: '/cal', {
             my $json = $^req.json or return
-                self.render: $^res, json => { status => 'error',
+                self.render: json => { status => 'error',
                     message => 'no data' };
             my $data = $json<data>
-                   or return self.render: $^res,
+                   or return self.render:
                         json => { error => 'missing data', :400status };
             self.pim.save: Day.construct: $json<data>.kv.map: { $^k => ( txt => $^v ) }
             json => { status => 'ok' };
@@ -150,7 +150,7 @@ method setup {
     }
 
     .post: '/rolodex/search', sub {
-        $^req.json<q>:exists or return self.render: $^res, :400status,
+        $^req.json<q>:exists or return self.render: :400status,
                     json => { :error<bad request> };
         my $q = $^req.json<q>;
         my @matches = $.pim.rolodex.search($q);
