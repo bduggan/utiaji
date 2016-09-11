@@ -1,6 +1,7 @@
 use Utiaji::App;
 use Utiaji::DB;
 use Utiaji::Log;
+use Utiaji::Error;
 
 # setup:
 # createdb utiaji
@@ -14,46 +15,39 @@ submethod BUILD {
 
     given self.router {
         .get('/',
-            sub ($req,$res) {
-                self.render: $res, text => 'Welcome to Utiaji.'
+            sub ($req) {
+                text => 'Welcome to Utiaji.'
             }
         );
 
         .get('/get/∙key',
-            sub ($req,$res,$/) {
+            sub ($/,$req) {
                 db.query: "select v::text from kv where k=?", $<key>
-                    or return self.render: $res, :404status;
-                my $json = db.json or return self.render: $res, :404status;
-                self.render: $res, :$json
+                    or return :404status;
+                my $json = db.json or return :404status;
+                return :$json
             }
         );
 
         .post('/set/∙key',
-            sub ($req,$res,$/) {
+            sub ($/,Utiaji::Request $req) {
                 trace "running POST /set/_key";
                 my $json = $req.json;
                 my $key = $<key>;
-                unless $json {
-                    return self.render: $res, :400status,
-                        json => { status => "fail",
-                                  reason => "missing or invalid json" }
-                }
+                fail bad-request("missing json",:json) unless $json;
                 db.query(q[insert into kv (k,v) values (?, ?)], $key, :$json)
-                    or return self.render: $res,
-                        json => { status => "fail", reason => db.errors },
-                        status => 409;
+                    or fail bad-request(db.errors,:json,:409status);
                 trace "rendering ok";
-                self.render: $res, json => { status => 'ok' }
+                return json => { status => 'ok' }
             }
         );
 
         .post('/del/∙key',
-            sub ($req,$res,$/) {
+            sub ($/,$req) {
                 db.query: "delete from kv where k = ?", $<key>
-                    or return self.render: $res, :400status,
+                    or return :400status,
                        json => { status => "fail", reason => db.errors };
-
-                return self.render: $res, json => { status => 'ok' }
+                return json => { status => 'ok' }
             }
         );
 

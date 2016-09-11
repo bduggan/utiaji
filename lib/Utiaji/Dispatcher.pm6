@@ -21,15 +21,19 @@ method dispatch-request($route,
    }
    my $response;
    try {
+       $response = $cb(|@args);
        CATCH {
            when Utiaji::Error {
-               my $status = $_.status // 400;;
-               my $text = $_.message // 'unknown error';
-               $response = self.render(:$status, :$text);
+               my $status = .status // 400;;
+               my $text = .message // 'unknown error';
+               if .json {
+                 $response = self.render(:$status, json => { status => 'fail', reason => $text});
+               } else {
+                 $response = self.render(:$status, :$text);
+               }
                error "Error generating error { $response.gist }" unless $response ~~ Utiaji::Response;
            }
        }
-       $response = $cb(|@args);
    }
    unless $response ~~ Utiaji::Response {
        $response = self.render(|$response);

@@ -31,7 +31,7 @@ role Utiaji::Renderer {
         samewith :type<json>, :body($out), :$status
     }
 
-    multi method render(:$template!, :$status=200, *%template_params) {
+    multi method render(:$template!, :$status=200, *%template_params) returns Utiaji::Response {
         my $t = self.load-template($template) or return self.render_not_found;
         %template_params<app> = self;
         samewith :type<html>, :body( $t.render(|%template_params) ), :$status
@@ -43,7 +43,7 @@ role Utiaji::Renderer {
 #        samewith :type<html>, :body( $t.render(|%template_params) ), :$status
 #    }
 
-    multi method render(:$type='text', :$body='', :$status!) {
+    multi method render(:$type='text', :$body='', :$status!) returns Utiaji::Response {
         my $res = Utiaji::Response.new;
         debug "rendering $type";
         $res.headers<content-type> = %mime-types{$type};
