@@ -14,19 +14,14 @@ $t.get-ok('/')
   .content-type-is('text/plain')
   .content-is("Welcome to Utiaji.");
 
-$t.get-ok('/test')
-  .status-is(200)
-  .content-type-is('text/plain')
-  .content-is("This is a test of the emergency broadcast system.");
-
 $t.post-ok("/echo", json => { abc => 123 } )
   .status-is(200)
   .json-is( { abc => 123 } );
 
-$t.get-ok('/placeholder/bob')
+$t.get-ok('/greet/bob')
   .status-is(200)
   .content-type-is('text/plain')
-  .content-is('bob');
+  .content-is('hi, bob');
 
 $s.stop-fork;
 
