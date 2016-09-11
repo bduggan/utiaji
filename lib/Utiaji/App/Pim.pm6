@@ -38,15 +38,15 @@ method setup {
        redirect: '/'
     }
 
-    .get: '/oauth', sub ($req,$res) {
+    .get: '/oauth', sub ($req) {
         my $code = $req.query-params<code>;
         my $tokens = $oauth.code-to-token(:$code);
         if (my $token = $tokens<access_token>) {
             my $identity = $oauth.verify-id(:id-token($tokens<id_token>));
-            $res.session<user> = $identity<email>;
-            return self.redirect_to: $res, '/';
+            $req.session<user> = $identity<email>;
+            redirect('/');
         } else {
-            self.render: $res, text => "auth failed";
+            return text => "auth failed";
         }
      }
 
@@ -54,19 +54,18 @@ method setup {
 
     .get: '/cal', {
             my $cal = self.pim.cal.load(focus => Date.today);
-            self.render: $^res, 'cal' => { :tab<cal>, :cal($cal) }
+            self.render: template => 'cal', :tab<cal>, :cal($cal)
     }
 
     .get: '/cal/Δday',
-        -> $req, $res, $/ {
+        -> $/, $req {
             my $cal = self.pim.cal.load(focus => ~$<day>);
-            self.render: $res, 'cal' => { :tab<cal>, :cal($cal) }
+            cal => { :tab<cal>, :cal($cal) }
     }
 
-    .get: '/cal/range/Δfrom/Δto', -> $res, $/ {
-            self.render: $res,
-                json => self.pim.cal.load(from => ~$<from>,
-                        to => ~$<to>, :!align, :!window).as-data;
+    .get: '/cal/range/Δfrom/Δto', -> $/ {
+            json => self.pim.cal.load(from => ~$<from>,
+                 to => ~$<to>, :!align, :!window).as-data;
     }
 
     .post: '/cal', {
@@ -77,63 +76,61 @@ method setup {
                    or return self.render: $^res,
                         json => { error => 'missing data', :400status };
             self.pim.save: Day.construct: $json<data>.kv.map: { $^k => ( txt => $^v ) }
-            self.render: $^res, json => { status => 'ok' };
+            json => { status => 'ok' };
     }
 
-    .get: '/wiki', { self.redirect_to: $^res, '/wiki/main' }
+    .get: '/wiki', { redirect('/wiki/main') }
 
     .get: '/wiki/:page',
-        -> $req, $res, $/ {
+        -> $/, $req {
             my $page = self.pim.wiki.page(~$<page>);
-            self.render: $res, 'wiki' => { :tab<wiki>, :page($page)}
+            wiki => { :tab<wiki>, :page($page)}
     }
 
     .get: '/wiki/:page.json',
-        -> $req, $res, $/ {
+        -> $/, $req {
             my $page = self.pim.wiki.page($<page>);
-            self.render: $res, json => $page.rep-ext;
+            json => $page.rep-ext;
     }
 
     .post: '/wiki/:page',
-        sub ($req, $res, $/) {
+        sub ($/, $req) {
             my $txt = $req.json<txt>
-                or return self.render: $res,
-                        json => { :error<missing text> }, :400status;
+                or return json => { :error<missing text> }, :400status;
             my $page = Page.new: name => ~$<page>, text => $txt;
             if self.pim.save($page) {
-              self.render: $res, json => { 'status' => 'ok' };
+              return json => { 'status' => 'ok' };
             } else {
-              self.render: $res, :400status, json => { :error<cannot save> } ;
+              return :400status, json => { :error<cannot save> } ;
             }
     }
 
     .post: '/w/:page',
-        sub ($req, $res, $match) {
+        sub ($match, $req ) {
             my $page = self.pim.wiki.page($match<page>) or return self.render: :400status ;
-            my $file = $req.json<file> or return self.render: $res, json => { :error<missing file> }, :400status;
+            my $file = $req.json<file> or return self.render: json => { :error<missing file> }, :400status;
             if $file ~~ rx{ ^ .+ "/" $<name>=(<-[/]>+) $ } {
                 $file = ~$<name>;
             }
 
             if $page.add-file($file) {
-                return self.render: $res, json => { status => "ok" };
+                return json => { status => "ok" };
             } else {
-                return self.render: :504status, json => "error";
+                return :504status, json => "error";
             }
         }
 
     .get: '/rolodex', {
         my $rolodex = $.pim.rolodex;
-        self.render: $^res, 'rolodex' => { :tab<rolodex>, :$rolodex }
+        rolodex => { :tab<rolodex>, :$rolodex }
     }
 
     .post: '/search',
-        -> $req, $res {
+        -> $req {
             my $query = $req.json<txt>
-                or return self.render: $res, :400status,
+                or return self.render: :400status,
                                        json => { :error<missing text> };
-            self.render: $res,
-                json => [ self.pim.search($query).map:
+            return json => [ self.pim.search($query).map:
                           -> $p { %{ label => $p.label, href => $p.href } } ]
     }
 
@@ -148,8 +145,8 @@ method setup {
             $card = Card.new(text => $json<txt>);
          }
          $.pim.save($card)
-             or return self.render: $^res, :400status, json => { :error<cannot save> };
-          self.render: $^res, json => { :status<ok>, card => $card.rep-ext }
+             or return :400status, json => { :error<cannot save> };
+          return json => { :status<ok>, card => $card.rep-ext }
     }
 
     .post: '/rolodex/search', sub {
@@ -157,21 +154,21 @@ method setup {
                     json => { :error<bad request> };
         my $q = $^req.json<q>;
         my @matches = $.pim.rolodex.search($q);
-        self.render: $^res, json => { results => @matches».rep-ext };
+        json => { results => @matches».rep-ext };
     }
 
     .get: '/planets', sub {
-        self.render: $^res, :template<planets>;
+        :template<planets>;
     }
 
     .post: '/planet/add', sub {
-        self.render: $^res, json => { test => 'todo' };
+        json => { test => 'todo' };
     }
 
     .get: "/register", sub {
         debug $^req.query-params<via>;
         my $via = $^req.query-params<via>;
-        self.render: $^res, 'register' => { 'via' => $via };
+        register => { 'via' => $via };
     }
 
 }
