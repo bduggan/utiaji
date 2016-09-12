@@ -17,22 +17,22 @@ $t.post-ok('/cal', json => { data => { '2010-02-03' => "something" } })
    .status-is(200)
    .json-is({status => 'ok'});
 
-# $t.get-ok("/cal/range/2010-02-03/2010-02-03")
-#    .status-is(200)
-#    .json-is({'2010-02-03' => 'something'});
-#
-# $t.post-ok('/wiki/testpage', json => { txt => 'abc' })
-#    .status-is(200)
-#    .json-is({status => 'ok'});
-#
-# $t.get-ok("/wiki/testpage")
-#    .status-is(200)
-#    .content-like( rx/abc/ );
-#
-# $t.get-ok("/wiki/testpage.json")
-#    .status-is(200)
-#    .json-is({:name<testpage>, :txt<abc>, dates => [], files => [], pages => []});
-#
+$t.get-ok("/cal/range/2010-02-03/2010-02-03")
+   .status-is(200)
+   .json-is({'2010-02-03' => 'something'});
+
+$t.post-ok('/wiki/testpage', json => { txt => 'abc' })
+   .status-is(200)
+   .json-is({status => 'ok'});
+
+$t.get-ok("/wiki/testpage")
+   .status-is(200)
+   .content-like( rx/abc/ );
+
+$t.get-ok("/wiki/testpage.json")
+   .status-is(200)
+   .json-is({:name<testpage>, :txt<abc>, dates => [], files => [], pages => []});
+
 # $t.post-ok('/cal', json => { data => { '2010-02-04' => 'a @link or @two' } })
 #   .status-is(200)
 #   .json-is({status => 'ok'});

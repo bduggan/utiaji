@@ -60,7 +60,7 @@ method setup {
     .get: '/cal/Δday',
         -> $/, $req {
             my $cal = self.pim.cal.load(focus => ~$<day>);
-            cal => { :tab<cal>, :cal($cal) }
+            self.render: template => 'cali', :tab<cal>, :cal($cal)
     }
 
     .get: '/cal/range/Δfrom/Δto', -> $/ {
@@ -84,7 +84,7 @@ method setup {
     .get: '/wiki/:page',
         -> $/, $req {
             my $page = self.pim.wiki.page(~$<page>);
-            wiki => { :tab<wiki>, :page($page)}
+            self.render: template => 'wiki', :tab<wiki>, :page($page)
     }
 
     .get: '/wiki/:page.json',
@@ -122,11 +122,10 @@ method setup {
 
     .get: '/rolodex', {
         my $rolodex = $.pim.rolodex;
-        rolodex => { :tab<rolodex>, :$rolodex }
+        self.render: template => "rolodex", :tab<rolodex>, :$rolodex;
     }
 
-    .post: '/search',
-        -> $req {
+    .post: '/search', -> $req {
             my $query = $req.json<txt>
                 or return self.render: :400status,
                                        json => { :error<missing text> };
@@ -168,7 +167,7 @@ method setup {
     .get: "/register", sub {
         debug $^req.query-params<via>;
         my $via = $^req.query-params<via>;
-        register => { 'via' => $via };
+        self.render: template => 'register', 'via' => $via;
     }
 
 }
