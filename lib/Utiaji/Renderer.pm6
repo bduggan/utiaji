@@ -1,6 +1,7 @@
 use Utiaji::Log;
 use Utiaji::Response;
 use Utiaji::Template;
+use JSON::Fast;
 
 role Utiaji::Renderer {
    has $.template-path = 'templates';
