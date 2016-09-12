@@ -10,10 +10,10 @@ unit class Utiaji::App
 has $.root is rw = $?FILE.IO.parent.parent.dirname;
 has $.router handles <get post put> = Utiaji::Router.new;
 
-method new {
-    my $self = callsame(|%_);
-    $self.setup();
-    $self;
+method BUILDALL(|) {
+    callsame;
+    self.setup();
+    self;
 }
 
 method setup {}

@@ -7,7 +7,7 @@ use Utiaji::Test;
 
 clear-db;
 
-my $app = Utiaji::App::Pim.new;
+my $app = Utiaji::App::Pim.new(:oauth-config-file('./client_id_test.json'));
 
 my $t = Utiaji::Test.new.start($app);
 

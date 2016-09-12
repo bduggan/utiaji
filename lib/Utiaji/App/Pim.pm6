@@ -14,6 +14,7 @@ unit class Utiaji::App::Pim is Utiaji::App;
 
 has $.template-path = 'templates/pim';
 has $.pim = Utiaji::Model::Pim.new;
+has $.oauth-config-file='./client_id.json';
 
 method handle-request(Utiaji::Request $request, Utiaji::Router $router) {
     $request.session<planet> //= 'demo';
@@ -21,7 +22,7 @@ method handle-request(Utiaji::Request $request, Utiaji::Router $router) {
 }
 
 method setup {
-    my $config = from-json('./client_id.json'.IO.slurp);
+    my $config = from-json(self.oauth-config-file.IO.slurp);
     my $oauth = OAuth2::Client::Google.new(
        config => $config,
        redirect-uri => $config<web><redirect_uris>[0],
