@@ -33,25 +33,25 @@ $t.get-ok("/wiki/testpage.json")
    .status-is(200)
    .json-is({:name<testpage>, :txt<abc>, dates => [], files => [], pages => []});
 
-# $t.post-ok('/cal', json => { data => { '2010-02-04' => 'a @link or @two' } })
-#   .status-is(200)
-#   .json-is({status => 'ok'});
-#
-# $t.get-ok("/wiki/link.json").status-is(200)
-#    .json-is({:name<link>, :txt(''), dates => [ '2010-02-04' ], :files([]), pages => [] });
-#
-# $t.get-ok("/wiki/two.json").status-is(200)
-#     .json-is({:name<two>, :txt(''), dates => [ '2010-02-04' ], :files([]), pages => [] });
-#
-# $t.post-ok('/search', json => { txt => 'abc' }).status-is(200)
-#     .json-is([ { label => "testpage", href => '/wiki/testpage' }, ]);
-#
-# $t.post-ok('/search', json => { txt => 'testpage' }).status-is(200)
-#     .json-is([ { label => "testpage", href => '/wiki/testpage' }, ]);
-#
+$t.post-ok('/cal', json => { data => { '2010-02-04' => 'a @link or @two' } })
+  .status-is(200)
+  .json-is({status => 'ok'});
+
+$t.get-ok("/wiki/link.json").status-is(200)
+   .json-is({:name<link>, :txt(''), dates => [ '2010-02-04' ], :files([]), pages => [] });
+
+$t.get-ok("/wiki/two.json").status-is(200)
+    .json-is({:name<two>, :txt(''), dates => [ '2010-02-04' ], :files([]), pages => [] });
+
+$t.post-ok('/search', json => { txt => 'abc' }).status-is(200)
+    .json-is([ { label => "testpage", href => '/wiki/testpage' }, ]);
+
+$t.post-ok('/search', json => { txt => 'testpage' }).status-is(200)
+    .json-is([ { label => "testpage", href => '/wiki/testpage' }, ]);
+
 # $t.post-ok('/wiki/beer', json => { txt => '🍺' }).status-is(200)
-#      .json-is( { status => "ok" } );
-#
+#     .json-is( { status => "ok" } );
+
 # $t.get-ok('/wiki/beer.json').status-is(200)
 #     .json-is( { name => "beer", :dates($[]), :files([]), :pages($[]), txt => '🍺' } );
 #

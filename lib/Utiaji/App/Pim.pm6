@@ -4,6 +4,7 @@ use Utiaji::Request;
 use Utiaji::Response;
 use Utiaji::Router;
 use Utiaji::Model::Pim;
+use Utiaji::Error;
 use JSON::Fast;
 
 use OAuth2::Client::Google;
@@ -69,12 +70,8 @@ method setup {
     }
 
     .post: '/cal', {
-            my $json = $^req.json or return
-                self.render: json => { status => 'error',
-                    message => 'no data' };
-            my $data = $json<data>
-                   or return self.render:
-                        json => { error => 'missing data', :400status };
+            my $json = $^req.json or fail bad-request('no data',:json);
+            my $data = $json<data> or fail bad-request('missing data',:json);
             self.pim.save: Day.construct: $json<data>.kv.map: { $^k => ( txt => $^v ) }
             json => { status => 'ok' };
     }
@@ -95,20 +92,19 @@ method setup {
 
     .post: '/wiki/:page',
         sub ($/, $req) {
-            my $txt = $req.json<txt>
-                or return json => { :error<missing text> }, :400status;
+            my $txt = $req.json<txt> or fail bad-request('missing text');
             my $page = Page.new: name => ~$<page>, text => $txt;
             if self.pim.save($page) {
               return json => { 'status' => 'ok' };
             } else {
-              return :400status, json => { :error<cannot save> } ;
+              fail bad-request('cannot save',:json);
             }
     }
 
     .post: '/w/:page',
         sub ($match, $req ) {
-            my $page = self.pim.wiki.page($match<page>) or return self.render: :400status ;
-            my $file = $req.json<file> or return self.render: json => { :error<missing file> }, :400status;
+            my $page = self.pim.wiki.page($match<page>) or fail bad-request;
+            my $file = $req.json<file> or fail bad-request('missing file', :json);
             if $file ~~ rx{ ^ .+ "/" $<name>=(<-[/]>+) $ } {
                 $file = ~$<name>;
             }
@@ -126,10 +122,8 @@ method setup {
     }
 
     .post: '/search', -> $req {
-            my $query = $req.json<txt>
-                or return self.render: :400status,
-                                       json => { :error<missing text> };
-            return json => [ self.pim.search($query).map:
+            my $query = $req.json<txt> or fail bad-request('missing text', :json);
+            json => [ self.pim.search($query).map:
                           -> $p { %{ label => $p.label, href => $p.href } } ]
     }
 
@@ -143,14 +137,12 @@ method setup {
          } else {
             $card = Card.new(text => $json<txt>);
          }
-         $.pim.save($card)
-             or return :400status, json => { :error<cannot save> };
-          return json => { :status<ok>, card => $card.rep-ext }
+         $.pim.save($card) or fail bad-request('cannot save',:json);
+         return json => { :status<ok>, card => $card.rep-ext }
     }
 
     .post: '/rolodex/search', sub {
-        $^req.json<q>:exists or return self.render: :400status,
-                    json => { :error<bad request> };
+        $^req.json<q>:exists or fail bad-request(:json);
         my $q = $^req.json<q>;
         my @matches = $.pim.rolodex.search($q);
         json => { results => @matches».rep-ext };
