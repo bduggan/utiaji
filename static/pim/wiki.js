@@ -1,27 +1,13 @@
-use_tags(['div','row','textarea','a','h4','br','checkbox'])
+use_tags(['div','row','textarea','a','h4','br','checkbox','img','span'])
 
 var _wiki = {
     getInitialState: function() {
-        var s = this.props.initial_state;
-        // txt
-        // date
-        // pages
+        var s = this.init(this.props.initial_state);
+        // txt, date, pages, files
         s['editing'] = state['txt'] ? false : true;
-        s['autoview'] = true;
-        return this.init(s);
+        s['autoview'] = state['txt'] ? true : false;
+        return s;
     },
-
-    maybeSave: function() {
-        if (this.is_modified()) {
-            this.save();
-            return;
-        }
-        if (this.state.editing && this.state.txt && this.elapsed(3000) && this.state.autoview) {
-            this.setState({editing: false});
-        }
-        return;
-    },
-
     save: function() {
         var that = this;
         var state = this.state;
@@ -42,7 +28,6 @@ var _wiki = {
             };
         })
     },
-
     editMode: function(e) {
         if (e.target.getAttribute('href')) { return; }
         this.setState({ editing: true } );
@@ -60,10 +45,49 @@ var _wiki = {
         }
         return a({className:'tiny hollow secondary button',onClick:this.autoviewon},'autoview: off')
     },
+    files:  function() {
+        f = this.state.files;
+        return row(
+             ...f.map( function(_) { return a( { href: "/up/" + _.name },
+                 img({className:'up', src:"/thumb/" + _.name + ".png"}))}),
+            ( links.allowed() ?
+                 div({className:"upload secondary button round"},
+                    span("upload"),
+                    input({name:"upload", type:"file", className:"upload", id:"upload", onChange: this.do_upload }) )
+                      : a({name:"upload", className:"secondary button round upload", href: '/register?via=upload' },'upload')
+            )
+        );
+    },
+    edit_button: function() {
+        var s = this.state;
+        return div( { className: 'mode-switcher' },
+                        s.editing ? (
+                                    div( this.autoviewbutton(),
+                                    a({className:'tiny hollow secondary button',onClick:this.viewMode},'view' ))
+                                    )
+                                  : a({className:'tiny hollow button',onClick:this.editMode},'edit')
+                              )
+    },
+    do_upload: function() {
+        var that = this;
+        put_file('upload').then(
+            function(res) {
+                post_json('/w/' + that.state.name, {file:res.url}).then(
+                    function(r) {
+                        get_json().then(function(json) {
+                            that.setState(json);
+                        });
+                    }
+                );
+            }
+        );
+
+    },
     render: function () {
         var s = this.state;
         return div(
                 this.status_indicator(),
+                this.edit_button(),
                 h4( { className: 'text-center' }, s.name ),
                 row( div( { className: 'linklist' },
                            ...s.dates.map( function(v) {
@@ -73,15 +97,8 @@ var _wiki = {
                                 return a({className:'small hollow button', href:'/wiki/' + v},v)
                               } )
                         )
-                    ),
-                    div( { className: 'mode-switcher' },
-                        s.editing ? (
-                                    div( this.autoviewbutton(),
-                                    a({className:'tiny hollow secondary button',onClick:this.viewMode},'view' ))
-                                    )
-                                  : a({className:'tiny hollow button',onClick:this.editMode},'edit')
-                    ),
-                row(
+               ),
+               row(
                     s.editing ?
                     textarea(
                         {
@@ -97,7 +114,8 @@ var _wiki = {
                         className: 'wiki',
                         onClick: this.editMode,
                         html: wikify(s.txt)
-                    })
+                    }),
+                    this.files()
                 )
                 );
     }

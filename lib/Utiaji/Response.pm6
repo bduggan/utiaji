@@ -1,8 +1,10 @@
 unit class Utiaji::Response;
 use Utiaji::Headers;
+use Utiaji::Session;
+use Utiaji::Cookie;
 use Utiaji::Log;
 
-has %.codes =
+my %codes =
     200 => "OK",
     201 => "Created",
     301 => "Moved Permanently",
@@ -21,17 +23,21 @@ has %.codes =
 
 has Int $.status is rw;
 has Str $.body is rw = "";
+has Utiaji::Session $.session is rw;
 has Utiaji::Headers $.headers is rw = Utiaji::Headers.new;
 
 method prepare-response {
     unless $.headers<content-type> {
         $.headers<content-type> = 'text/plain';
     }
+#    if $.session {
+#        $.headers<set-cookie> = ~ $.session.to-cookie;
+#    }
     $.headers<content-length> = $.body.encode('UTF-8').elems;
 }
 
 method status-line {
-    return join ' ', 'HTTP/1.1', $.status, %.codes{$.status} // '';
+    return join ' ', 'HTTP/1.1', $.status, %codes{$.status} // '';
 }
 
 method to-string {
@@ -45,3 +51,10 @@ method to-string {
         $.body
     ).join("\r\n");
 }
+
+sub redirect($where) is export {
+    my $response = Utiaji::Response.new(:302status);
+    $response.headers<location> = $where;
+    return $response;
+}
+

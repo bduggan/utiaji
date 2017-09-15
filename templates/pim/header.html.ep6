@@ -1,4 +1,4 @@
-%| :$tab, :$all-pages
+%| :$tab = 'none';
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,7 +10,9 @@
   <script type='text/javascript' src="/pim.js"></script>
   <script type='text/javascript' src="/base.js"></script>
   <script type='text/javascript' src="/search.js"></script>
+% if $tab ne 'none' {
   <script type='text/javascript' src="/<%= $tab %>.js"></script>
+% }
 </head>
 <body>
 <div class="title-bar">
@@ -29,6 +31,21 @@
       <input id="search" type="text" placeholder="search" autocomplete="off" list="search_pages"</li>
     </ul>
   </div>
+  <div class="top-bar-right">
+      <ul class="menu">
+      <li>
+        <a class="small default blackbg button" href="/planets">planet <b><%= $session<planet> %></b></a>
+      </li>
+      <li>
+      % if $session<user> {
+        <a class="small default blackbg button" alt="logout" title="logout" href="/logout"><%= $session<user> %></a>
+      % } else {
+        <a class='warning button' href="/login">log in</a>
+      % }
+      </li>
+      <li></li>
+      </ul>
+  </div>
 </div>
 <script type='text/javascript'>
   var search = React.createElement(Search, { } );
@@ -36,3 +53,5 @@
 </script>
 
 <container>
+
+

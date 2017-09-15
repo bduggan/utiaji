@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<form action="/up">
+    <input name="file" type="file" id='test-input' />
+    <button onclick='send(); return false;'>send</button>
+</form>
+<script>
+function send() {
+    var file = document.getElementById('test-input').files[0];
+    console.log('sending',file);
+    fetch('/up/' + file.name, {
+      method: 'PUT',
+      headers: { 'Content-Type': file.type },
+      body: file
+    })
+}
+</script>
+<br>
+<img style='border:1px solid black' src="/thumb/florida-flight.pdf.png" />
+</html>

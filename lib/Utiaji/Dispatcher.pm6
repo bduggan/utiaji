@@ -4,21 +4,39 @@ unit role Utiaji::Dispatcher;
 use Utiaji::Request;
 use Utiaji::Log;
 use Utiaji::Response;
+use Utiaji::Error;
 
 method dispatch-request($route,
     Match $captures,
     Utiaji::Request $req,
-    Utiaji::Response $res is rw
 ) is export {
-    $res.status = 200;
-    $res.body = "";
+   my Code $cb = $route.code;
 
-   my $cb = $route.code;
+   my @args;
    if $captures && $captures.hash.elems {
-       trace "Dispatching to callback with captures.";
-       $cb.signature.count == 2 ?? $cb($res, $captures) !! $cb($req, $res, $captures);
-   } else {
-       trace "Dispatching to callback without captures.";
-       $cb.signature.count == 1 ?? $cb($res) !! $cb($req,$res);
+       @args.push($captures);
    }
+   if $cb.signature.count > @args {
+       @args.push($req);
+   }
+   my $response;
+   try {
+       $response = $cb(|@args);
+       CATCH {
+           when Utiaji::Error {
+               my $status = .status // 400;;
+               my $text = .message // 'unknown error';
+               if .json {
+                 $response = self.render(:$status, json => { status => 'fail', reason => $text});
+               } else {
+                 $response = self.render(:$status, :$text);
+               }
+               error "Error generating error { $response.gist }" unless $response ~~ Utiaji::Response;
+           }
+       }
+   }
+   unless $response ~~ Utiaji::Response {
+       $response = self.render(|$response);
+   }
+   return $response;
 }

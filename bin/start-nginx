@@ -1,6 +1,0 @@
-#!/bin/bash
-
-cd `dirname $0`
-cd ..
-nginx -p static/ -c ../etc/nginx.conf 2>&1 | egrep -v 'alert.*/var/log/nginx/error.log'
-

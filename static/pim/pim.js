@@ -65,10 +65,35 @@ Date.prototype.d = function(d) {
     return this.getDate()
 }
 
+var links = function() {
+    var ok = false;
+    return {
+        allow : function() {
+            ok = true
+        },
+        disallow : function() {
+            ok = false;
+        },
+        allowed : function() {
+            return ok;
+        }
+    }
+}();
+
+// credit: http://stackoverflow.com/questions/37684/how-to-replace-plain-urls-with-links
+if(!String.linkify) {
+    String.prototype.linkify = function() {
+    var urlPattern = /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim;
+    if (links.allowed()) {
+        return this.replace(urlPattern, '<a target="_blank" href="$&">$&</a>')
+    }
+    return this.replace(urlPattern, '<a href="/register?via=links">$&</a>')
+    }
+}
 
 function wikify(str) {
     return escape(str)
-    .replace(/@(\w+)/g, "<a href='/wiki/$1'>$1</a>");
+    .replace(/@(\w+)/g, "<a href='/wiki/$1'>$1</a>").linkify();
 }
 
 var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
@@ -90,11 +115,34 @@ function post_json() {
    }
    var j = args[0];
    return fetch(url,{
+       credentials: 'same-origin',
        method: 'POST',
        headers: { 'Content-Type':'application/json'},
        body: JSON.stringify(j)
    })
 }
+
+function put_file(id) {
+   var file = document.getElementById(id).files[0];
+   return fetch('/up/' + file.name, {
+       credentials: 'same-origin',
+       method: 'PUT',
+       headers: { 'Content-Type': file.type },
+       body: file
+   });
+}
+
 function logerr(err) {
     console.log(err);
+}
+
+function get_json() {
+  var url = window.location.href;
+  url += '.json';
+  return fetch(url, {
+     credentials: 'same-origin',
+     headers: { 'Content-Type' : 'application/json' },
+  }).then(function(res){
+     return res.json();
+  })
 }

@@ -1,12 +1,13 @@
 unit class Utiaji::Headers does Associative;
-use Utiaji::Log;
 
-# https://doc.perl6.org/language/subscripts#Custom_type_example
-# http://tools.ietf.org/html/rfc7230#section-3
+use Utiaji::Log;
+use Utiaji::Cookie;
+
 subset StrOrInt where Str | Int;
 
 has $.raw;
 has %!fields of StrOrInt handles <list kv keys values>;
+has Utiaji::Cookie %.cookies;
 
 my grammar parser {
      rule TOP { [ <header> \n ]* }
@@ -26,7 +27,6 @@ my class actions {
     method field-name($/) { $/.make: ~$/ }
     method field-value($/) { $/.make: ~$/ }
 }
-
 
 sub normalize-key ($key) {
     return "Content-MD5" if $key ~~ m:i/^ 'content-md5' $/;
@@ -58,8 +58,13 @@ method parse($!raw) {
         error "did not parse headers { $!raw.perl }";
         return;
     }
-    for $match.made -> $p {
-        self.push: $p
+    self.push: $_ for $match.made;
+    if my $c = self<cookie> {
+        my @cookies = split '; ', $c;
+        for @cookies -> $str {
+            my ($name,$value) = split '=', $str, 2;
+            %!cookies«$name» = Utiaji::Cookie.new(:$name, :$value);
+        }
     }
     self
 }

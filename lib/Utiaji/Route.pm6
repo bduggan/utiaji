@@ -4,7 +4,7 @@ use Utiaji::Pattern;
 has $.name;
 has $.verb;
 has Regex $.path;
-has $.code;
+has Code $.code;
 has Utiaji::Pattern $.pattern is rw;
 
 method gist {

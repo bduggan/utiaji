@@ -22,8 +22,22 @@ Run
 PGDATABASE=utiaji ./bin/utiaji
 ```
 
-Discuss
-===
-A live installation is at <http://utiaji.org>.
-There's a mailing list at <http://groups.google.com/group/utiaji>.
+About
+=====
+This is a web-application written in Perl 6. It uses the
+following architecture:
+
+A server has an app which handling and rendering.
+An app has a router.
+
+Handling does dispatching with the app's router.
+
+Dispatching invokes a callback which generates response.
+The callback can alternatively generate arguments for
+the renderer which will generate the response.
+
+Apps may inherit from the above app and override the
+various roles or wrap them.
+
+
 

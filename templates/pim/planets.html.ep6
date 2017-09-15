@@ -1,0 +1,39 @@
+%| *%args
+
+<script type="text/javascript">
+function add_planet() {
+    console.log('ok');
+    var p = document.getElementById('new_planet').value;
+    if (!p) {
+        return;
+    }
+    post_json('/planet/add', { name: p } ).then(
+        function(json) {
+            console.log('got',json);
+        }
+    );
+
+}
+</script>
+
+
+▶== include $app, 'header', :$session, |%args;
+<row>
+<br>
+<div class="small-12 columns">
+You are on planet <b><%= $session<planet> %></b>.
+<br>
+<br>
+
+% if $session<user> {
+Add a new planet:
+    <input type='text' name="new_planet" placeholder="New Planet" id='new_planet' />
+    <div class='button' onclick='add_planet()'>Add planet</div>
+% } else {
+You need to log in to create a new planet or change planets.
+% }
+
+</div>
+</row>
+
+▶== include $app, 'footer', |%args;

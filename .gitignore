@@ -1,3 +1,9 @@
 .precomp
 notes
 .perl6-version
+static/pim/up/*
+!static/pim/up/.gitkeep
+static/pim/cache/*
+!static/pim/cache/.gitkeep
+etc/nginx/*.log
+client_id.json

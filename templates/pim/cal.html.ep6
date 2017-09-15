@@ -1,6 +1,6 @@
 %| :$cal, *%args
 
-%== include $app, 'header', |%args;
+▶== include $app, 'header', :$session, |%args;
 
 <row>
 <div class="column" id='content'>

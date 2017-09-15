@@ -2,40 +2,22 @@ use Utiaji::Log;
 use Utiaji::Headers;
 use Utiaji::RequestLine;
 use Utiaji::Body;
-
-# https://www.w3.org/Protocols/rfc2616/rfc2616.txt
-#
-# Section 5.
-#
-#  Request    = Request-Line              ; Section 5.1
-#               *(( general-header        ; Section 4.5
-#                | request-header         ; Section 5.3
-#                | entity-header ) CRLF)  ; Section 7.1
-#               CRLF
-#               [ message-body ]          ; Section 4.3
-#
+use Utiaji::Session;
 
 class Utiaji::Request {
     has Str $.raw;
     has Str $.unhandled-message;
-    has Utiaji::RequestLine $.request-line;
+    has Utiaji::RequestLine $.request-line handles <verb path query query-params>;
     has Utiaji::Headers $.headers = Utiaji::Headers.new;
-    has Utiaji::Body $.body = Utiaji::Body.new;
-
-    method verb {
-        $.request-line.verb;
-    }
-
-    method path {
-        $.request-line.path;
-    }
+    has Utiaji::Body $.body handles <json> = Utiaji::Body.new;
+    has Utiaji::Session $.session = Utiaji::Session.new;
 
     method gist {
         return "{ $.verb // '?' } { $.path // '?' }";
     }
 
-    method json {
-        return $.body.json;
+    method param($name) {
+        self.query-params{$name}
     }
 
     method parse {
@@ -48,6 +30,11 @@ class Utiaji::Request {
         };
         if $headers-raw {
             $!headers.parse($headers-raw);
+            #if my $session-cookie = $!headers.cookies<utiaji> {
+                #    debug "parsing $session-cookie";
+                #$!session.parse($session-cookie.value) or debug "invalid session cookie";
+                #debug "session values: " ~ $!session.gist;
+            #}
         }
         if $body-raw {
             $!body.parse($body-raw);

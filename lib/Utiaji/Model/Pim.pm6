@@ -4,6 +4,7 @@ use Utiaji::Log;
 class Page {...}
 class Day {...}
 class Card { ... }
+class File { ... }
 
 role Referencable { ... }
 role Serializable { ... }
@@ -45,7 +46,8 @@ role Saveable {
     method id { ... }
     method rep { ... }
     method save {
-        self.db.upsertjson( self.id, self.rep );
+        self.db.upsertjson( self.id, self.rep ) or return Nil;
+        self;
     }
     multi method construct(Str :$id!,:$rep) { ... }
     multi method construct(@pairs) {
@@ -198,6 +200,10 @@ class Page does Serializable does Saveable does Referencable does Embeddable {
     method rep {
         return { txt => $!text }
     }
+    method files {
+        $.db.query("select k,v::text from kv inner join kk on kv.k = kk.f where k like 'file:%' and kk.t=?", self.id);
+        return $.db.jsonv.map: { File.construct(id => .[0], rep => .[1] ) }
+    }
     method rep-ext {
         return {} unless defined self;
         return {
@@ -205,10 +211,18 @@ class Page does Serializable does Saveable does Referencable does Embeddable {
             txt => self.text,
             dates => self.refs-in(date, :ids),
             pages => self.refs-in(page, :ids),
+            files => self.files.map({ name => .path })
         }
     }
     method initial-state {
         return self.rep-ext;
+    }
+
+    method add-file($name) {
+        debug "adding $name";
+        my $file = File.new(:path($name)).save;
+        $.db.query("insert into kk(f,t) values (?,?)",$file.id,self.id) or return False;
+        return $file;
     }
 }
 
@@ -280,6 +294,17 @@ class Card does Saveable does Serializable {
     }
 }
 
+class File does Saveable {
+    has $.id = "file:" ~ now.fmt('%f').subst('.','-');
+    has Str $.path is required;
+    method rep {
+        return { path => $.path }
+    }
+    multi method construct(Str :$id!, :$rep) {
+        return File.new(:$id, :path($rep<path>));
+    }
+}
+
 class Utiaji::Model::Pim {
     has $.db = Utiaji::DB.new;
     has $.cal = Cal.new;
@@ -318,5 +343,6 @@ class Utiaji::Model::Pim {
     method search(Str $query) {
         return self.wiki.search($query).flat;
     }
+
 }
 

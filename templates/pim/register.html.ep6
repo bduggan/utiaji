@@ -1,0 +1,25 @@
+%| :$via, *%args
+
+%== include $app, 'header', |%args;
+
+<h2><center>planet <b>demo</b></center></h2>
+
+<row>
+<div class="small-12 columns">
+<p>
+% if $via eq 'links' {
+On planet <b>demo</b>, URLs don't go to the outside world.
+<br>
+BUT, if you <a href="/login">authenticate</a>, they will!
+% } else {
+You can't upload stuff to planet <b>demo</b>.
+<br>
+If you <a href="/login">authenticate</a>, you will be able to upload attachments.
+% }
+</p>
+<br>
+<center><a href="/login" class="button">Authenticate with Google</a></center>
+</div>
+</row>
+
+%== include $app, 'footer', |%args;

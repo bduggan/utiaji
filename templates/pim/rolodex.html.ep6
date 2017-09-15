@@ -1,6 +1,6 @@
 %| Rolodex :$rolodex, *%args
 
-▶== include $app, 'header', |%args;
+▶== include $app, 'header', :$session, |%args;
 
 <div id='content'></div>
 

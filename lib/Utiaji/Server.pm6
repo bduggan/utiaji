@@ -6,7 +6,7 @@ use Utiaji::App::Default;
 use NativeCall;
 sub fork returns int32 is native { * };
 
-class Utiaji::Server does Utiaji::Handler {
+class Utiaji::Server {
 
     has Promise $.loop;
     has $.timeout = 10;
@@ -20,7 +20,14 @@ class Utiaji::Server does Utiaji::Handler {
     }
 
     method !header_valid(Blob[] $header) {
-        return $header ⊂ (10,13,32..127);
+        my $i = 0;
+        for 0..$header.end - 2 {
+            next unless $header[$_] == 13;
+            next unless $header[$_+1] == 10;
+            $i = $_;
+            last;
+        }
+        return $header.subbuf($i,$header.end) ⊂ (10,13,32..127);
     }
 
     method !header_done(Buf[] $request) {
@@ -45,7 +52,8 @@ class Utiaji::Server does Utiaji::Handler {
             trace "Unhandled request [[$request]]";
             return Utiaji::Response.new(:501status, body => "Not implemented, sorry!");
         };
-        return self.handle-request($req,$.app.router);
+        debug $request;
+        return self.app.handle-request($req,$.app.router);
     }
 
     method generate-response($bytes is rw,$buf) {
