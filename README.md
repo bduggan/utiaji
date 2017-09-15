@@ -10,13 +10,17 @@ It is written in Perl 6.
 
 Install
 =======
+```
 createdb utiaji
 psql utiaji -f schema.sql
 ./install.sh
+```
 
 Run
 ===
+```
 PGDATABASE=utiaji ./bin/utiaji
+```
 
 Discuss
 ===
