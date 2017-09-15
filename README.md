@@ -10,10 +10,11 @@ It is written in Perl 6.
 
 Install
 =======
+* Install [Perl 6](https://perl6.org/downloads/) and [zef](https://github.com/ugexe/zef).
 ```
 createdb utiaji
 psql utiaji -f schema.sql
-./install.sh
+zef install --deps-only .
 ```
 
 Run
@@ -22,8 +23,11 @@ Run
 PGDATABASE=utiaji ./bin/utiaji
 ```
 
-Discuss
+Demo
 ===
 A live installation is at <http://utiaji.org>.
-There's a mailing list at <http://groups.google.com/group/utiaji>.
+
+THANKS
+===
+* to Ryan Hinkel for all the React help.
 
