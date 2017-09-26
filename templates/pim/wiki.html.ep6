@@ -1,4 +1,4 @@
-%| :$page, *%args
+%| Page :$page, *%args
 
 ▶== include $app, 'header', |%args;
 
