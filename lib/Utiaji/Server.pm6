@@ -4,7 +4,6 @@ use Utiaji::Handler;
 use Utiaji::Response;
 use Utiaji::App::Default;
 use NativeCall;
-sub fork returns int32 is native { * };
 
 class Utiaji::Server does Utiaji::Handler {
 
@@ -13,7 +12,7 @@ class Utiaji::Server does Utiaji::Handler {
     has Int $.port = 3333;
     has $.host = 'localhost';
     has $.app is rw = Utiaji::App::Default.new;
-    has $.child;
+    has $.shutdown is rw;
 
     method url {
         "http://$.host" ~ ($.port == 80 ?? "" !! ":$.port")
@@ -94,11 +93,11 @@ class Utiaji::Server does Utiaji::Handler {
             $responding = True;
             my $response = self.generate-response($bytes,$buf);
             if $response ~~ Failure {
-                $conn.close;
+                # $conn.close;
                 $closed = True;
             } elsif $response && !$closed {
                 $conn.write($response.to-string.encode("UTF-8"));
-                $conn.close;
+                # $conn.close;
                 $closed = True;
                 debug "closed connection";
                 debug "elapsed { now - $started }";
@@ -122,6 +121,9 @@ class Utiaji::Server does Utiaji::Handler {
             react {
                 whenever IO::Socket::Async.listen($.host,$.port) {
                     self.handle-connection($^connection);
+                    if self.shutdown {
+                        done();
+                    }
                     QUIT { debug "socket quit"; }
                     LAST { debug "socket done"; }
                 }
@@ -134,14 +136,7 @@ class Utiaji::Server does Utiaji::Handler {
     }
 
     method start-fork {
-        my $pid;
-        unless ($pid = fork) {
-          sleep 0.2;
-          self.start;
-          self.await;
-          exit;
-        }
-        $!child = $pid;
+        self.start;
         self.ping or error "Failed to start server";
     }
 
@@ -172,9 +167,6 @@ class Utiaji::Server does Utiaji::Handler {
     }
 
     method stop-fork {
-        if $!child {
-            trace "killing $!child";
-            shell "kill $!child"
-        }
+        self.shutdown = True;
     }
 }

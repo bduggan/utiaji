@@ -2,6 +2,9 @@ unit class Utiaji::Template;
 use Utiaji::Log;
 use JSON::Fast;
 
+# TODO, types are used in templates, need to import this
+use Utiaji::Model::Pim;
+
 has $.raw;
 has $.parsed;
 has $.cache-key;
