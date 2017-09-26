@@ -19,7 +19,10 @@ zef install --deps-only .
 
 Run
 ===
+Utiaji uses nginx for static content.  A configuration
+and start script are included.
 ```
+./bin/start-nginx
 PGDATABASE=utiaji ./bin/utiaji
 ```
 
