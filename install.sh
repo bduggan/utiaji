@@ -7,4 +7,4 @@ export PATH=$HOME/.rakudobrew/bin:$PATH
 git clone https://github.com/tadzik/rakudobrew.git $HOME/.rakudobrew
 rakudobrew build moar $version
 rakudobrew build-zef
-zef install --depsonly .
+zef install --depsonly --force-test .
